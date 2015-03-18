@@ -1,0 +1,5 @@
+DBNAME = 'NCTU_COM'
+DBUSER = 'root'
+DBPASSWORD = 'root'
+COOKIE_SECRET = 'wef wqfqw wqefwqf2 f'
+PORT = '2517'
