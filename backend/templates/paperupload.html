@@ -1,0 +1,159 @@
+{% extends 'frame.html' %}
+{% block content %}
+
+{% if acct == None %}
+<script>window.location="/"</script>
+{% else %}
+<form id="paperupload" class="ui form">
+    <h2 class="ui dividing header">投稿上傳</h2>
+    <div class="field">
+        <label><h3>選擇類別</h3></label>
+        <select class="ui dropdown">
+            <option value="">　</option>
+            <option value="1">1</option>
+        </select>
+    </div>
+    <div class="field">
+        <label><h3>選擇論文涵蓋領域</h3></label>
+        <select class="ui dropdown">
+            <option value="">　</option>
+            <option value="1">1</option>
+        </select>
+    </div>
+    <div class="field">
+        <label><h3>中文標題</h3></label>
+        <textarea rows=2></textarea>
+    </div>
+    <div class="field">
+        <label><h3>英文標題</h3></label>
+        <textarea rows=2></textarea>
+    </div>
+    <div class="field">
+        <label><h3>中文摘要</h3></label>
+        <textarea></textarea>
+    </div>
+    <div class="field">
+        <label><h3>英文摘要</h3></label>
+        <textarea></textarea>
+    </div>
+    <div class="two fields">
+        <div class="three wide field">
+            <label><h3>中文關鍵詞</h3></label>
+        </div>
+        <div class="thirteen wide field">
+            <input ></input>
+            <input ></input>
+            <input ></input>
+            <input ></input>
+            <input ></input>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="three wide field">
+            <label><h3>英文關鍵詞</h3></label>
+        </div>
+        <div class="thirteen wide field">
+            <input ></input>
+            <input ></input>
+            <input ></input>
+            <input ></input>
+            <input ></input>
+        </div>
+    </div>
+    <div class="field">
+        <label><h3>給總編輯的信</h3></label>
+        <textarea></textarea>
+    </div>
+    <div class="field">
+        <label><h3>圖表數量</h3></label>
+        <div class="fields">
+            <div class="fifteen wide field">
+                <input></input>
+            </div>
+            <div class="one wide field" style="padding-top:4px;">
+                <h3>張</h3>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <label><h3>論文字數</h3></label>
+        <div class="fields">
+            <div class="fifteen wide field">
+                <input></input>
+            </div>
+            <div class="one wide field" style="padding-top:4px;">
+                <h3>字</h3>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <label><h3>曾投稿本學報</h3></label>    
+        <div class="ui radio checkbox">
+            <input type="radio" name="submitted" ></input>
+            <label>是</label>
+        </div>
+        <div class="ui radio checkbox">
+            <input type="radio" name="submitted" ></input>
+            <label>否</label>
+        </div>
+    </div>
+    <div class="field">
+        <label><h3>請確認以下條件</h3></label>    
+        <div class="ui checkbox">
+            <input type="checkbox" name="confirm1" ></input>
+            <label>確認此篇論文僅投稿至本學報，而且以前未曾被刊登過，或投稿過其他刊物。</label>
+        </div>
+        <div class="ui checkbox">
+            <input type="checkbox" name="confirm2" ></input>
+            <label>確認所有研究均符合學術界之道德規範。</label>
+        </div>
+        <div class="ui checkbox">
+            <input type="checkbox" name="confirm3" ></input>
+            <label>確認所交付之論文除了封面頁之外，其他文件均符合匿名審查原則，未出現作者任何個人資料。</label>
+        </div>
+    </div>
+    <div class="field">
+        <label><h3>此篇論文有涉及任何利益衝突</h3></label>    
+        <div class="ui radio checkbox">
+            <input type="radio" name="conflict" value="1"></input>
+            <label>是，請做說明</label>
+        </div>
+        <div class="ui radio checkbox">
+            <input type="radio" name="conflict" value="0"></input>
+            <label>否</label>
+        </div>
+        <textarea name="conflict_explain" style="margin-top: 7px"></textarea>
+    </div>
+    <div class="field">
+        <label><h3></h3></label>
+    </div>
+</form>
+<script>
+$( document ).ready(function(){
+    $('select.dropdown').dropdown();
+    $('.ui.radio.checkbox').checkbox();
+    $('.ui.checkbox').checkbox();
+    $('textarea[name=conflict_explain]').hide();
+    $('[name=conflict]').change(function(){
+        if($('[name=conflict]:checked').val() == '0'){
+            $('textarea[name=conflict_explain]').hide();
+        }else{
+            $('textarea[name=conflict_explain]').show();
+        }
+    });
+});
+function send(){
+    info = $("#edit").serialize();
+    alert(info);
+    $.post(
+        "/login",
+        info,
+        function(msg){
+            alert(msg);
+        }
+    );
+}
+</script>
+
+{% end %}
+{% end %}
