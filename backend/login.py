@@ -110,7 +110,7 @@ class LoginHandler(RequestHandler):
                  return
 
         elif req == 'edit':
-
+            pass
 
 
 
