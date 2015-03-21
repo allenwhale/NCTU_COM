@@ -86,18 +86,19 @@ class LoginService:
         return (None, uid)
 
 
-    def smalledit(self, name, password):
+    def smalledit(self,email, name, password):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
+        yield cur.execute('SELECT "account"."password","account"."uid" FROM "account" '
                 'WHERE "account"."email" = %s;', (email,))
         if cur.rowcount != 1:
             return ('Enoexist', None)
         meta = cur.fetchone()
-        if self._hash(password) != meta[0]:
+        print(self._hash(password),meta[0])
+        if str(self._hash(password)) != meta[0]:
             return ('Epassword', None)
-        uid = meta['uid']
-        yield cur.execute('UPDATE table "account" SET '
-                '("name") = (%s)', (name))
+        uid = meta[1]
+        yield cur.execute('UPDATE "account" SET '
+                '("name") = (%s) WHERE "account"."email" = %s;', (name, email))
         return (None, uid)
 
     def get_account_info(self, uid):
@@ -158,28 +159,24 @@ class LoginHandler(RequestHandler):
                  return
 
         elif req == 'edit':
-            try:
-                name = str(self.get_arugment('name', default=''))
-                first_name = str(self.get_arugment('first_name', default=''))
-                last_name = str(self.get_arugment('last_name', default=''))
-                gender = str(self.get_arugment('gender', default=''))
-                degreem = str(self.get_arugment('degreem', default=''))
-                country = str(self.get_arugment('country', default=''))
-                affiliation = str(self.get_arugment('affiliation', default=''))
-                department = str(self.get_arugment('department', default=''))
-                position = str(self.get_arugment('position', default=''))
-                affiliation_postcode = str(self.get_arugment('affiliation_postcode', default=''))
-                affiliation_adress = str(self.get_arugment('affiliation_adress', default=''))
-                contact_postcode = str(self.get_arugment('contact_postcode', default=''))
-                contact_address = str(self.get_arugment('contact_address', default=''))
-                cellphone = str(self.get_arugment('cellphone', default=''))
-                tellphone = str(self.get_arugment('tellphone', default=''))
-                password = str(self.get_arugment('password', default=''))
-                ability = str(self.get_arugment('ability', default=''))
-            except:
-                self.finish('E')
-                return
-            err, uid = yield from LoginSerive.inst.smalledit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability)
+            name = str(self.get_argument('name', default=''))
+            first_name = str(self.get_argument('first_name', default=''))
+            last_name = str(self.get_argument('last_name', default=''))
+            gender = str(self.get_argument('gender', default=''))
+            degree = str(self.get_argument('degree', default=''))
+            country = str(self.get_argument('country', default=''))
+            affiliation = str(self.get_argument('affiliation', default=''))
+            department = str(self.get_argument('department', default=''))
+            position = str(self.get_argument('position', default=''))
+            affiliation_postcode = str(self.get_argument('affiliation_postcode', default=''))
+            affiliation_address = str(self.get_argument('affiliation_adress', default=''))
+            contact_postcode = str(self.get_argument('contact_postcode', default=''))
+            contact_address = str(self.get_argument('contact_address', default=''))
+            cellphone = str(self.get_argument('cellphone', default=''))
+            tellphone = str(self.get_argument('tellphone', default=''))
+            password = str(self.get_argument('password', default=''))
+            ability = str(self.get_argument('ability', default=''))
+            err, uid = yield from LoginService.inst.smalledit(self.acct['email'],name, password)
             if err:
                 self.finish(err)
                 return
