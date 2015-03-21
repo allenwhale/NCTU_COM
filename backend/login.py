@@ -23,6 +23,9 @@ class LoginService:
             return ('Epassword', None)
         return (None, meta[1])
 
+    def changepassword(self, email, password, newpassword, repassword):
+        pass
+
 class LoginHandler(RequestHandler):
     @reqenv
     def get(self):
@@ -31,17 +34,29 @@ class LoginHandler(RequestHandler):
 
     @reqenv
     def post(self):
-        try:
-            email = str(self.get_argument('email'))
-            password = str(self.get_argument('password'))
-        except:
-            self.finish('E')
+        req = str(self.get_argument('req'))
+        if req == 'signin':
+            try:
+                email = str(self.get_argument('email'))
+                password = str(self.get_argument('password'))
+            except:
+                self.finish('E')
+                return
+            err, uid = yield from LoginService.inst.signin(email, password)
+            if err:
+                self.finish(err)
+                return
+            self.finish('S')
             return
-        err, uid = yield from LoginService.inst.signin(email, password)
-        if err:
-            self.finish(err)
-            return
-        self.finish('S')
-        return
+        elif req == 'changepassword':
+            try: 
+                email = str(self.get_argument('email'))
+                password = str(self.get_argument('password'))
+                newpassword = str(self.get_argument('newpassword'))
+                repassword = sstr(self.get_argument('repassword'))
+             except:
+                 self.finish('E')
+                 return
+
 
 

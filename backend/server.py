@@ -7,6 +7,8 @@ from req import reqenv
 from req import Service
 from login import LoginHandler
 from login import LoginService
+from register import RegisterHandler
+from register import RegisterService
 
 class IndexHandler(RequestHandler):
     @reqenv
@@ -22,4 +24,6 @@ if __name__ == '__main__':
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)
+    Service.Login = LoginService(db)
+    Service.Register = RegisterService(db)
     tornado.ioloop.IOLoop().instance().start()
