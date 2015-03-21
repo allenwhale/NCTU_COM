@@ -67,7 +67,7 @@ class LoginService:
             return ('Edb', None)
         return (None, email)
 
-    def edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, ability):
+    def edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability, password):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
                 'WHERE "account"."email" = %s;', (email,))
@@ -78,7 +78,7 @@ class LoginService:
             return ('Epassword', None)
         uid = meta['uid']
         yield cur.execute('UPDATE table "account" SET '
-                '("name", "first_name", "last_name", "gender", "degree", "country, "affiliation", "department", "position"", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email") = (%s, %s, %s, %s, %s, %s, %s, %s)')
+                '("name", "first_name", "last_name", "gender", "degree", "country, "affiliation", "department", "position"", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address") = (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability, password))
         yield cur.execute('DELETE FROM "account_ability" WHERE "account_ability"."uid" = %s;',(uid,))
         for a in ability:
             yield cur.execute('INSERT INTO "account_ability" '
@@ -137,7 +137,7 @@ class LoginHandler(RequestHandler):
                 email = str(self.get_argument('email'))
                 password = str(self.get_argument('password'))
                 newpassword = str(self.get_argument('newpassword'))
-                repassword = sstr(self.get_argument('repassword'))
+                repassword = str(self.get_argument('repassword'))
             except:
                  self.finish('E')
                  return
