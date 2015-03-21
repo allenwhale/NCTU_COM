@@ -1,4 +1,4 @@
-DBNAME = 'NCTU_COM'
+DBNAME = 'nctu_com'
 DBUSER = 'root'
 DBPASSWORD = 'root'
 COOKIE_SECRET = 'wef wqfqw wqefwqf2 f'
