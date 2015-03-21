@@ -40,9 +40,13 @@
             登入
         </a>
     </div>
-    <div>
-        {% block content %}
-        {% end %}
+    <div class="ui grid">
+        <div class="four wide column"></div>
+        <div class="eight wide column">
+            {% block content %}
+            {% end %}
+        </div>
+        <div class="four wide column"></div>
     </div>
 
 </html>
