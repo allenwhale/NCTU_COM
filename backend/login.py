@@ -1,5 +1,17 @@
 from req import RequestHandler
 from req import reqenv
+import smtplib
+from email.mime.text import MIMEText
+def SendMail(From, To, Subject, Msg):
+    content = MIMEText(msg)
+    content['Suject'] = Subject
+    content['From'] = From
+    content['To'] = To
+    s = smtplib.SMTP('localhost')
+    s.sendmail(From, [To], content.as_string())
+    s.quit()
+    
+
 class LoginService:
     def __init__(self, db):
         self.db = db
@@ -34,7 +46,21 @@ class LoginService:
             return ('Epassword', None)
         if newpassword != repassword:
             return ('Enewpassword')
-        yield cur.execute('UPDATE "account" SET "account"."password" = %s ')
+        yield cur.execute('UPDATE "account" SET "account"."password" = %s '
+                'WHERE "account"."email" = %s;', (email, _hash(newpassword)))
+        if cur.rowcount != 1:
+            return ('Edb', None)
+        return (None, meta[1])
+
+    def forgetpassword(self, email):
+        def rand_password():
+            return 'qwertyuiop'
+        newpassword = rand_password()
+        yield cur.execute('UPDATE "account" SET "account"."password" = %s '
+                'WHERE "account"."email" = %s;', (email, _hash(newpassword)))
+        if cur.rowcount != 1:
+            return ('Edb', None)
+        return (None, email)
 
 class LoginHandler(RequestHandler):
     @reqenv
