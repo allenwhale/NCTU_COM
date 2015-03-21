@@ -184,6 +184,11 @@ class LoginHandler(RequestHandler):
             self.finish('S')
             return
 
+        elif req == 'logout':
+            self.clear_cookie('uid')
+            return
+
+
 
 class ModifyuserHandler(RequestHandler):
     @reqenv
