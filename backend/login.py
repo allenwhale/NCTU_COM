@@ -24,6 +24,16 @@ class LoginService:
         return (None, meta[1])
 
     def changepassword(self, email, password, newpassword, repassword):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
+                'WHERE "account"."email" = %s;', (email,))
+        if cur.rowcount != 1:
+            return ('Enoexist', None)
+        meta = cur.fetchone()
+        if _hash(password) != meta[0]:
+            return ('Epassword', None)
+        if newpassword != repassword:
+            return ('Enewpassword')
         pass
 
 class LoginHandler(RequestHandler):
@@ -54,7 +64,7 @@ class LoginHandler(RequestHandler):
                 password = str(self.get_argument('password'))
                 newpassword = str(self.get_argument('newpassword'))
                 repassword = sstr(self.get_argument('repassword'))
-             except:
+            except:
                  self.finish('E')
                  return
 
