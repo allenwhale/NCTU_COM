@@ -1,0 +1,63 @@
+{% extends 'frame.html' %}
+{% block content %}
+
+<form class="ui form">
+    <h2 class="ui dividing header">Personal Information</h2>
+    <div class="field">
+        <label><h3>姓名</h3></label>
+        <input id="name" type="text">
+    </div>
+    <div class="field">
+        <label><h3>Name</h3></label>
+            <div class="two fields">
+                <div class="field">
+                    <input type="text" placeholder="First Name">
+                </div>
+                <div class="field">
+                    <input type="text" placeholder="Last Name">
+                </div>
+            </div>
+    </div>
+    <div class="field">
+        <label><h3>Gender</h3></label>
+        <select class="ui dropdown">
+            <option value="">　</option>
+            <option value="先生">先生</option>
+            <option value="女士">女士</option>
+        </select>
+    </div>
+    <div class="field">
+        <label><h3>學位</h3></label>
+        <select class="ui dropdown">
+            <option value="">　</option>
+            <option value="博士">博士</option>
+            <option value="碩士">碩士</option>
+            <option value="學士">學士</option>
+            <option value="其他">其他</option>
+        </select>
+    </div>
+    <div class="field">
+        <label><h2>E-mail</h2></label>
+        <input type="text">
+    </div>
+    <div class="field">
+        <label><h2>Password</h2></label>
+        <input type="password">
+    </div>
+    <div class="field">
+        <label><h2>Confirm Password</h2></label>
+        <input type="password">
+    </div>
+    <div class="ui blue submit button" onclick="send();">送出</div>
+</form>
+<script>
+$( document ).ready(function(){
+    $('select.dropdown').dropdown();
+});
+function send(){
+    
+}
+</script>
+
+{% end %}
+
