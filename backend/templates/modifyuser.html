@@ -1,11 +1,14 @@
 {% extends 'frame.html' %}
 {% block content %}
 
-<form class="ui form">
+{% if acct == None %}
+<script>window.location="/"</script>
+{% else %}
+<form id="edit" class="ui form">
     <h2 class="ui dividing header">Personal Information</h2>
     <div class="field">
         <label><h3>姓名</h3></label>
-        <input id="name" type="text">
+        <input name="name" type="text">
     </div>
     <div class="field">
         <label><h3>Name</h3></label>
@@ -38,12 +41,9 @@
     </div>
     <div class="field">
         <label><h2>Password</h2></label>
-        <input type="password">
+        <input name="password" type="password">
     </div>
-    <div class="field">
-        <label><h2>Confirm Password</h2></label>
-        <input type="password">
-    </div>
+    <input name="req" type="hidden" value="edit">
     <div class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
@@ -51,9 +51,19 @@ $( document ).ready(function(){
     $('select.dropdown').dropdown();
 });
 function send(){
-    
+    info = $("#edit").serialize();
+    alert(info);
+    $.post(
+        "/login",
+        info,
+        function(msg){
+            alert(msg);
+        }
+    );
 }
 </script>
+
+{% end %}
 
 {% end %}
 

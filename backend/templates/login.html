@@ -12,30 +12,39 @@
         <input name="password" type="password">
     </div>
         <input id="req" name="req" type="hidden">
-    <div class="ui blue submit button" onclick="send('signin');">送出</div>
-    <div class="ui yellow submit button" onclick="send('forgetpassword');">忘記密碼</div>
+    <div id="login_button" class="ui blue submit button" onclick="send('signin');">送出</div>
+    <div id="forgetpassword_button" class="ui yellow submit button" onclick="send('forgetpassword');">忘記密碼</div>
 </form>
 <script>
 function send(type){
+    login_button = $("#login_button");
+    forgetpassword_button = $("#forgetpassword_button");
+    login_button.addClass("disabled");
+    forgetpassword_button.addClass("disabled");
     $("#req").attr("value", type);
     info = $("#login_form").serialize();
     $.post(
             "/login",
             info,
             function(msg){
+
+                var MSG;
                 if( type == "signin"){
                     if(msg == "S")
                         humane.log("登入成功 即將跳轉至首頁", {timeout: 1000}, function(){
                             window.location="/";
                         });
                         else
-                            humane.log("登入失敗 請再次確認");
+                            MSG = "登入失敗 請再次確認";
                 }
                 else if( type == "forgetpassword" ){
-                    alert(msg);
                     if( msg == "S")
-                        humane.log("已經更改密碼");
+                        MSG = "已經更改密碼";
                 }
+                humane.log(MSG, {timeout: 1000}, function(){
+                    login_button.removeClass("disabled");
+                    forgetpassword_button.removeClass("disabled");
+                })
             }
     );
 }

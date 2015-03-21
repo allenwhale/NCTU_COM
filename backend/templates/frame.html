@@ -44,7 +44,13 @@
         </a>
         {% else %}
         <a class="item right" onclick='logout();'>登出</a>
-        <a class="item right">{{acct["email"]}}</a>
+        <a class="item right">Hello! 
+            {% if acct["name"] != None %}
+                {{acct["name"]}}
+            {% else %}
+                {{acct["email"]}}
+            {% end %}
+        </a>
         <a class="item right" href="/modifyuser">更改資料</a>
         {%end%}
     </div>
