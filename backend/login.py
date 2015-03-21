@@ -34,7 +34,7 @@ class LoginService:
             return ('Epassword', None)
         if newpassword != repassword:
             return ('Enewpassword')
-        pass
+        yield cur.execute('UPDATE "account" SET "account"."password" = %s ')
 
 class LoginHandler(RequestHandler):
     @reqenv

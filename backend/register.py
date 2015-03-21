@@ -67,7 +67,7 @@ class RegisterHandler(RequestHandler):
         except:
             self.finish('E')
             return
-        err, uid = yield from RegisterService.inst.sigup(name, first_name, last_name, gender, degreem, country, affiliation, department, position, affiliation_postcode, affiliation_adress, contact_postcode, contact_address, cellphone, tellphone, password, repassword, ability)
+        err, uid = yield from RegisterService.inst.sigup(name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_adress, contact_postcode, contact_address, cellphone, tellphone, password, repassword, ability)
         if err:
             self.finish(err)
             return
