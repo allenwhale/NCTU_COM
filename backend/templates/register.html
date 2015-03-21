@@ -2,6 +2,7 @@
 {% block content %}
 
 <form id="register_form" class="ui form">
+    <h1 class="ui dividing header">會員申請</h1>
     <div class="field">
         <label><h2>E-mail</h2></label>
         <input name="email" type="text">
@@ -29,7 +30,9 @@ function send(){
             info,
             function(msg){
                 if(msg == "S")
-                    window.location="/";
+                    humane.log("註冊成功頁面即將跳轉至登入畫面！<br>並於登入後立即修改個人資料", {timeout: 2000}, function(){
+                        window.location="/login";
+                    });
                 else{
                     humane.log(msg, {timeout: 1000}, function(){
                         register_button.removeClass("disabled");
