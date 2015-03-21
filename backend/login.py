@@ -62,6 +62,20 @@ class LoginService:
             return ('Edb', None)
         return (None, email)
 
+    def edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, password, ability):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
+                'WHERE "account"."email" = %s;', (email,))
+        if cur.rowcount != 1:
+            return ('Enoexist', None)
+        meta = cur.fetchone()
+        if _hash(password) != meta[0]:
+            return ('Epassword', None)
+        uid = meta['uid']
+        pass
+
+
+
 class LoginHandler(RequestHandler):
     @reqenv
     def get(self):
@@ -93,6 +107,9 @@ class LoginHandler(RequestHandler):
             except:
                  self.finish('E')
                  return
+
+        elif req == 'edit':
+
 
 
 
