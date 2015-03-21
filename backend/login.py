@@ -111,7 +111,38 @@ class LoginHandler(RequestHandler):
                  return
 
         elif req == 'edit':
-            pass
+            try:
+                name = str(self.get_arugment('name'))
+                first_name = str(self.get_arugment('first_name'))
+                last_name = str(self.get_arugment('last_name'))
+                gender = str(self.get_arugment('gender'))
+                degreem = str(self.get_arugment('degreem'))
+                country = str(self.get_arugment('country'))
+                affiliation = str(self.get_arugment('affiliation'))
+                department = str(self.get_arugment('department'))
+                position = str(self.get_arugment('position'))
+                affiliation_postcode = str(self.get_arugment('affiliation_postcode'))
+                affiliation_adress = str(self.get_arugment('affiliation_adress'))
+                contact_postcode = str(self.get_arugment('contact_postcode'))
+                contact_address = str(self.get_arugment('contact_address'))
+                cellphone = str(self.get_arugment('cellphone'))
+                tellphone = str(self.get_arugment('tellphone'))
+                password = str(self.get_arugment('password'))
+                ability = str(self.get_arugment('ability'))
+            except:
+                self.finish('E')
+                return
+            err, uid = yield from LoginSerive.inst.edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability)
+            if err:
+                self.finish(err)
+                return
+            self.finish('S')
+            return
 
 
+class ModifyuserHandler(RequestHandler):
+    @reqenv
+    def get(self):
+        self.render('modifyuser.html')
+        pass
 
