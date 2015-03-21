@@ -59,8 +59,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 def reqenv(func):
     @tornado.gen.coroutine
     def wrap(self,*args,**kwargs):
-        uid = self.get_secure_cookie('uid').decode()
-        self.acct = yield from Service.Login.get_account_info(str(uid)) 
+        try:
+            uid = self.get_secure_cookie('uid').decode()
+        except:
+            uid = '0'
+        if uid != '0':
+            self.acct = yield from Service.Login.get_account_info(str(uid))[1] 
+        else:
+            self.acct = None
+
         ret = func(self,*args,**kwargs)
         if isinstance(ret,types.GeneratorType):
             ret = yield from ret
