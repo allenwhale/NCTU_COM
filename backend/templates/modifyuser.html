@@ -52,10 +52,10 @@
     <div class="two fields">
         <div class="field">
         <label><h3>部門</h3></label>
-            <input name="department" type="text" placeholder="First Name" value="{{ '' if acct["department"] == None else acct["department"]  }}">
+            <input name="department" type="text" placeholder="Department" value="{{ '' if acct["department"] == None else acct["department"]  }}">
         </div>
         <div class="field">
-        <label><h3>職稱</h3></label>
+            <label><h3>職稱</h3></label>
             <select name="position" class="ui dropdown">
                 <option value="">　</option>
                 {% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}
@@ -63,6 +63,42 @@
                     <option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
                 {% end %}
             </select>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="three wide field">
+            <label><h3>郵遞區號<a class="ui green button right" style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank">查詢</a></h3></label>
+            <input name="affiliation_postcode" value="{{ '' if acct["affiliation_postcode"] == None else acct["affiliation_postcode"] }}">
+        </div>
+        <div class="thirteen wide field">
+            <label><h3>服務機構地址</h3></label>
+            <input name="affiliation_address" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
+        </div>
+    </div>
+    <div class="field">
+        <div class="ui checkbox">
+            <input id="set_contact_as_affiliation" type="checkbox">
+            <label>同服務機構地址</label>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="three wide field">
+            <label><h3>郵遞區號<a class="ui green button right" style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank">查詢</a></h3></label>
+            <input name="contact_postcode" value="{{ '' if acct["contact_postcode"] == None else acct["contact_postcode"] }}">
+        </div>
+        <div class="thirteen wide field">
+            <label><h3>聯絡地址</h3></label>
+            <input name="contact_address" value="{{ '' if acct["contact_address"] == None else acct["contact_address"] }}">
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label><h3>手機號碼</h3></label>
+            <input name="cellphone" type="text" value="">
+        </div>
+        <div class="field">
+            <label><h3>室內電話</h3></label>
+            <input name="telephone" type="text" value="">
         </div>
     </div>
     <div class="field">
@@ -75,8 +111,13 @@
 <script>
 $( document ).ready(function(){
     $('select.dropdown').dropdown();
+    $('.ui.checkbox').checkbox();
 });
 function send(){
+    if( $("#set_contact_as_affiliation").prop("checked")){
+        $("input[name='contact_address']").val($("input[name='affiliation_address']").val());
+        $("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
+    }
     info = $("#edit").serialize();
     alert(info);
     $.post(
@@ -92,4 +133,3 @@ function send(){
 {% end %}
 
 {% end %}
-

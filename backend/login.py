@@ -86,7 +86,7 @@ class LoginService:
         return (None, uid)
 
 
-    def smalledit(self,email, name, first_name, last_name, gender, degree, country, affiliation, department, position, password):
+    def smalledit(self,email, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, password):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "account"."password","account"."uid" FROM "account" '
                 'WHERE "account"."email" = %s;', (email,))
@@ -98,7 +98,7 @@ class LoginService:
             return ('Epassword', None)
         uid = meta[1]
         yield cur.execute('UPDATE "account" SET '
-                '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, email))
+                '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s), ("affiliation_postcode")=(%s), ("affiliation_address")=(%s), ("contact_postcode")=(%s), ("contact_address")=(%s), ("cellphone")=(%s), ("telephone")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, email))
         return (None, uid)
 
     def get_account_info(self, uid):
@@ -169,14 +169,14 @@ class LoginHandler(RequestHandler):
             department = str(self.get_argument('department', default=''))
             position = str(self.get_argument('position', default=''))
             affiliation_postcode = str(self.get_argument('affiliation_postcode', default=''))
-            affiliation_address = str(self.get_argument('affiliation_adress', default=''))
+            affiliation_address = str(self.get_argument('affiliation_address', default=''))
             contact_postcode = str(self.get_argument('contact_postcode', default=''))
             contact_address = str(self.get_argument('contact_address', default=''))
             cellphone = str(self.get_argument('cellphone', default=''))
-            tellphone = str(self.get_argument('tellphone', default=''))
+            telephone = str(self.get_argument('telephone', default=''))
             password = str(self.get_argument('password', default=''))
             ability = str(self.get_argument('ability', default=''))
-            err, uid = yield from LoginService.inst.smalledit(self.acct['email'],name, first_name, last_name, gender, degree, country, affiliation, department, position, password)
+            err, uid = yield from LoginService.inst.smalledit(self.acct['email'],name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, password)
             if err:
                 self.finish(err)
                 return
