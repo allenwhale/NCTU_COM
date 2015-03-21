@@ -6,6 +6,16 @@ class RegisterService:
         RegisterService.inst = self
 
     def signup(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, password, repassword, ability):
+        if password != repassword:
+            return ('Epassword', None)
+        def _hash(p):
+            ret = 1048576
+            MOD = 10000000007
+            C = 213
+            for i in p:
+                ret = (ret * C + ord(i)) % MOD
+            return ret
+
         cur = yield self.db.cursor()
         yield cur.execute('SELECT 1 FROM "account" '
                 'WHERE "account"."name" = %s OR "account"."email" = %s;', (name, email))
@@ -16,7 +26,7 @@ class RegisterService:
                 '"affiliation", "department", "affiliation_postcode", "affiliation_address", '
                 '"contact_postcode", "contact_address", "email", "password") '
                 'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ,%s) '
-                'RETURNING "account"."uid";', (name, first_name, last_name, gender, degree, country, affiliation, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, password))
+                'RETURNING "account"."uid";', (name, first_name, last_name, gender, degree, country, affiliation, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, _hash(password)))
         if cur.rowcount != 1:
             return ('Edb', None)
         uid = str(cur.fetchone()[0])
@@ -57,4 +67,10 @@ class RegisterHandler(RequestHandler):
         except:
             self.finish('E')
             return
+        err, uid = yield from RegisterService.inst.sigup(name, first_name, last_name, gender, degreem, country, affiliation, department, position, affiliation_postcode, affiliation_adress, contact_postcode, contact_address, cellphone, tellphone, password, repassword, ability)
+        if err:
+            self.finish(err)
+            return
+        self.finish('S')
+        return
 
