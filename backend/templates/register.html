@@ -14,19 +14,27 @@
         <label><h2>Confirm Password</h2></label>
         <input name="repassword" type="password">
     </div>
-    <div class="ui blue submit button" onclick="send();">送出</div>
+    <div id="register_button" class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
 $( document ).ready(function(){
     $('select.dropdown').dropdown();
 });
 function send(){
+    register_button = $("#register_button");
+    $("#register_button").addClass("disabled");
     info = $("#register_form").serialize();
     $.post(
             "/register",
             info,
             function(msg){
-                alert(msg);
+                if(msg == "S")
+                    window.location="/";
+                else{
+                    humane.log(msg, {timeout: 1000}, function(){
+                        register_button.removeClass("disabled");
+                    });
+                }
             }
     );
 }
