@@ -86,7 +86,7 @@ class LoginService:
         return (None, uid)
 
 
-    def smalledit(self,email, name, password):
+    def smalledit(self,email, name, first_name, last_name, gender, degree, country, affiliation, department, position, password):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "account"."password","account"."uid" FROM "account" '
                 'WHERE "account"."email" = %s;', (email,))
@@ -98,7 +98,7 @@ class LoginService:
             return ('Epassword', None)
         uid = meta[1]
         yield cur.execute('UPDATE "account" SET '
-                '("name") = (%s) WHERE "account"."email" = %s;', (name, email))
+                '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, email))
         return (None, uid)
 
     def get_account_info(self, uid):
@@ -176,7 +176,7 @@ class LoginHandler(RequestHandler):
             tellphone = str(self.get_argument('tellphone', default=''))
             password = str(self.get_argument('password', default=''))
             ability = str(self.get_argument('ability', default=''))
-            err, uid = yield from LoginService.inst.smalledit(self.acct['email'],name, password)
+            err, uid = yield from LoginService.inst.smalledit(self.acct['email'],name, first_name, last_name, gender, degree, country, affiliation, department, position, password)
             if err:
                 self.finish(err)
                 return
