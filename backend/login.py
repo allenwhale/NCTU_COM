@@ -76,6 +76,10 @@ class LoginService:
         yield cur.execute('UPDATE table "account" SET '
                 '("name", "first_name", "last_name", "gender", "degree", "country", "affiliation_address", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email")')
 
+        def get_account_info(self, uid):
+            cur = yield self.db.cursor()
+
+
 
 
 class LoginHandler(RequestHandler):
@@ -98,6 +102,7 @@ class LoginHandler(RequestHandler):
             if err:
                 self.finish(err)
                 return
+            self.set_secure_cookie('uid', str(uid))
             self.finish('S')
             return
         elif req == 'changepassword':
