@@ -38,9 +38,15 @@
         <a class="item">
             聯絡我們
         </a>
+        {% if acct == None %}
         <a class="item right" href="/login">
             登入
         </a>
+        {% else %}
+        <a class="item right" onclick='logout();'>登出</a>
+        <a class="item right">{{acct["email"]}}</a>
+        <a class="item right" href="/modifyuser">更改資料</a>
+        {%end%}
     </div>
     <div class="ui grid">
         <div class="four wide column"></div>
@@ -52,3 +58,10 @@
     </div>
 
 </html>
+<script>
+function logout(){
+    $.post("/login", {"req": "logout"}, function(){
+        window.location.reload();
+    });
+}
+</script>
