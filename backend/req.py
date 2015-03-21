@@ -64,7 +64,7 @@ def reqenv(func):
         except:
             uid = '0'
         if uid != '0':
-            self.acct = yield from Service.Login.get_account_info(str(uid))[1] 
+            err, self.acct = yield from Service.Login.get_account_info(str(uid))
         else:
             self.acct = None
 
