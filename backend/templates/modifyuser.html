@@ -8,36 +8,62 @@
     <h2 class="ui dividing header">Personal Information</h2>
     <div class="field">
         <label><h3>姓名</h3></label>
-        <input name="name" type="text">
+        <input name="name" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
     </div>
     <div class="field">
         <label><h3>Name</h3></label>
             <div class="two fields">
                 <div class="field">
-                    <input type="text" placeholder="First Name">
+                    <input name="first_name" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
                 </div>
                 <div class="field">
-                    <input type="text" placeholder="Last Name">
+                    <input name="last_name" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
                 </div>
             </div>
     </div>
     <div class="field">
         <label><h3>Gender</h3></label>
-        <select class="ui dropdown">
+        <select name="gender" class="ui dropdown" value="先生">
             <option value="">　</option>
-            <option value="先生">先生</option>
-            <option value="女士">女士</option>
+            {% set gender=["先生", "女士"] %}
+            {% for i in gender %}
+                <option value="{{i}}" {{'selected' if acct["gender"] == i else ''}} >{{i}}</option>
+            {% end %}
         </select>
     </div>
     <div class="field">
         <label><h3>學位</h3></label>
-        <select class="ui dropdown">
+        <select name="degree" class="ui dropdown">
             <option value="">　</option>
-            <option value="博士">博士</option>
-            <option value="碩士">碩士</option>
-            <option value="學士">學士</option>
-            <option value="其他">其他</option>
+            {% set degree=["博士", "碩士", "學士", "其他"] %}
+            {% for i in degree %}
+                <option value="{{i}}" {{'selected' if acct["degree"] == i else ''}} >{{i}}</option>
+            {% end %}
         </select>
+    </div>
+    <div class="field">
+        <label><h3>國籍</h3></label>
+        <input name="country" type="text" value="{{ '' if acct["country"] == None else acct["country"]  }}">
+    </div>
+    <div class="field">
+        <label><h3>服務機構名稱</h3></label>
+        <input name="affiliation" type="text" value="{{ '' if acct["affiliation"] == None else acct["affiliation"]  }}">
+    </div>
+    <div class="two fields">
+        <div class="field">
+        <label><h3>部門</h3></label>
+            <input name="department" type="text" placeholder="First Name" value="{{ '' if acct["department"] == None else acct["department"]  }}">
+        </div>
+        <div class="field">
+        <label><h3>職稱</h3></label>
+            <select name="position" class="ui dropdown">
+                <option value="">　</option>
+                {% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}
+                {% for i in position %}
+                    <option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
+                {% end %}
+            </select>
+        </div>
     </div>
     <div class="field">
         <label><h2>Password</h2></label>
