@@ -48,3 +48,4 @@ class PaperuploadHandler(RequestHandler):
         conflict_explain = str(self.get_argument('conflict_explain', default=''))
         attach_file = self.request.files['attach_file'][0]
 
+        err, pid = yield from PaperuploadService.inst(classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file)
