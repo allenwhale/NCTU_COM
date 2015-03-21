@@ -26,12 +26,13 @@ class LoginService:
                 ret = (ret * C + ord(i)) % MOD
             return ret
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
+        yield cur.execute('SELECT "account"."password", "account"."uid" FROM "account" '
                 'WHERE "account"."email" = %s;', (email,))
         if cur.rowcount != 1:
             return ('Enoexist', None)
         meta = cur.fetchone()
-        if _hash(password) != meta[0]:
+        print(password, type(_hash(password)),type( meta[0]))
+        if str(_hash(password)) != meta[0]:
             return ('Epassword', None)
         return (None, meta[1])
 
