@@ -5,7 +5,7 @@ class LoginService:
         self.db = db
         LoginService.inst = self
 
-    def signup(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_addressi, email, password, repassword, ability):
+    def signup(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, password, repassword, ability):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT 1 FROM "account" '
                 'WHERE "account"."name" = %s OR "account"."email" = %s;', (name, email))
@@ -13,7 +13,8 @@ class LoginService:
             return ('Eexist', None)
         yield cur.execute('INSERT INTO "sccount" '
                 '("name", "first_name", "last_name", "gender", "degree", "country", '
-                '"affiliation", "department", "affiliation_address")')
+                '"affiliation", "department", "affiliation_postcode", "affiliation_address", '
+                '"contact_postcode", "contact_address", "email", "password") ')
 
 class LoginHandler(RequestHandler):
     @reqenv

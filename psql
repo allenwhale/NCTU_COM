@@ -1,0 +1,24 @@
+CREATE TABLE account(
+	uid SERIAL,
+	name character varying,
+	first_name character varying,
+	last_name character varying,
+	gender character varying,
+	degree character varying,
+	country character varying,
+	affiliation character varying,
+	department character varying,
+	position character varying,
+	affiliation_postcode character varying,
+	affiliation_address character varying,
+	contact_postcode character varying,
+	contact_address character varying,
+	cellphone character varying,
+	tellphone character varying,
+	email character varying,
+	password character varying
+);
+CREATE TABLE account_ability(
+	uid integer,
+	skill character varying
+);
