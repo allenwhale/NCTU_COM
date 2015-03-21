@@ -21,6 +21,7 @@ if __name__ == '__main__':
     app = tornado.web.Application([
         ('/', IndexHandler),
         ('/login', LoginHandler),
+        ('/register', RegisterHandler),
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)
