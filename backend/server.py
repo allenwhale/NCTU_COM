@@ -10,6 +10,8 @@ from login import LoginService
 from register import RegisterHandler
 from register import RegisterService
 from login import ModifyuserHandler
+from paperupload import PaperuploadHandler
+from paperupload import PaperuploadService
 
 class IndexHandler(RequestHandler):
     @reqenv
@@ -29,4 +31,5 @@ if __name__ == '__main__':
     app.listen(config.PORT)
     Service.Login = LoginService(db)
     Service.Register = RegisterService(db)
+    Service.Paperupload = PaperuploadService(db)
     tornado.ioloop.IOLoop().instance().start()
