@@ -6,6 +6,22 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
+    def upload(self, classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
+       cur = yield self.db.cursor()
+       yield cur.execute('INSERT INTO "paperupload" ("classification", "area", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "chinesekeywords" ,"englishkeywords", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain))
+       pid = str(cur.fetchone()[0])
+       apid = 0
+       for a in authors:
+           apid += 1
+           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "adress", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
+       filename = str(pid)
+       f = open('../html/paper/' + filename, 'wb+')
+       f.write(attach_file['body'])
+       f.close()
+       return (None, pid)
+
+
+
 class PaperuploadHandler(RequestHandler):
     @reqenv
     def get(self):
@@ -23,10 +39,12 @@ class PaperuploadHandler(RequestHandler):
         chinesekeywords = list(self.get_arguments('chinesekeywords', default=''))
         englishkeywords = list(self.get_arguments('englishkeywords', default=''))
         authors = self.get_arguments('authors')
-        letter = self.get_argument('letter', default='')
-        picnum = self.get_argument('picnum', default='')
-        wordnum = self.get_argument('wordnum', default='')
-        submitted = self.get_argument('submitted', default='')
-        confirm = self.get_arguments('confirm')
-        conflict
-        pass
+        letter = str(self.get_argument('letter', default=''))
+        picnum = str(self.get_argument('picnum', default=''))
+        wordnum = str(self.get_argument('wordnum', default=''))
+        submitted = str(self.get_argument('submitted', default=''))
+        confirm = str(self.get_arguments('confirm', default=''))
+        conflict = str(self.get_argument('confllict', default=''))
+        conflict_explain = str(self.get_argument('conflict_explain', default=''))
+        attach_file = self.request.files['attach_file'][0]
+
