@@ -14,12 +14,15 @@ class LoginService:
         yield cur.execute('INSERT INTO "sccount" '
                 '("name", "first_name", "last_name", "gender", "degree", "country", '
                 '"affiliation", "department", "affiliation_postcode", "affiliation_address", '
-                '"contact_postcode", "contact_address", "email", "password") ')
+                '"contact_postcode", "contact_address", "email", "password") '
+                'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ,%s) '
+                'RETURNING "account"."uid";', (name, first_name, last_name, gender, degree, country, affiliation, affiliation_postcode, affiliation_address, contact_postcode, contact_address, email, password))
 
 class LoginHandler(RequestHandler):
     @reqenv
     def get(self):
-        pass
+        self.render('login.html')
+        return
 
     @reqenv
     def post(self):
