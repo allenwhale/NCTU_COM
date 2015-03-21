@@ -94,11 +94,11 @@
     <div class="two fields">
         <div class="field">
             <label><h3>手機號碼</h3></label>
-			<input name="cellphone" type="text" value="{{acct['cellphone']}}">
+			<input name="cellphone" type="text" value="{{ '' if acct["cellphone"] == None else acct["cellphone"]}}">
         </div>
         <div class="field">
             <label><h3>室內電話</h3></label>
-			<input name="telephone" type="text" value="{{acct['telephone']}}">
+			<input name="telephone" type="text" value="{{ '' if acct["telephone"] == None else acct["telephone"]}}">
         </div>
     </div>
     <div class="field">
@@ -119,12 +119,12 @@ function send(){
         $("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
     }
     info = $("#edit").serialize();
-    alert(info);
     $.post(
         "/login",
         info,
         function(msg){
-            alert(msg);
+            if( msg == "S" )
+                humane.log("修改成功！", {timeout: 1500});
         }
     );
 }
