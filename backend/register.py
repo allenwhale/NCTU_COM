@@ -17,11 +17,11 @@ class RegisterService:
             return ret
 
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT 1 FROM "account" '
+        yield cur.execute('SELECT * FROM "account" '
                 'WHERE "account"."email" = %s;', (email, ))
         if cur.rowcount != 0:
             return ('Eexist', None)
-        yield cur.execute('INSERT INTO "sccount" '
+        yield cur.execute('INSERT INTO "account" '
                 '( "email", "password") '
                 'VALUES ( %s ,%s) '
                 'RETURNING "account"."uid";', (email, _hash(password)))
@@ -46,7 +46,7 @@ class RegisterHandler(RequestHandler):
         except:
             self.finish('E')
             return
-        err, uid = yield from RegisterService.inst.sigup(email, password, repassword)
+        err, uid = yield from RegisterService.inst.signup(email, password, repassword)
         if err:
             self.finish(err)
             return
