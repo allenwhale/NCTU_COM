@@ -85,6 +85,21 @@ class LoginService:
                     '("uid", "skill") VALUES(%s, %s);', (uid, a))
         return (None, uid)
 
+
+    def smalledit(self, name, password):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "account"."password" "account"."uid" FROM "account" '
+                'WHERE "account"."email" = %s;', (email,))
+        if cur.rowcount != 1:
+            return ('Enoexist', None)
+        meta = cur.fetchone()
+        if self._hash(password) != meta[0]:
+            return ('Epassword', None)
+        uid = meta['uid']
+        yield cur.execute('UPDATE table "account" SET '
+                '("name") = (%s)', (name))
+        return (None, uid)
+
     def get_account_info(self, uid):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "name", "first_name", "last_name", "gender", "degree", "country", "affiliation", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email" FROM "account" WHERE "account"."uid" = %s;', (uid,))
