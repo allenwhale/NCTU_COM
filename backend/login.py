@@ -98,7 +98,7 @@ class LoginService:
             return ('Epassword', None)
         uid = meta[1]
         yield cur.execute('UPDATE "account" SET '
-                '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s), ("affiliation_postcode")=(%s), ("affiliation_address")=(%s), ("contact_postcode")=(%s), ("contact_address")=(%s), ("cellphone")=(%s), ("telephone")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, email))
+                '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s), ("affiliation_postcode")=(%s), ("affiliation_address")=(%s), ("contact_postcode")=(%s), ("contact_address")=(%s), ("cellphone")=(%s), ("tellphone")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, email))
         return (None, uid)
 
     def get_account_info(self, uid):
