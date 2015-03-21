@@ -26,6 +26,7 @@ if __name__ == '__main__':
         ('/login', LoginHandler),
         ('/register', RegisterHandler),
         ('/modifyuser', ModifyuserHandler),
+        ('/paperupload', PaperuploadHandler),
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)

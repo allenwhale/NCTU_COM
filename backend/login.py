@@ -103,7 +103,7 @@ class LoginService:
 
     def get_account_info(self, uid):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "name", "first_name", "last_name", "gender", "degree", "country", "affiliation", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email" FROM "account" WHERE "account"."uid" = %s;', (uid,))
+        yield cur.execute('SELECT "name", "first_name", "last_name", "gender", "degree", "country", "affiliation", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email", "cellphone", "tellphone" FROM "account" WHERE "account"."uid" = %s;', (uid,))
         data = cur.fetchone()
         meta = {'name': data[0],
                 'first_name': data[1],
@@ -118,7 +118,9 @@ class LoginService:
                 'affiliation_address': data[10],
                 'contact_postcode': data[11],
                 'contact_address': data[12],
-                'email': data[13]
+                'email': data[13],
+                'cellphone': data[14],
+                'tellphone': data[15]
                 }
         return (None, meta)
 
