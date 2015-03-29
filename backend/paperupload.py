@@ -30,12 +30,14 @@ class PaperuploadService:
        for k in englishkeywords:
            yield cur.execute('INSERT INTO "englishkeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
        return (None, pid)
-'''
-   def set_papercheck(self, pid, papercheck):
-       cur = yield from self.db.cursor()
-       if papercheck not in range(4):
-           return ('Eindex', None)
-'''
+    def set_papercheck(self, pid, papercheck):
+        cur = yield from self.db.cursor()
+        if int(papercheck) not in range(4):
+            return ('Eindex', None)
+        yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid" = %s AND "uid" = %s;', (papercheck, pid, uid))
+        if cur.rowcount != 1:
+            return ('Eexeist', None)
+        return (None, pid)
 
 class PaperuploadHandler(RequestHandler):
     @reqenv

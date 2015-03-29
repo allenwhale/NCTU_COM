@@ -14,6 +14,8 @@ from paperupload import PaperuploadHandler
 from paperupload import PaperuploadService
 from showpaper import ShowpaperHandler
 from showpaper import ShowpaperService
+from admin import AdminService
+from admin import AdminRequestHandler
 
 class IndexHandler(RequestHandler):
     @reqenv
