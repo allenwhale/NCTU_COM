@@ -215,7 +215,6 @@ function send(){
 	var anony = document.getElementById('anony').files[0];
 	var repdf=/^.*\.pdf$/g;
 	var doc=/^.*\.doc$/g;
-	var tmp=re.exec(anony.name);
 	if(typeof(anony) == 'undefined'){
 		humane.log('請選擇匿名檔案上傳');
 		return;
