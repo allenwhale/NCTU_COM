@@ -6,7 +6,7 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
-    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author):
+    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author, chinesekeywords, englishkeywords):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
        yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
@@ -22,21 +22,22 @@ class PaperuploadService:
        f.write(non_anony_file['body'])
        f.close()
        apid = 0
-       print(author)
-       for a in author:
-           print(a)
        for a in author:
            apid += 1
-           print(apid)
-           print(a)
            yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
+       for k in chinesekeywords:
+           yield cur.execute('INSERT INTO "chinesekeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
+       for k in englishkeywords:
+           yield cur.execute('INSERT INTO "englishkeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
        return (None, pid)
-'''
-   def set_papercheck(self, pid, papercheck):
-       cur = yield from self.db.cursor()
-       if papercheck not in range(4):
-           return ('Eindex', None)
-'''
+    def set_papercheck(self, pid, papercheck):
+        cur = yield from self.db.cursor()
+        if int(papercheck) not in range(4):
+            return ('Eindex', None)
+        yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid" = %s AND "uid" = %s;', (papercheck, pid, uid))
+        if cur.rowcount != 1:
+            return ('Eexeist', None)
+        return (None, pid)
 
 class PaperuploadHandler(RequestHandler):
     @reqenv
@@ -71,15 +72,11 @@ class PaperuploadHandler(RequestHandler):
         author_phone = self.get_arguments('phone[]')
         author_email = self.get_arguments('email[]')
         author = list(zip(author_name, author_first_name, author_last_name, author_affiliation, author_department, author_position, author_address, author_phone, author_email))
-        for a in author:
-            print(a)
         """
         authors = self.get_arguments('authors')
         attach_file = self.request.files['attach_file'][0]
         """
-        print(self.acct['uid'])
-        print(author)
-        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author)
+        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author, chinesekeywords, englishkeywords)
         if err:
             self.finish(err)
             return

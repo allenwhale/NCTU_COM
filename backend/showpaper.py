@@ -30,16 +30,16 @@ class ShowpaperService:
         meta = {'chinese': [],
                 'english': []}
         yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "chinesekeywords"."pid" = %s;', (pid, ))
-        for k in cur:
+        for (k, ) in cur:
             meta['chinese'].append(k)
         yield cur.execute('SELECT "keyword" FROM "englishkeywords" WHERE "englishkeywords"."pid" = %s;', (pid, ))
-        for k in cur:
+        for (k, ) in cur:
             meta['english'].append(k)
 
         return (None, meta)
 
 
-    def get_paper(self, uid, check=None):
+    def get_paper(self, uid, check=None, PID=None):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain" FROM "paperupload" WHERE "paperupload"."uid" = %s;', (uid,))
         meta = []
@@ -61,13 +61,41 @@ class ShowpaperService:
         if check:
             tm = []
             for m in meta:
-                print(type(m['papercheck']))
                 if str(m['papercheck']) in check:
                     tm.append(m)
             meta = tm
+
+        if PID:
+            tm = []
+            for m in meta:
+                if str(m['pid']) in PID:
+                    tm.append(m)
+            meta = tm
+
         for m in meta:
             err, m['author'] = yield from self.get_author_bypid(m['pid'])
             err, m['keywords'] = yield from self.get_keywords_bypid(m['pid'])
+        return (None, meta)
+
+    def get_all_paper(self):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain" FROM "paperupload";', ())
+        meta = []
+        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain in cur:
+            meta.append({'pid': pid,
+                'papercheck': papercheck,
+                'chinesetitle': chinesetitle,
+                'englishtitle': englishtitle,
+                'chineseabstract': chineseabstract,
+                'englishabstract': englishabstract,
+                'letter': letter,
+                'picnum': picnum,
+                'word': wordnum,
+                'submitted': submitted,
+                'confirm': confirm,
+                'conflict': conflict,
+                'conflict_explain': conflict_explain
+                })
         return (None, meta)
 
 
@@ -84,14 +112,20 @@ class ShowpaperHandler(RequestHandler):
     @reqenv
     def post(self):
         req = str(self.get_argument('req'))
+        uid = self.acct['uid']
         if req == 'get_paper':
-            uid = self.acct['uid']
-            papercheck = self.get_arguments('papercheck[]')
-            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck)
+            try:
+                papercheck = self.get_arguments('papercheck[]')
+            except:
+                papercheck = None
+            try:
+                pid = self.get_arguments('pid[]')
+            except:
+                pid = None
+            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck, pid)
             if err:
                 self.finish(err)
                 return
             self.finish(json.dumps(meta))
             return
-
         return
