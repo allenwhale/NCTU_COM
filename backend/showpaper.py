@@ -60,7 +60,7 @@ class ShowpaperService:
                 })
         if check:
             for m in meta:
-                if m['papercheck'] != check:
+                if m['papercheck'] not in check:
                     meta.pop(m)
         for m in meta:
             err, m['author'] = yield from self.get_author_bypid(m['pid'])
@@ -78,7 +78,7 @@ class ShowpaperHandler(RequestHandler):
         req = str(self.get_argument('req'))
         if req == 'get_paper':
             uid = self.acct['uid']
-            papercheck = str(self.get_argument('checkpaper', default=''))
+            papercheck = self.get_arguments('checkpaper[]')
             err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck if papercheck != '' else None)
             if err:
                 self.finish(err)
