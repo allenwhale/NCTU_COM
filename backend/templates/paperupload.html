@@ -182,11 +182,11 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			<div class="two fields">
                 <div class="inline field">
 					<label>匿名上傳</label>
-					<input type="file" name="anony"></input>
+					<input id="anony" type="file" name="anony"></input>
                 </div>
                 <div class="inline field">
 					<label>非匿名上傳</label>
-					<input type="file" name="non-anony"></input>
+					<input type="file" name="non-anony" id="non-anony"></input>
                 </div>
             </div>
     </div>
@@ -212,6 +212,19 @@ $( document ).ready(function(){
 });
 function send(){
 	//	alert( $("input[name=conflict]:checked").val());
+	var anony = document.getElementById('anony').files[0];
+	var repdf=/^.*\.pdf$/g;
+	var doc=/^.*\.doc$/g;
+	var tmp=re.exec(anony.name);
+	if(typeof(anony) == 'undefined'){
+		humane.log('請選擇匿名檔案上傳');
+		return;
+	}
+	anony = document.getElementById('non-anony').files[0];
+	if(typeof(anony) == 'undefined'){
+		humane.log('請選擇非匿名檔案上傳');
+		return;
+	}
 	var conf = "";
 	for( i = 1 ; i <= 3 ; i++){
 		var selector = "[name=confirm"+i+"]:checked";
@@ -231,7 +244,12 @@ function send(){
 		}
 	});
 }
+
 function create_author(){
+	if($('#author_field').find('.ui.segments').length==5){
+		humane.log('太多作者囉');
+		return;
+	}
 
 	contents = '<div class="ui segments"><div class="ui teal inverted segment author-edit hover"  onclick=" $(this).next().animate({height: \'toggle\'});"><h4>作者<a class="hover"><i class="red remove icon" onclick="remove_author(this);" style="float: right;"></i></a></h4></div><div class="ui secondary segment" style="display: none;"><div class="field"><label><h3>姓名</h3></label><input name="name[]" type="text" value=""></div><div class="field">	<label><h3>Name</h3></label><div class="two fields"><div class="field"><input name="first_name[]" type="text" placeholder="First Name" value=""></div><div class="field"><input name="last_name[]" type="text" placeholder="Last Name" value=""></div></div></div><div class="field"><label><h3>服務機構名稱</h3></label><input name="affiliation[]" type="text" value=""></div><div class="two fields"><div class="field"><label><h3>部門</h3></label><input name="department[]" type="text" placeholder="Department" value=""></div><div class="field"><label><h3>職稱</h3></label><select name="position[]" class="ui dropdown">	<option value="">　</option>{% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}{% for i in position %}<option value="{{i}}">{{i}}</option>{% end %}</select></div></div><div class="fields"><label><h3>地址</h3></label><input name="address[]" value="">	</div><div class="field"><label><h3>聯絡電話</h3></label><input name="phone[]" type="text" value=""></div><div class="field"><label><h3>E-mail</h3></label><input name="email[]" type="text" value=""></div></div></div>';
 	field = $("#author_field");
