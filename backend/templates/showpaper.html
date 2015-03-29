@@ -1,0 +1,14 @@
+{% extends 'frame.html' %}
+{% block content %}
+
+{% if acct == None %}
+<script>window.location="/"</script>
+{% else %}
+<div class="ui segment">
+    <div class="ui list">
+        <a class="item">審查中論文</a>
+        <a class="item">審查通過論文</a>
+    </div>
+</div>
+{% end %}
+{% end %}

@@ -12,12 +12,12 @@ from register import RegisterService
 from login import ModifyuserHandler
 from paperupload import PaperuploadHandler
 from paperupload import PaperuploadService
+from showpaper import ShowpaperHandler
+from showpaper import ShowpaperService
 
 class IndexHandler(RequestHandler):
     @reqenv
     def get(self):
-        err, meta = yield from  Service.Paperupload.get_paper(2)
-        print(meta)
         self.render('index.html')
         return
 
@@ -29,10 +29,12 @@ if __name__ == '__main__':
         ('/register', RegisterHandler),
         ('/modifyuser', ModifyuserHandler),
         ('/paperupload', PaperuploadHandler),
+        ('/showpaper', ShowpaperHandler),
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)
     Service.Login = LoginService(db)
     Service.Register = RegisterService(db)
     Service.Paperupload = PaperuploadService(db)
+    Service.Showpaper = ShowpaperService(db)
     tornado.ioloop.IOLoop().instance().start()

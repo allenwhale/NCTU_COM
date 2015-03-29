@@ -25,6 +25,7 @@ CREATE TABLE account_ability(
 CREATE TABLE paperupload(
     pid SERIAL,
 	uid integer,
+	papercheck integer DEFAULT 0,
     chinesetitle character varying,
     englishtitle character varying,
     chineseabstract character varying,
