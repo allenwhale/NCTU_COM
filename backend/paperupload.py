@@ -10,6 +10,10 @@ class PaperuploadService:
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
        yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
+<<<<<<< HEAD
+       pid = str(cur.fetchone()[0]);
+       print(pid);
+=======
        if cur.rowcount != 1:
            return ('EDB', None)
        pid = str(cur.fetchone()[0])
@@ -21,9 +25,8 @@ class PaperuploadService:
        f = open(non_anony_filename, 'wb+')
        f.write(non_anony_file['body'])
        f.close()
+>>>>>>> 012917411fdad9e2f2caa8146f4ea5c4ec8319f9
        """
-       yield cur.execute('INSERT INTO "paperupload" ("chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "chinesekeywords" ,"englishkeywords", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain))
-       pid = str(cur.fetchone()[0])
        apid = 0
        for a in authors:
            apid += 1

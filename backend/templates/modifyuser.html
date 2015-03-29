@@ -2,7 +2,11 @@
 {% block content %}
 
 {% if acct == None %}
-<script>window.location="/"</script>
+<script>
+humane.log("請先登入", {timeout: 1000}, function(){
+	window.location="/login";
+});
+</script>
 {% else %}
 <form id="edit" class="ui form">
     <h2 class="ui dividing header">Personal Information</h2>
