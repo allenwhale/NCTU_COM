@@ -6,21 +6,31 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
-    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain):
+    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
        yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
+<<<<<<< HEAD
        pid = str(cur.fetchone()[0]);
        print(pid);
+=======
+       if cur.rowcount != 1:
+           return ('EDB', None)
+       pid = str(cur.fetchone()[0])
+       anony_filename = '../html/paper/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
+       non_anony_filename = '../html/paper/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
+       f = open(anony_filename, 'wb+')
+       f.write(anony_file['body'])
+       f.close()
+       f = open(non_anony_filename, 'wb+')
+       f.write(non_anony_file['body'])
+       f.close()
+>>>>>>> 012917411fdad9e2f2caa8146f4ea5c4ec8319f9
        """
        apid = 0
        for a in authors:
            apid += 1
            yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "adress", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
-       filename = str(pid)
-       f = open('../html/paper/' + filename, 'wb+')
-       f.write(attach_file['body'])
-       f.close()
        """
        return (None, True)
 
@@ -101,9 +111,11 @@ class PaperuploadHandler(RequestHandler):
         confirm = str(self.get_argument('confirm', default=''))
         conflict = str(self.get_argument('conflict', default=''))
         conflict_explain = str(self.get_argument('conflict_explain', default=''))
+        anony_file = self.request.files['anony'][0]
+        non_anony_file = self.request.files['non-anony'][0]
         """
         authors = self.get_arguments('authors')
         attach_file = self.request.files['attach_file'][0]
         """
         print(self.acct['uid'])
-        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain)
+        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file)
