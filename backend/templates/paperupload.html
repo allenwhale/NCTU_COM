@@ -160,6 +160,7 @@ $( document ).ready(function(){
 //	console.log
 });
 function send(){
+//	alert( $("input[name=conflict]:checked").val());
 	var data = new FormData($("#paperupload")[0]);
 	$.ajax({
 		url: "/paperupload",

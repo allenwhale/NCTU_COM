@@ -97,7 +97,7 @@ class PaperuploadHandler(RequestHandler):
         letter = str(self.get_argument('letter', default=''))
         picnum = str(self.get_argument('picnum', default=''))
         wordnum = str(self.get_argument('wordnum', default=''))
-        conflict = str(self.get_argument('confllict', default=''))
+        conflict = str(self.get_argument('conflict', default=''))
         conflict_explain = str(self.get_argument('conflict_explain', default=''))
         """
         authors = self.get_arguments('authors')
