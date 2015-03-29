@@ -22,7 +22,7 @@ function load_pass_paper(){
 	segment = $("#pass_paper");
 	data = {
 		req: "get_paper",
-		papercheck: [0]
+        papercheck: [0,1,2,3]
 	};
 	$.post("./showpaper", data, function(msg){
 			alert(msg.length);
