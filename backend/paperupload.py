@@ -6,7 +6,7 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
-    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file):
+    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
        yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
@@ -21,13 +21,16 @@ class PaperuploadService:
        f = open(non_anony_filename, 'wb+')
        f.write(non_anony_file['body'])
        f.close()
-       """
        apid = 0
-       for a in authors:
+       print(author)
+       for a in author:
+           print(a)
+       for a in author:
            apid += 1
-           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "adress", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
-       """
-       return (None, True)
+           print(apid)
+           print(a)
+           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
+       return (None, pid)
 
 
 class PaperuploadHandler(RequestHandler):
@@ -53,9 +56,27 @@ class PaperuploadHandler(RequestHandler):
         conflict_explain = str(self.get_argument('conflict_explain', default=''))
         anony_file = self.request.files['anony'][0]
         non_anony_file = self.request.files['non-anony'][0]
+        author_name = self.get_arguments('name[]')
+        author_first_name = self.get_arguments('first_name[]')
+        author_last_name = self.get_arguments('last_name[]')
+        author_affiliation = self.get_arguments('affiliation[]')
+        author_department = self.get_arguments('department[]')
+        author_position = self.get_arguments('position[]')
+        author_address = self.get_arguments('address[]')
+        author_phone = self.get_arguments('phone[]')
+        author_email = self.get_arguments('email[]')
+        author = list(zip(author_name, author_first_name, author_last_name, author_affiliation, author_department, author_position, author_address, author_phone, author_email))
+        for a in author:
+            print(a)
         """
         authors = self.get_arguments('authors')
         attach_file = self.request.files['attach_file'][0]
         """
         print(self.acct['uid'])
-        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file)
+        print(author)
+        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author)
+        if err:
+            self.finish(err)
+            return
+        self.finish('S')
+        return
