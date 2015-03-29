@@ -30,10 +30,10 @@ class ShowpaperService:
         meta = {'chinese': [],
                 'english': []}
         yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "chinesekeywords"."pid" = %s;', (pid, ))
-        for k in cur:
+        for (k, ) in cur:
             meta['chinese'].append(k)
         yield cur.execute('SELECT "keyword" FROM "englishkeywords" WHERE "englishkeywords"."pid" = %s;', (pid, ))
-        for k in cur:
+        for (k, ) in cur:
             meta['english'].append(k)
 
         return (None, meta)
@@ -61,7 +61,6 @@ class ShowpaperService:
         if check:
             tm = []
             for m in meta:
-                print(type(m['papercheck']))
                 if str(m['papercheck']) in check:
                     tm.append(m)
             meta = tm
