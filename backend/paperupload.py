@@ -6,10 +6,10 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
-    def upload(self, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain):
+    def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
-       yield cur.execute('INSERT INTO "paperupload" ("chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)', (chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain));
+       yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain));
        """
        yield cur.execute('INSERT INTO "paperupload" ("chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "chinesekeywords" ,"englishkeywords", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain))
        pid = str(cur.fetchone()[0])
@@ -24,6 +24,60 @@ class PaperuploadService:
        """
        return (None, True)
 
+    def get_author_bypid(self, pid):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper" WHERE "author_paper"."pid" = %d;', (pid, ))
+        meta = []
+        for apid, name, first_name, last_name, affiliation, department, position, country, address, phone, email in cur:
+            meta.append({'apid': apid,
+                'name': name,
+                'first_name': first_name,
+                'last_name': last_name,
+                'affiliation': affiliation,
+                'department': department,
+                'position': position,
+                'country': country,
+                'address': address,
+                'phone': phone,
+                'email': email})
+        return (None, meta)
+
+    def get_keywords_bypid(self, pid):
+        cur = yield self.db.cursor()
+        meta = {'chinese': [],
+                'english': []}
+        yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "chinesekeywords"."pid" = %s;', (pid, ))
+        for k in cur:
+            meta['chinese'].append(k)
+        yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "englishkeywords"."pid" = %s;', (pid, ))
+        for k in cur:
+            meta['english'].append(k)
+
+        return (None, meta)
+
+
+    def get_paper(self, uid):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "pid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain" FROM "paperupload" WHERE "paperupload"."uid" = %s;', (uid,))
+        meta = []
+        for pid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain in cur:
+            meta.append({'pid': pid,
+                'chinesetitle': chinesetitle,
+                'englishtitle': englishtitle,
+                'chineseabstract': chineseabstract,
+                'englishabstract': englishabstract,
+                'letter': letter,
+                'picnum': picnum,
+                'word': wordnum,
+                'submitted': submitted,
+                'confirm': confirm,
+                'conflict': conflict,
+                'conflict_explain': conflict_explain
+                })
+        for m in meta:
+            err, m['author'] = yield from self.get_author_bypid(m['pid'])
+            err, m['keywords'] = yield from self.get_keywords_bypid(m['pid'])
+        return (None, meta)
 
 
 class PaperuploadHandler(RequestHandler):
@@ -52,4 +106,5 @@ class PaperuploadHandler(RequestHandler):
         attach_file = self.request.files['attach_file'][0]
         """
         #err, pid = yield from PaperuploadService.inst(chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file)
-        err, pid = yield from PaperuploadService.inst.upload(chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain)
+        print(self.acct['uid'])
+        err, pid = yield from PaperuploadService.inst.upload(self.acct['uid'], chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, conflict, conflict_explain)

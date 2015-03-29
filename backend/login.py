@@ -120,7 +120,8 @@ class LoginService:
                 'contact_address': data[12],
                 'email': data[13],
                 'cellphone': data[14],
-                'telephone': data[15]
+                'telephone': data[15],
+                'uid': uid
                 }
         return (None, meta)
 
