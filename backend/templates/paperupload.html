@@ -16,22 +16,22 @@
     </div>
     <div class="field">
         <label><h3>中文摘要</h3></label>
-        <textarea></textarea>
+        <textarea name="chineseabstract"></textarea>
     </div>
     <div class="field">
         <label><h3>英文摘要</h3></label>
-        <textarea></textarea>
+        <textarea name="englishabstract"></textarea>
     </div>
     <div class="two fields">
         <div class="three wide field">
             <label><h3>中文關鍵詞</h3></label>
         </div>
         <div class="thirteen wide field">
-            <input ></input>
-            <input ></input>
-            <input ></input>
-            <input ></input>
-            <input ></input>
+            <input name="chinesekeywords[]"></input>
+            <input name="chinesekeywords[]"></input>
+            <input name="chinesekeywords[]"></input>
+            <input name="chinesekeywords[]"></input>
+            <input name="chinesekeywords[]"></input>
         </div>
     </div>
 	<br>
@@ -40,22 +40,22 @@
             <label><h3>英文關鍵詞</h3></label>
         </div>
         <div class="thirteen wide field">
-            <input ></input>
-            <input ></input>
-            <input ></input>
-            <input ></input>
-            <input ></input>
+            <input name="englishkeywords[]"></input>
+            <input name="englishkeywords[]"></input>
+            <input name="englishkeywords[]"></input>
+            <input name="englishkeywords[]"></input>
+            <input name="englishkeywords[]"></input>
         </div>
     </div>
     <div class="field">
         <label><h3>給總編輯的信</h3></label>
-        <textarea></textarea>
+        <textarea name="letter"></textarea>
     </div>
     <div class="field">
         <label><h3>圖表數量</h3></label>
         <div class="fields">
             <div class="fifteen wide field">
-                <input></input>
+                <input name="picnum" ></input>
             </div>
             <div class="one wide field" style="padding-top:4px;">
                 <h3>張</h3>
@@ -66,7 +66,7 @@
         <label><h3>論文字數</h3></label>
         <div class="fields">
             <div class="fifteen wide field">
-                <input></input>
+                <input name="wordnum"></input>
             </div>
             <div class="one wide field" style="padding-top:4px;">
                 <h3>字</h3>
@@ -113,7 +113,16 @@
     </div>
     <div class="field">
         <label><h3>選擇檔案上傳</h3></label>
-        <input type="file"></input>
+			<div class="two fields">
+                <div class="inline field">
+					<label>匿名上傳</label>
+					<input type="file"></input>
+                </div>
+                <div class="inline field">
+					<label>非匿名上傳</label>
+					<input type="file"></input>
+                </div>
+            </div>
     </div>
     <div class="ui blue submit button" onclick="send();">送出</div>
 </form>
@@ -130,11 +139,11 @@ $( document ).ready(function(){
             $('textarea[name=conflict_explain]').show();
         }
     });
+//	console.log
 });
 function send(){
-	alert("XD");
 	var data = new FormData($("#paperupload")[0]);
-	alert("GG");
+	/*
 	$.ajax({
 		url: "/paperupload",
 		data: data,
@@ -145,6 +154,7 @@ function send(){
 			alert(msg);
 		}
 	});
+	*/
 }
 </script>
 
