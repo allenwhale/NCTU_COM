@@ -76,7 +76,8 @@ class ShowpaperHandler(RequestHandler):
     def get(self):
         try:
             pid = self.get_argument('pid')
-            self.render('showpaper_pid.html')
+            err, meta = yield from ShowpaperService.inst.get_paper(self.acct['uid'], None, [pid])
+            self.render('showpaper_pid.html', meta=meta)
         except:
             self.render('showpaper.html')
         return
