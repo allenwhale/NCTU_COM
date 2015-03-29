@@ -1,5 +1,6 @@
 from req import RequestHandler
 from req import reqenv
+import json
 
 class ShowpaperService:
     def __init__(self, db):
@@ -75,4 +76,14 @@ class ShowpaperHandler(RequestHandler):
     @reqenv
     def post(self):
         req = str(self.get_argument('req'))
+        if req == 'get_paper':
+            uid = self.acct['uid']
+            papercheck = str(self.get_argument('checkpaper', default=''))
+            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck if papercheck != '' else None)
+            if err:
+                self.finish(err)
+                return
+            self.finish(json.dumps(meta), encoding='utf-8')
+            return
+
         return
