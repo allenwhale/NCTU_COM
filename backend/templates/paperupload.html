@@ -74,6 +74,24 @@
         </div>
     </div>
     <div class="field">
+        <label><h2 class="ui dividing header">作者</h2></label>
+        <div class="field">
+            <label><h3>姓名</h3></label>
+            <input name="name" type="text">
+        </div>
+        <div class="field">
+            <label><h3>Name</h3></label>
+                <div class="two fields">
+                    <div class="field">
+                        <input name="first_name" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
+                    </div>
+                    <div class="field">
+                        <input name="last_name" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="field">
         <label><h3>曾投稿本學報</h3></label>    
         <div class="ui radio checkbox">
             <input type="radio" name="submitted" value="1"></input>

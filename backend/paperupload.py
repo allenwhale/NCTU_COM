@@ -26,7 +26,7 @@ class PaperuploadService:
 
     def get_author_bypid(self, pid):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper" WHERE "author_paper"."pid" = %d;', (pid, ))
+        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper" WHERE "author_paper"."pid" = %s;', (pid, ))
         meta = []
         for apid, name, first_name, last_name, affiliation, department, position, country, address, phone, email in cur:
             meta.append({'apid': apid,
@@ -49,7 +49,7 @@ class PaperuploadService:
         yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "chinesekeywords"."pid" = %s;', (pid, ))
         for k in cur:
             meta['chinese'].append(k)
-        yield cur.execute('SELECT "keyword" FROM "chinesekeywords" WHERE "englishkeywords"."pid" = %s;', (pid, ))
+        yield cur.execute('SELECT "keyword" FROM "englishkeywords" WHERE "englishkeywords"."pid" = %s;', (pid, ))
         for k in cur:
             meta['english'].append(k)
 

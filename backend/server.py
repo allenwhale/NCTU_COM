@@ -16,6 +16,8 @@ from paperupload import PaperuploadService
 class IndexHandler(RequestHandler):
     @reqenv
     def get(self):
+        err, meta = yield from  Service.Paperupload.get_paper(2)
+        print(meta)
         self.render('index.html')
         return
 
