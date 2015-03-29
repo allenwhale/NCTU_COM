@@ -53,7 +53,7 @@ CREATE TABLE author_paper(
     last_name character varying,
     affiliation character varying,
     department character varying,
-    posiition character varying,
+    position character varying,
     country character varying,
     address character varying,
     phone character varying,
