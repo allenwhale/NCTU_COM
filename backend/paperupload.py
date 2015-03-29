@@ -6,9 +6,9 @@ class PaperuploadService:
         self.db = db
         PaperuploadService.inst = self
 
-    def upload(self, classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
+    def upload(self, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
        cur = yield self.db.cursor()
-       yield cur.execute('INSERT INTO "paperupload" ("classification", "area", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "chinesekeywords" ,"englishkeywords", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain))
+       yield cur.execute('INSERT INTO "paperupload" ("chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "chinesekeywords" ,"englishkeywords", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain))
        pid = str(cur.fetchone()[0])
        apid = 0
        for a in authors:
@@ -30,8 +30,6 @@ class PaperuploadHandler(RequestHandler):
 
     @reqenv
     def post(self):
-        classification = str(self.get_argument('classification', default=''))
-        area = str(self.get_argument('area', default=''))
         chinesetitle = str(self.get_argument('chinesetitle', default=''))
         englishtitle = str(self.get_argument('englishtitle', default=''))
         chineseabstract = str(self.get_argument('chineseabstract', default=''))
@@ -48,4 +46,4 @@ class PaperuploadHandler(RequestHandler):
         conflict_explain = str(self.get_argument('conflict_explain', default=''))
         attach_file = self.request.files['attach_file'][0]
 
-        err, pid = yield from PaperuploadService.inst(classification, area, chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file)
+        err, pid = yield from PaperuploadService.inst(chinesetitle, englishtitle, chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file)
