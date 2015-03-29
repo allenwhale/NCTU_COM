@@ -2,169 +2,224 @@
 {% block content %}
 
 {% if acct == None %}
-<script>window.location="/"</script>
+<script>
+humane.log("請先登入", {timeout: 1000}, function(){
+		window.location="/login";
+		});
+</script>
 {% else %}
 <form id="paperupload" class="ui form">
-    <h2 class="ui dividing header">投稿上傳</h2>
-    <div class="field">
-        <label><h3>中文標題</h3></label>
-        <textarea name="chinesetitle" rows=2></textarea>
-    </div>
-    <div class="field">
-        <label><h3>英文標題</h3></label>
-        <textarea name="englishtitle" rows=2></textarea>
-    </div>
-    <div class="field">
-        <label><h3>中文摘要</h3></label>
-        <textarea name="chineseabstract"></textarea>
-    </div>
-    <div class="field">
-        <label><h3>英文摘要</h3></label>
-        <textarea name="englishabstract"></textarea>
-    </div>
-    <div class="two fields">
-        <div class="three wide field">
-            <label><h3>中文關鍵詞</h3></label>
-        </div>
-        <div class="thirteen wide field">
-            <input name="chinesekeywords[]"></input>
-            <input name="chinesekeywords[]"></input>
-            <input name="chinesekeywords[]"></input>
-            <input name="chinesekeywords[]"></input>
-            <input name="chinesekeywords[]"></input>
-        </div>
-    </div>
+	<h2 class="ui dividing header">投稿上傳</h2>
+	<div class="field">
+		<label><h3>中文標題</h3></label>
+		<textarea name="chinesetitle" rows=2></textarea>
+	</div>
+	<div class="field">
+		<label><h3>英文標題</h3></label>
+		<textarea name="englishtitle" rows=2></textarea>
+	</div>
+	<div class="field">
+		<label><h3>中文摘要</h3></label>
+		<textarea name="chineseabstract"></textarea>
+	</div>
+	<div class="field">
+		<label><h3>英文摘要</h3></label>
+		<textarea name="englishabstract"></textarea>
+	</div>
+	<div class="two fields">
+		<div class="three wide field">
+			<label><h3>中文關鍵詞</h3></label>
+		</div>
+		<div class="thirteen wide field">
+			<input name="chinesekeywords[]"></input>
+			<input name="chinesekeywords[]"></input>
+			<input name="chinesekeywords[]"></input>
+			<input name="chinesekeywords[]"></input>
+			<input name="chinesekeywords[]"></input>
+		</div>
+	</div>
 	<br>
-    <div class="two fields">
-        <div class="three wide field">
-            <label><h3>英文關鍵詞</h3></label>
-        </div>
-        <div class="thirteen wide field">
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>給總編輯的信</h3></label>
-        <textarea name="letter"></textarea>
-    </div>
-    <div class="field">
-        <label><h3>圖表數量</h3></label>
-        <div class="fields">
-            <div class="fifteen wide field">
-                <input name="picnum" ></input>
-            </div>
-            <div class="one wide field" style="padding-top:4px;">
-                <h3>張</h3>
-            </div>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>論文字數</h3></label>
-        <div class="fields">
-            <div class="fifteen wide field">
-                <input name="wordnum"></input>
-            </div>
-            <div class="one wide field" style="padding-top:4px;">
-                <h3>字</h3>
-            </div>
-        </div>
-    </div>
-    <div class="field">
-        <label><h2 class="ui dividing header">作者</h2></label>
-        <div class="field">
-            <label><h3>姓名</h3></label>
-            <input name="name" type="text">
-        </div>
-        <div class="field">
-            <label><h3>Name</h3></label>
-                <div class="two fields">
-                    <div class="field">
-                        <input name="first_name" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
-                    </div>
-                    <div class="field">
-                        <input name="last_name" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
-                    </div>
-                </div>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>曾投稿本學報</h3></label>    
-        <div class="ui radio checkbox">
-            <input type="radio" name="submitted" value="1"></input>
-            <label>是</label>
-        </div>
-        <div class="ui radio checkbox">
-            <input type="radio" name="submitted" value="0"></input>
-            <label>否</label>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>請確認以下條件</h3></label>    
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm1" ></input>
-            <label>確認此篇論文僅投稿至本學報，而且以前未曾被刊登過，或投稿過其他刊物。</label>
-        </div>
+	<div class="two fields">
+		<div class="three wide field">
+			<label><h3>英文關鍵詞</h3></label>
+		</div>
+		<div class="thirteen wide field">
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+		</div>
 	</div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm2" ></input>
-            <label>確認所有研究均符合學術界之道德規範。</label>
-        </div>
+	<div class="field">
+		<label><h3>給總編輯的信</h3></label>
+		<textarea name="letter"></textarea>
 	</div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm3" ></input>
-            <label>確認所交付之論文除了封面頁之外，其他文件均符合匿名審查原則，未出現作者任何個人資料。</label>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>此篇論文有涉及任何利益衝突</h3></label>    
-        <div class="ui radio checkbox">
-            <input type="radio" name="conflict" value="1"></input>
-            <label>是，請做說明</label>
-        </div>
-        <div class="ui radio checkbox">
-            <input type="radio" name="conflict" value="0"></input>
-            <label>否</label>
-        </div>
-        <textarea name="conflict_explain" style="margin-top: 7px"></textarea>
-    </div>
-    <div class="field">
-        <label><h3>選擇檔案上傳</h3></label>
-			<div class="two fields">
-                <div class="inline field">
-					<label>匿名上傳</label>
-					<input type="file"></input>
-                </div>
-                <div class="inline field">
-					<label>非匿名上傳</label>
-					<input type="file"></input>
-                </div>
-            </div>
-    </div>
-    <div class="ui blue submit button" onclick="send();">送出</div>
+	<div class="field">
+		<label><h3>圖表數量</h3></label>
+		<div class="fields">
+			<div class="fifteen wide field">
+				<input name="picnum" ></input>
+			</div>
+			<div class="one wide field" style="padding-top:4px;">
+				<h3>張</h3>
+			</div>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>論文字數</h3></label>
+		<div class="fields">
+			<div class="fifteen wide field">
+				<input name="wordnum"></input>
+			</div>
+			<div class="one wide field" style="padding-top:4px;">
+				<h3>字</h3>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="field" id="author_field">
+		<label><h2 class="ui dividing header">作者</h2></label>
+		<div class="ui segments">
+			<div class="ui teal inverted segment author-edit">
+				<h4>作者1</h4>
+			</div>
+			<div class="ui secondary segment" style="display: none;">
+				<div class="field">
+					<label><h3>姓名</h3></label>
+					<input name="name[]" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
+				</div>
+				<div class="field">
+					<label><h3>Name</h3></label>
+					<div class="two fields">
+						<div class="field">
+							<input name="first_name[]" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
+						</div>
+						<div class="field">
+							<input name="last_name[]" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label><h3>服務機構名稱</h3></label>
+					<input name="affiliation[]" type="text" value="{{ '' if acct["affiliation"] == None else acct["affiliation"]  }}">
+				</div>
+				<div class="two fields">
+					<div class="field">
+						<label><h3>部門</h3></label>
+						<input name="department[]" type="text" placeholder="Department" value="{{ '' if acct["department"] == None else acct["department"]  }}">
+					</div>
+					<div class="field">
+						<label><h3>職稱</h3></label>
+						<select name="position[]" class="ui dropdown">
+							<option value="">　</option>
+							{% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}
+							{% for i in position %}
+							<option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
+							{% end %}
+						</select>
+					</div>
+				</div>
+				<div class="fields">
+					<label><h3>地址</h3></label>
+					<input name="address[]" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
+				</div>
+				<div class="field">
+					<label><h3>聯絡電話</h3></label>
+					<input name="phone[]" type="text" value="{{ '' if acct["cellphone"] == None else acct["cellphone"]}}">
+				</div>
+				<div class="field">
+					<label><h3>E-mail</h3></label>
+					<input name="email[]" type="text" value="{{ '' if acct["email"] == None else acct["email"] }}">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="field">
+		<label><h3>曾投稿本學報</h3></label>    
+		<div class="ui radio checkbox">
+			<input type="radio" name="submitted" value="1"></input>
+			<label>是</label>
+		</div>
+		<div class="ui radio checkbox">
+			<input type="radio" name="submitted" value="0"></input>
+			<label>否</label>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>請確認以下條件</h3></label>    
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm1" ></input>
+			<label>確認此篇論文僅投稿至本學報，而且以前未曾被刊登過，或投稿過其他刊物。</label>
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm2" ></input>
+			<label>確認所有研究均符合學術界之道德規範。</label>
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm3" ></input>
+			<label>確認所交付之論文除了封面頁之外，其他文件均符合匿名審查原則，未出現作者任何個人資料。</label>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>此篇論文有涉及任何利益衝突</h3></label>    
+		<div class="ui radio checkbox">
+			<input type="radio" name="conflict" value="1"></input>
+			<label>是，請做說明</label>
+		</div>
+		<div class="ui radio checkbox">
+			<input type="radio" name="conflict" value="0"></input>
+			<label>否</label>
+		</div>
+		<textarea name="conflict_explain" style="margin-top: 7px"></textarea>
+	</div>
+	<div class="field">
+		<label><h3>選擇檔案上傳</h3></label>
+		<div class="two fields">
+			<div class="inline field">
+				<label>匿名上傳</label>
+				<input type="file"></input>
+			</div>
+			<div class="inline field">
+				<label>非匿名上傳</label>
+				<input type="file"></input>
+			</div>
+		</div>
+	</div>
+	<div class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
 $( document ).ready(function(){
-    $('select.dropdown').dropdown();
-    $('.ui.radio.checkbox').checkbox();
-    $('.ui.checkbox').checkbox();
-    $('textarea[name=conflict_explain]').hide();
-    $('[name=conflict]').change(function(){
-        if($('[name=conflict]:checked').val() == '0'){
-            $('textarea[name=conflict_explain]').hide();
-        }else{
-            $('textarea[name=conflict_explain]').show();
-        }
-    });
-//	console.log
+	$('select.dropdown').dropdown();
+	$('.ui.radio.checkbox').checkbox();
+	$('.ui.checkbox').checkbox();
+	$('textarea[name=conflict_explain]').hide();
+	
+	if($('[name=conflict]:checked').val() == '1'){
+		$('textarea[name=conflict_explain]').show();
+	}
+	$('[name=conflict]').change(function(){
+		if($('[name=conflict]:checked').val() == '0'){
+			$('textarea[name=conflict_explain]').hide();
+		}else{
+			$('textarea[name=conflict_explain]').show();
+		}
+	});
+	$(".author-edit").click(function(){
+		segment = $(this).next();
+		segment.animate({height: "toggle"});
+	});
 });
 function send(){
-//	alert( $("input[name=conflict]:checked").val());
+	//	alert( $("input[name=conflict]:checked").val());
 	var conf = "";
 	for( i = 1 ; i <= 3 ; i++){
 		var selector = "[name=confirm"+i+"]:checked";
