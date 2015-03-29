@@ -21,10 +21,12 @@ function load_pass_paper(){
 	alert("X");
 	segment = $("#pass_paper");
 	data = {
-		req: "get_paper"
+		req: "get_paper",
+		papercheck: [0]
 	};
-	$.post("./showpaper", data, function(msg){ alert(msg);
-			});
+	$.post("./showpaper", data, function(msg){
+			alert(msg.length);
+			}, "json");
 }
 $(document).ready(function(){
 	load_pass_paper();
