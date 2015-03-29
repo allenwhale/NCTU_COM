@@ -74,7 +74,11 @@ class ShowpaperService:
 class ShowpaperHandler(RequestHandler):
     @reqenv
     def get(self):
-        self.render('showpaper.html')
+        try:
+            pid = self.get_argument('pid')
+            self.render('showpaper_pid.html')
+        except:
+            self.render('showpaper.html')
         return
     @reqenv
     def post(self):

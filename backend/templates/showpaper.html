@@ -7,29 +7,64 @@
 <div class="ui segment">
     <div class="ui list">
         <a class="item">審查中論文</a>
-		<div class="ui segment">
+		<div id="paper">
+			<table class="ui table">
+				<thead>
+					<tr>
+						<th>編號</th>
+						<th>中文名稱</th>
+						<th>英文名稱</th>
+						<th>審查階段</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 		</div>
         <a class="item">審查通過論文</a>
-		<div class="ui segment" id="pass_paper">
+		<div id="pass_paper">
+			<table class="ui table">
+				<thead>
+					<tr>
+						<th>編號</th>
+						<th>中文名稱</th>
+						<th>英文名稱</th>
+						<th>審查階段</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 		</div>
     </div>
 </div>
 <script>
-function load_paper(){
-}
-function load_pass_paper(){
-	alert("X");
-	segment = $("#pass_paper");
+function load_paper(container, papercheck){
+	tbody = container.find("tbody");
 	data = {
 		req: "get_paper",
-        papercheck: [0,1,2,3]
+		papercheck: papercheck
 	};
-	$.post("./showpaper", data, function(msg){
-			alert(msg.length);
-			}, "json");
+	rep = ["pid", "chinesetitle", "englishtitle"];
+	paper_check = ["未審","一審","二審","三審"];
+	$.post("./showpaper", data, function(JData){
+		$.each(JData, function(){
+			contents = "<tr><td>%pid%</td><td>%chinesetitle%</td><td>%englishtitle%</td><td>%papercheck%</td><td class='hover'><a href='/showpaper?pid=%pid%'>查看</a></td></tr>";
+			data = this;
+			$.each(rep, function(k, v){
+				reg = new RegExp("%"+v+"%", 'g');
+				contents = contents.replace(reg, data[v]);
+			});
+			reg = new RegExp("%papercheck%", 'g');
+			contents = contents.replace(reg, paper_check[data["papercheck"]]);	
+			tbody.prepend( contents );
+		});
+	}, "json");
 }
 $(document).ready(function(){
-	load_pass_paper();
+	load_paper($("#paper"), [0, 1, 2]);
 });
 </script>
 {% end %}
