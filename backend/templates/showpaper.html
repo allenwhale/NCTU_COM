@@ -24,8 +24,9 @@ function load_pass_paper(){
 		req: "get_paper",
         papercheck: [0,1,2,3]
 	};
-	$.post("./showpaper", data, function(msg){ alert(msg);
-			});
+	$.post("./showpaper", data, function(msg){
+			alert(msg.length);
+			}, "json");
 }
 $(document).ready(function(){
 	load_pass_paper();
