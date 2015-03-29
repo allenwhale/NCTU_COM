@@ -26,7 +26,7 @@ CREATE TABLE paperupload(
     pid SERIAL,
 	uid integer,
     chinesetitle character varying,
-    englishtilte character varying,
+    englishtitle character varying,
     chineseabstract character varying,
     englishabstract character varying,
     letter character varying,
