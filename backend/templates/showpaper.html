@@ -7,8 +7,28 @@
 <div class="ui segment">
     <div class="ui list">
         <a class="item">審查中論文</a>
+		<div class="ui segment">
+		</div>
         <a class="item">審查通過論文</a>
+		<div class="ui segment" id="pass_paper">
+		</div>
     </div>
 </div>
+<script>
+function load_paper(){
+}
+function load_pass_paper(){
+	alert("X");
+	segment = $("#pass_paper");
+	data = {
+		req: "get_paper"
+	};
+	$.post("./showpaper", data, function(msg){ alert(msg);
+			});
+}
+$(document).ready(function(){
+	load_pass_paper();
+});
+</script>
 {% end %}
 {% end %}
