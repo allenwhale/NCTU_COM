@@ -59,9 +59,12 @@ class ShowpaperService:
                 'conflict_explain': conflict_explain
                 })
         if check:
+            tm = []
             for m in meta:
-                if m['papercheck'] not in check:
-                    meta.pop(m)
+                print(type(m['papercheck']))
+                if str(m['papercheck']) in check:
+                    tm.append(m)
+            meta = tm
         for m in meta:
             err, m['author'] = yield from self.get_author_bypid(m['pid'])
             err, m['keywords'] = yield from self.get_keywords_bypid(m['pid'])
@@ -78,8 +81,8 @@ class ShowpaperHandler(RequestHandler):
         req = str(self.get_argument('req'))
         if req == 'get_paper':
             uid = self.acct['uid']
-            papercheck = self.get_arguments('checkpaper[]')
-            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck if papercheck != '' else None)
+            papercheck = self.get_arguments('papercheck[]')
+            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck)
             if err:
                 self.finish(err)
                 return
