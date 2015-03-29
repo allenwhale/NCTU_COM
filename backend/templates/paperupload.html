@@ -94,11 +94,11 @@
     <div class="field">
         <label><h3>曾投稿本學報</h3></label>    
         <div class="ui radio checkbox">
-            <input type="radio" name="submitted" ></input>
+            <input type="radio" name="submitted" value="1"></input>
             <label>是</label>
         </div>
         <div class="ui radio checkbox">
-            <input type="radio" name="submitted" ></input>
+            <input type="radio" name="submitted" value="0"></input>
             <label>否</label>
         </div>
     </div>
@@ -108,10 +108,14 @@
             <input type="checkbox" name="confirm1" ></input>
             <label>確認此篇論文僅投稿至本學報，而且以前未曾被刊登過，或投稿過其他刊物。</label>
         </div>
+	</div>
+    <div class="field">
         <div class="ui checkbox">
             <input type="checkbox" name="confirm2" ></input>
             <label>確認所有研究均符合學術界之道德規範。</label>
         </div>
+	</div>
+    <div class="field">
         <div class="ui checkbox">
             <input type="checkbox" name="confirm3" ></input>
             <label>確認所交付之論文除了封面頁之外，其他文件均符合匿名審查原則，未出現作者任何個人資料。</label>
@@ -161,7 +165,14 @@ $( document ).ready(function(){
 });
 function send(){
 //	alert( $("input[name=conflict]:checked").val());
+	var conf = "";
+	for( i = 1 ; i <= 3 ; i++){
+		var selector = "[name=confirm"+i+"]:checked";
+		if( $(selector).val() == "on" ) conf += "1";
+		else conf += "0";
+	}
 	var data = new FormData($("#paperupload")[0]);
+	data.append("confirm", conf);
 	$.ajax({
 		url: "/paperupload",
 		data: data,
