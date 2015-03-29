@@ -8,11 +8,11 @@
     <h2 class="ui dividing header">投稿上傳</h2>
     <div class="field">
         <label><h3>中文標題</h3></label>
-        <textarea rows=2></textarea>
+        <textarea name="chinesetitle" rows=2></textarea>
     </div>
     <div class="field">
         <label><h3>英文標題</h3></label>
-        <textarea rows=2></textarea>
+        <textarea name="englishtitle" rows=2></textarea>
     </div>
     <div class="field">
         <label><h3>中文摘要</h3></label>
@@ -115,6 +115,7 @@
         <label><h3>選擇檔案上傳</h3></label>
         <input type="file"></input>
     </div>
+    <div class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
 $( document ).ready(function(){
@@ -131,15 +132,19 @@ $( document ).ready(function(){
     });
 });
 function send(){
-    info = $("#edit").serialize();
-    alert(info);
-    $.post(
-        "/login",
-        info,
-        function(msg){
-            alert(msg);
-        }
-    );
+	alert("XD");
+	var data = new FormData($("#paperupload")[0]);
+	alert("GG");
+	$.ajax({
+		url: "/paperupload",
+		data: data,
+		type: "post",
+		processData: false,
+		contentType: false,
+		success: function(msg){
+			alert(msg);
+		}
+	});
 }
 </script>
 

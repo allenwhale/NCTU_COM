@@ -27,7 +27,7 @@ CREATE TABLE paperupload(
     classification character varying,
     area character varying,
     chinesetitle character varying,
-    englishtilte character varying,
+    englishtitle character varying,
     chineseabstract character varying,
     englishabstract character varying,
     chinesekeywords character varying,
