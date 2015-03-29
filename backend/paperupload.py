@@ -31,7 +31,12 @@ class PaperuploadService:
            print(a)
            yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
        return (None, pid)
-
+'''
+   def set_papercheck(self, pid, papercheck):
+       cur = yield from self.db.cursor()
+       if papercheck not in range(4):
+           return ('Eindex', None)
+'''
 
 class PaperuploadHandler(RequestHandler):
     @reqenv

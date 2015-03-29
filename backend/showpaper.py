@@ -83,7 +83,7 @@ class ShowpaperHandler(RequestHandler):
             if err:
                 self.finish(err)
                 return
-            self.finish(json.dumps(meta, encoding='utf-8'))
+            self.finish(json.dumps(meta))
             return
 
         return
