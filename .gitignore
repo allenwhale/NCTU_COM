@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 .*.sw[op]
 __pycache__/
+html/paper
 *.py[cod]
 
 # C extensions
