@@ -7,6 +7,12 @@ class AdminService:
         self.db = db
         AdminService.inst = self
 
+    def isadmin(self, acct):
+        if not acct:
+            return 0
+        return 1 if int(acct['uid']) in  config.ADMIN_RANGE else 0
+
+
 
 class AdminHandler(RequestHandler):
     @reqenv
@@ -17,6 +23,5 @@ class AdminHandler(RequestHandler):
     def post(self):
         req = self.get_argument('req', None)
         if req == 'isadmin':
-            res = 1 if self.acct['uid'] in config.ADMIN_RANGE else 0
-            self.finish(str(res))
+            self.finish(str(AdminService.inst.isadmin(self.acct)))
         return

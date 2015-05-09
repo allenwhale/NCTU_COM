@@ -29,6 +29,7 @@ class RequestHandler(tornado.web.RequestHandler):
         
     def render(self,templ,**kwargs):
         kwargs['acct'] = self.acct
+        kwargs['admin'] = Service.Admin.isadmin(self.acct)
         class _encoder(json.JSONEncoder):
             def default(self,obj):
                 if isinstance(obj,datetime.datetime):

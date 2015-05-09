@@ -38,7 +38,8 @@
         <a class="item">
             聯絡我們
         </a>
-		{% if acct != None and acct["email"] == "admin" %}
+        {{admin}}
+		{% if admin == 1 %}
 			<a class="item" href="/admin">
 				審查論文
 			</a>
