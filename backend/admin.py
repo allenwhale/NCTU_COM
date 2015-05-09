@@ -1,5 +1,6 @@
 from req import RequestHandler
 from req import reqenv
+import config
 
 class AdminService:
     def __init__(self, db):
@@ -14,4 +15,8 @@ class AdminHandler(RequestHandler):
         return
     @reqenv
     def post(self):
+        req = self.get_argument('req', None)
+        if req == 'isadmin':
+            res = 1 if self.acct['uid'] in config.ADMIN_RANGE else 0
+            self.finish(str(res))
         return
