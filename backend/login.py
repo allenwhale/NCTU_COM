@@ -1,15 +1,9 @@
 from req import RequestHandler
 from req import reqenv
-import smtplib
-from email.mime.text import MIMEText
-def SendMail(From, To, Subject, Msg):
-    content = MIMEText(Msg)
-    content['Suject'] = Subject
-    content['From'] = From
-    content['To'] = To
-    s = smtplib.SMTP('localhost')
-    s.sendmail(From, [To], content.as_string())
-    s.quit()
+from mail import MailHandler
+def SendMail(From, To, Subject, templ, pwd):
+    m = MailHandler(templ)
+    m.send(To, Subject, user=user, pwd=pwd)
     
 
 class LoginService:
@@ -65,6 +59,7 @@ class LoginService:
         print(cur.rowcount)
         if cur.rowcount != 1:
             return ('Edb', None)
+        SendMail('me',email, 'new password', 'templates/forgetpassword.html',newpassword)
         return (None, email)
 
     def edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability, password):
