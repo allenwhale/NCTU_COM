@@ -102,11 +102,11 @@ class ShowpaperService:
 class ShowpaperHandler(RequestHandler):
     @reqenv
     def get(self):
-        try:
-            pid = self.get_argument('pid')
+        pid = self.get_argument('pid', None)
+        if pid:
             err, meta = yield from ShowpaperService.inst.get_paper(self.acct['uid'], None, [pid])
             self.render('showpaper_pid.html', meta=meta)
-        except:
+        else:
             self.render('showpaper.html')
         return
     @reqenv
