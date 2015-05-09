@@ -23,8 +23,9 @@ class PaperuploadService:
        f.close()
        apid = 0
        for a in author:
+           print(a)
            apid += 1
-           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
+           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "address", "phone", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
        for k in chinesekeywords:
            yield cur.execute('INSERT INTO "chinesekeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
        for k in englishkeywords:
