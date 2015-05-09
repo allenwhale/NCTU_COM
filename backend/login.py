@@ -1,9 +1,11 @@
 from req import RequestHandler
 from req import reqenv
 from mail import MailHandler
+import random
 def SendMail(From, To, Subject, templ, pwd):
+    print(To)
     m = MailHandler(templ)
-    m.send(To, Subject, user=user, pwd=pwd)
+    m.send(To, Subject, user=To, pwd=pwd)
     
 
 class LoginService:
@@ -51,7 +53,7 @@ class LoginService:
 
     def forgetpassword(self, email):
         def rand_password():
-            return 'root'
+            return str(random.randint(0, 10000000000))
         cur = yield self.db.cursor()
         newpassword = rand_password()
         yield cur.execute('UPDATE "account" SET "password" = %s '
