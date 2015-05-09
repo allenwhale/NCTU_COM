@@ -38,6 +38,11 @@
         <a class="item">
             聯絡我們
         </a>
+		{% if acct != None and acct["email"] == "admin" %}
+			<a class="item" href="/judge">
+				審查論文
+			</a>
+		{% end %}
         {% if acct == None %}
             <a class="item right" href="/login">
                 登入
@@ -68,7 +73,7 @@
 <script>
 function logout(){
     $.post("/login", {"req": "logout"}, function(){
-        window.location.reload();
+        window.location = "/";
     });
 }
 </script>
