@@ -5,44 +5,41 @@
 <script>window.location="/"</script>
 {% else %}
 <div class="ui segment">
-    <div class="ui list">
-        <a class="item">審查中論文</a>
-		<div id="paper">
-			<table class="ui table">
-				<thead>
-					<tr>
-						<th>編號</th>
-						<th>中文名稱</th>
-						<th>英文名稱</th>
-						<th>審查階段</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-        <a class="item">審查通過論文</a>
-		<div id="pass_paper">
-			<table class="ui table">
-				<thead>
-					<tr>
-						<th>編號</th>
-						<th>中文名稱</th>
-						<th>英文名稱</th>
-						<th>審查階段</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-    </div>
+	<h1>審查中論文</h1>
+	<div id="paper">
+		<table class="ui table">
+			<thead>
+				<tr>
+					<th>編號</th>
+					<th>中文名稱</th>
+					<th>英文名稱</th>
+					<th>審查階段</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	<h1>審查通過論文</h1>
+	<div id="pass_paper">
+		<table class="ui table">
+			<thead>
+				<tr>
+					<th>編號</th>
+					<th>中文名稱</th>
+					<th>英文名稱</th>
+					<th>審查階段</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
 </div>
 <script>
 function load_paper(container, papercheck){
-	tbody = container.find("tbody");
 	data = {
 		req: "get_paper",
 		papercheck: papercheck
@@ -50,6 +47,7 @@ function load_paper(container, papercheck){
 	rep = ["pid", "chinesetitle", "englishtitle"];
 	paper_check = ["未審","一審","二審","三審"];
 	$.post("./showpaper", data, function(JData){
+		tbody = container.find("tbody");
 		$.each(JData, function(){
 			contents = "<tr><td>%pid%</td><td>%chinesetitle%</td><td>%englishtitle%</td><td>%papercheck%</td><td class='hover'><a href='/showpaper?pid=%pid%'>查看</a></td></tr>";
 			data = this;
@@ -65,6 +63,7 @@ function load_paper(container, papercheck){
 }
 $(document).ready(function(){
 	load_paper($("#paper"), [0, 1, 2]);
+	load_paper($("#pass_paper"), [3]);
 });
 </script>
 {% end %}
