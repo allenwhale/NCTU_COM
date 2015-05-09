@@ -4,18 +4,60 @@
 <div class="ui segment">
 	<h1 class="ui header">基本資料</h1>
 	<h3>
-		論文編號: {{meta[0]["pid"]}} <br>
-		中文標題:<br>
-		英文標題:<br><br>
-		中文摘要:<br>
-		<div class="ui segment"></div>
+		{% set data=meta[0] %}
+		論文編號: {{data["pid"]}} <br>
+		中文標題: {{data["chinesetitle"]}}<br>
+		英文標題: {{data["englishtitle"]}}
+
+		<div class="ui hidden divider"></div>
+
+		中文摘要:
+		<div class="ui segment spec_br">{{data["chineseabstract"]}}</div>
+
 		英文摘要:
-		<div class="ui segment"></div>
+		<div class="ui segment spec_br">{{data["englishabstract"]}}</div>
+
 		中文關鍵詞:
+		<div class="ui ul">
+			{% for x in data["keywords"]["chinese"] %}
+				{% if len(x) %}
+					<li>{{x}}</li>
+				{% end %}
+			{% end %}
+		</div>
+
+		<div class="ui hidden divider"></div>
+
 		英文關鍵詞:
+		<div class="ui ul">
+			{% for x in data["keywords"]["english"] %}
+				{% if len(x) %}
+					<li>{{x}}</li>
+				{% end %}
+			{% end %}
+		</div>
+
+		<div class="ui hidden divider"></div>
+
+		作者:
+		{% for x in data["author"] %}
+			<div class="ui segment">
+				{{ x }}
+			</div>
+		{% end %}
 	</h3>
+</div>
+<script>
+$(document).ready(function(){
+	$(".spec_br").each(function(){
+		contents = $(this).html();
+		reg = new RegExp("\n", 'g');
+		contents = contents.replace(reg, "<br>");
+
+		$(this).html(contents);
+	});
+});
+</script>
 	<div class="ui divider"></div>
 	<h1 class="ui header">投稿回覆</h1>
-</div>
-
 {% end %}
