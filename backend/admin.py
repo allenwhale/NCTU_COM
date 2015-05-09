@@ -7,9 +7,10 @@ class AdminService:
         AdminService.inst = self
 
 
-class AdminRequestHandler(RequestHandler):
+class AdminHandler(RequestHandler):
     @reqenv
     def get(self):
+        self.render("admin.html")
         return
     @reqenv
     def post(self):

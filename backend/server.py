@@ -15,7 +15,7 @@ from paperupload import PaperuploadService
 from showpaper import ShowpaperHandler
 from showpaper import ShowpaperService
 from admin import AdminService
-from admin import AdminRequestHandler
+from admin import AdminHandler
 
 class IndexHandler(RequestHandler):
     @reqenv
@@ -32,6 +32,7 @@ if __name__ == '__main__':
         ('/modifyuser', ModifyuserHandler),
         ('/paperupload', PaperuploadHandler),
         ('/showpaper', ShowpaperHandler),
+        ('/admin', AdminHandler),
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)
@@ -39,4 +40,5 @@ if __name__ == '__main__':
     Service.Register = RegisterService(db)
     Service.Paperupload = PaperuploadService(db)
     Service.Showpaper = ShowpaperService(db)
+    Service.Admin = AdminService(db)
     tornado.ioloop.IOLoop().instance().start()
