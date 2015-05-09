@@ -16,6 +16,16 @@ from showpaper import ShowpaperHandler
 from showpaper import ShowpaperService
 from admin import AdminService
 from admin import AdminHandler
+from committee import CommitteeHandler
+from committee import CommitteeService
+from notice import NoticeHandler
+from notice import NoticeService
+from subscribe import SubscribeHandler
+from subscribe import SubscribeService
+from contact import ContactHandler
+from contact import ContactService
+from view import ViewHandler
+from view import ViewService
 
 class IndexHandler(RequestHandler):
     @reqenv
@@ -33,6 +43,11 @@ if __name__ == '__main__':
         ('/paperupload', PaperuploadHandler),
         ('/showpaper', ShowpaperHandler),
         ('/admin', AdminHandler),
+        ('/committee', CommitteeHandler),
+        ('/notice', NoticeHandler),
+        ('/subscribe', SubscribeHandler),
+        ('/contact', ContactHandler),
+        ('/view', ViewHandler),
         ('/(.*)', tornado.web.StaticFileHandler, {'path': '../html'}),
         ], cookie_secret=config.COOKIE_SECRET, autoescape='xhtml_escape')
     app.listen(config.PORT)
