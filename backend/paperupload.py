@@ -1,5 +1,6 @@
 from req import RequestHandler
 from req import reqenv
+import os
 
 class PaperuploadService:
     def __init__(self, db):
@@ -13,8 +14,9 @@ class PaperuploadService:
        if cur.rowcount != 1:
            return ('EDB', None)
        pid = str(cur.fetchone()[0])
-       anony_filename = '../html/paper/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
-       non_anony_filename = '../html/paper/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
+       os.mkdir('../html/paper/'+pid)
+       anony_filename = '../html/paper/' + pid + '/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
+       non_anony_filename = '../html/paper/'+pid+'/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
        f = open(anony_filename, 'wb+')
        f.write(anony_file['body'])
        f.close()
