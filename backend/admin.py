@@ -14,7 +14,7 @@ class AdminService:
 
     def admin_reply(self, pid, f):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "paper"')
+       # yield cur.execute('SELECT "paper"')
 
 
 

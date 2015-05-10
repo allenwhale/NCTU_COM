@@ -149,7 +149,8 @@ class ShowpaperHandler(RequestHandler):
             print(url)
             self.render('showpaper_pid.html', meta=meta, url=url)
         else:
-            self.render('showpaper.html')
+            err, meta = yield from ShowpaperService.inst.get_all_paper()
+            self.render('showpaper.html', meta=meta)
         return
     @reqenv
     def post(self):
