@@ -151,7 +151,7 @@ class ShowpaperHandler(RequestHandler):
                 pid = self.get_arguments('pid[]')
             except:
                 pid = None
-            err, meta = yield from ShowpaperService.inst.get_paper(uid, papercheck, pid)
+            err, meta = yield from ShowpaperService.inst.get_paper()
             if err:
                 self.finish(err)
                 return
