@@ -34,7 +34,7 @@ class IndexHandler(RequestHandler):
         return
 
 if __name__ == '__main__':
-    db = pg.AsyncPG(config.DBNAME, config.DBUSER, config.DBPASSWORD, dbtz='+8')
+    db = pg.AsyncPG(config.DBNAME, config.DBUSER, config.DBPASSWORD,host=config.DBHOST,dbtz='+8')
     app = tornado.web.Application([
         ('/', IndexHandler),
         ('/login', LoginHandler),

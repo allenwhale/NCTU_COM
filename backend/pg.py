@@ -108,7 +108,7 @@ class WrapCursor:
 
 class AsyncPG:
     def __init__(self,dbname,dbuser,dbpasswd,
-            dbschema = 'public',dbtz = '+0'):
+            dbschema = 'public',dbtz = '+0', host = 'locahost'):
 
         self.INITCONN_SHARE = 4
         self.INITCONN_FREE = 16
@@ -121,6 +121,7 @@ class AsyncPG:
         self._dbpasswd = dbpasswd
         self._dbschema = dbschema
         self._dbtz = dbtz
+        self._host = host
         self._share_connpool = []
         self._free_connpool = []
         self._conn_fdmap = {}
@@ -218,6 +219,7 @@ class AsyncPG:
                                 user = self._dbuser,
                                 password = self._dbpasswd,
                                 async = 1,
+                                host = self._host,
                                 options = (
                                     '-c search_path=%s '
                                     '-c timezone=%s'
