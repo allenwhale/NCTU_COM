@@ -41,9 +41,29 @@
 
 		作者:
 		{% for x in data["author"] %}
-			<div class="ui segment">
-				{{ x }}
-			</div>
+			<table class="ui small celled table">
+				<tbody>
+					<tr>
+						<td>姓名</td><td>{{x["name"]}}</td>
+					</tr>
+					<tr>
+						<td>First Name</td><td>{{x["first_name"]}}</td>
+						<td>Last Name</td><td>{{x["last_name"]}}</td>
+					</tr>
+					<tr>
+						<td>服務機構</td><td colspan='3'>{{x["affiliation"]}}</td>
+					</tr>
+					<tr>
+						<td>部門</td><td>{{x["department"]}}</td>
+						<td>職稱</td><td>{{x["position"]}}</td>
+					</tr>
+					<tr><td>地址</td><td colspan='3'>{{x["address"]}}</td></tr>
+					<tr>
+						<td>聯絡電話</td><td>{{x["phone"]}}</td>
+						<td>Email</td><td>{{x["email"]}}</td>
+					</tr>
+				</tbody>
+			</table>
 		{% end %}
 	</h3>
 </div>
@@ -60,6 +80,38 @@ $(document).ready(function(){
 </script>
 <div class="ui segment">
 	<h1 class="ui header">投稿回覆</h1>
+	<table class="ui table">
+		<thead>
+			<th>#</th>
+			<th>匿名檔案</th>
+			<th>非匿名檔案</th>
+			<th>審查回覆</th>
+			<th>上傳者回覆</th>
+		</thead>
+		<tbody>
+			{% set check=["一審","二審","三審"] %}
+			{% for x in range (data["papercheck"]) %}
+			<tr>
+				<td> {{check[x]}} </td> 
+				<td> 下載 </td>
+				<td> 下載 </td>
+				<td> 下載 </td>
+				<td> 下載 </td>
+			</tr>
+			{% end %}
+			<tr>
+				<td> {{check[data["papercheck"]]}} </td>
+				<td> 下載 </td>
+				<td> 下載 </td>
+				<td> </td>
+				<td> </td>
+			</tr>
+			{% if admin %}
 
+			{% else %}
+
+			{% end %}
+		</tbody>
+	<table>
 </div>
 {% end %}
