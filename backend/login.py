@@ -100,6 +100,7 @@ class LoginService:
         return (None, uid)
 
     def get_account_info(self, uid):
+        print(uid)
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "name", "first_name", "last_name", "gender", "degree", "country", "affiliation", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email", "cellphone", "telephone" FROM "account" WHERE "account"."uid" = %s;', (uid,))
         data = cur.fetchone()
