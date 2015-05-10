@@ -80,7 +80,7 @@ class ShowpaperService:
             err, m['keywords'] = yield from self.get_keywords_bypid(m['pid'])
         return (None, meta)
 
-    def get_all_paper(self):
+    def get_all_paper(self, check=None, PID=None):
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain" FROM "paperupload";', ())
         meta = []
@@ -99,6 +99,19 @@ class ShowpaperService:
                 'conflict': conflict,
                 'conflict_explain': conflict_explain
                 })
+        if check:
+            tm = []
+            for m in meta:
+                if str(m['papercheck']) in check:
+                    tm.append(m)
+            meta = tm
+
+        if PID:
+            tm = []
+            for m in meta:
+                if str(m['pid']) in PID:
+                    tm.append(m)
+            meta = tm
         return (None, meta)
 
     def get_file_name(self, pid):
@@ -151,7 +164,7 @@ class ShowpaperHandler(RequestHandler):
                 pid = self.get_arguments('pid[]')
             except:
                 pid = None
-            err, meta = yield from ShowpaperService.inst.get_paper()
+            err, meta = yield from ShowpaperService.inst.get_all_paper(papercheck, pid)
             if err:
                 self.finish(err)
                 return
