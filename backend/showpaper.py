@@ -1,5 +1,6 @@
 from req import RequestHandler
 from req import reqenv
+import os
 import time
 import json
 
@@ -104,23 +105,23 @@ class ShowpaperService:
         path = '../html/paper/'+ str(pid)
         res = {0:[None, None,None,None], 1: [None,None,None,None],2:[None,None,None,None],3:[None,None,None,None]}
         for f in os.listdir(path):
-            if f.find(pid+'.')!=-1:
-                res[0][0]=f
-            elif f.find('non-'+pid+'.')!=-1:
+            if f.find('non-'+pid+'.')!=-1:
                 res[0][1]=f
             elif f.find('reply-'+pid+'.')!=-1:
                 res[0][2]=f
             elif f.find('rreply-'+pid+'.')!=-1:
                 res[0][3]=f
+            elif f.find(pid+'.')!=-1:
+                res[0][0]=f
             for _ in range(1,4):
-                if f.find(pid+'-'+str(_)+'.')!=-1:
-                    res[_][0]=f
-                elif f.find('non-'+pid+'-'+str(_)+'.')!=-1:
+                if f.find('non-'+pid+'-'+str(_)+'.')!=-1:
                     res[_][1]=f
                 elif f.find('reply-'+pid+'-'+str(_)+'.')!=-1:
                     res[_][2]=f
                 elif f.find('rreply-'+pid+'-'+str(_)+'.')!=-1:
                     res[_][3]=f
+                elif f.find(pid+'-'+str(_)+'.')!=-1:
+                    res[_][0]=f
         return res
 
 
@@ -131,7 +132,8 @@ class ShowpaperHandler(RequestHandler):
         pid = self.get_argument('pid', None)
         if pid:
             err, meta = yield from ShowpaperService.inst.get_paper(self.acct['uid'], None, [pid])
-            url = ShowpaperHandler.inst.get_file_name(pid)
+            url = ShowpaperService.inst.get_file_name(pid)
+            print(url)
             self.render('showpaper_pid.html', meta=meta, url=url)
         else:
             self.render('showpaper.html')
