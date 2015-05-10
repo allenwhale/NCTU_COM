@@ -42,9 +42,9 @@ class ShowpaperService:
         return (None, meta)
 
 
-    def get_paper(self, uid, check=None, PID=None):
+    def get_paper(self, acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status" FROM "paperupload" WHERE "paperupload"."uid" = %s ORDER BY "papercheck" ASC, "pid" ASC;', (uid,))
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status" FROM "paperupload" '+'' if Service.Admin.isadmin(acct) else 'WHERE "paperupload"."uid" = %s'+' ORDER BY "papercheck" ASC, "pid" ASC;', (acct['uid'],))
         meta = []
         for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, status in cur:
             meta.append({'pid': pid,
@@ -81,38 +81,26 @@ class ShowpaperService:
             err, m['keywords'] = yield from self.get_keywords_bypid(m['pid'])
         return (None, meta)
 
-    def get_all_paper(self, check=None, PID=None):
+    def get_all_paper(self,acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain" FROM "paperupload";', ())
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain","uid" FROM "paperupload" ORDER BY "papercheck" ASC, "pid" ASC;', ())
         meta = []
-        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain in cur:
-            meta.append({'pid': pid,
-                'papercheck': papercheck,
-                'chinesetitle': chinesetitle,
-                'englishtitle': englishtitle,
-                'chineseabstract': chineseabstract,
-                'englishabstract': englishabstract,
-                'letter': letter,
-                'picnum': picnum,
-                'word': wordnum,
-                'submitted': submitted,
-                'confirm': confirm,
-                'conflict': conflict,
-                'conflict_explain': conflict_explain
-                })
-        if check:
-            tm = []
-            for m in meta:
-                if str(m['papercheck']) in check:
-                    tm.append(m)
-            meta = tm
-
-        if PID:
-            tm = []
-            for m in meta:
-                if str(m['pid']) in PID:
-                    tm.append(m)
-            meta = tm
+        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, uid in cur:
+            if Service.Admin.isadmin(acct) or str(acct['uid'])== str(uid):
+                meta.append({'pid': pid,
+                    'papercheck': papercheck,
+                    'chinesetitle': chinesetitle,
+                    'englishtitle': englishtitle,
+                    'chineseabstract': chineseabstract,
+                    'englishabstract': englishabstract,
+                    'letter': letter,
+                    'picnum': picnum,
+                    'word': wordnum,
+                    'submitted': submitted,
+                    'confirm': confirm,
+                    'conflict': conflict,
+                    'conflict_explain': conflict_explain
+                    })
         return (None, meta)
 
     def get_file_name(self, pid):
@@ -148,18 +136,12 @@ class ShowpaperHandler(RequestHandler):
     def get(self):
         pid = self.get_argument('pid', None)
         if pid:
-            err, meta = yield from ShowpaperService.inst.get_paper(self.acct['uid'], None, [pid])
-            print(meta)
+            err, meta = yield from ShowpaperService.inst.get_paper(self.acct, None, [pid])
             url = ShowpaperService.inst.get_file_name(pid)
-            print(url)
             self.render('showpaper_pid.html', meta=meta, url=url)
-        elif Service.Admin.isadmin(self.acct):
-            err, meta = yield from ShowpaperService.inst.get_all_paper()
-            self.render('showpaper.html', meta=meta)
         else:
-            err, meta = yield from ShowpaperService.inst.get_paper(self.acct['uid'], None, None)
+            err, meta = yield from ShowpaperService.inst.get_all_paper(self.acct)
             self.render('showpaper.html', meta=meta)
-            print(meta)
 
         return
     @reqenv
@@ -175,7 +157,9 @@ class ShowpaperHandler(RequestHandler):
                 pid = self.get_arguments('pid[]')
             except:
                 pid = None
-            err, meta = yield from ShowpaperService.inst.get_all_paper(papercheck, pid)
+            #err, meta = yield from ShowpaperService.inst.get_all_paper(papercheck, pid)
+            meta=0
+            err =0
             if err:
                 self.finish(err)
                 return

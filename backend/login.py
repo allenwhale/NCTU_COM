@@ -3,7 +3,6 @@ from req import reqenv
 from mail import MailHandler
 import random
 def SendMail(From, To, Subject, templ, pwd):
-    print(To)
     m = MailHandler(templ)
     m.send(To, Subject, user=To, pwd=pwd)
     
@@ -29,7 +28,6 @@ class LoginService:
         if cur.rowcount != 1:
             return ('Enoexist', None)
         meta = cur.fetchone()
-        print(password, type(self._hash(password)),type( meta[0]))
         if str(self._hash(password)) != meta[0]:
             return ('Epassword', None)
         return (None, meta[1])
@@ -58,11 +56,9 @@ class LoginService:
         newpassword = rand_password()
         yield cur.execute('UPDATE "account" SET "password" = %s '
                 'WHERE "account"."email" = %s;', (self._hash(newpassword), email))
-        print(cur.rowcount)
         if cur.rowcount != 1:
             return ('Edb', None)
         res = SendMail('me',email, 'new password', 'templates/forgetpassword.html',newpassword)
-        print(res, newpassword)
         return (None, email)
 
     def edit(self, name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, ability, password):
@@ -91,7 +87,6 @@ class LoginService:
         if cur.rowcount != 1:
             return ('Enoexist', None)
         meta = cur.fetchone()
-        print(self._hash(password),meta[0])
         if str(self._hash(password)) != meta[0]:
             return ('Epassword', None)
         uid = meta[1]
@@ -100,7 +95,6 @@ class LoginService:
         return (None, uid)
 
     def get_account_info(self, uid):
-        print(uid)
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "name", "first_name", "last_name", "gender", "degree", "country", "affiliation", "department", "position", "affiliation_postcode", "affiliation_address", "contact_postcode", "contact_address", "email", "cellphone", "telephone" FROM "account" WHERE "account"."uid" = %s;', (uid,))
         data = cur.fetchone()
