@@ -12,6 +12,10 @@ class AdminService:
             return 0
         return 1 if int(acct['uid']) in  config.ADMIN_RANGE else 0
 
+    def admin_reply(self, pid, f):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "paper"')
+
 
 
 class AdminHandler(RequestHandler):
