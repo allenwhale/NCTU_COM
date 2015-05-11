@@ -27,7 +27,7 @@ class AdminService:
         if status != 0:
             return ('Eturn', None)
         if check == 2:
-
+            pass
         path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(f['body'])
