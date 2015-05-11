@@ -93,25 +93,34 @@ $(document).ready(function(){
 			{% for x in range (data["papercheck"]) %}
 			<tr>
 				<td> {{check[x]}} </td> 
-				<td> 下載 </td>
-				<td> 下載 </td>
-				<td> 下載 </td>
-				<td> 下載 </td>
+				{% for y in range (4) %}
+				<td> <a href="/paper/{{data["pid"]}}/{{url[x][y]}}" download> 下載 </a></td>
+				{% end %}
 			</tr>
 			{% end %}
 			<tr>
 				<td> {{check[data["papercheck"]]}} </td>
-				<td> 下載 </td>
-				<td> 下載 </td>
+				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][0]}}" download> 下載 </a></td>
+				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][1]}}" download> 下載 </a></td>
 				<td> </td>
 				<td> </td>
 			</tr>
-			{% if admin %}
-
-			{% else %}
-
-			{% end %}
 		</tbody>
 	<table>
+	{% if admin %}
+		<div class="ui segment">
+			{% if data["status"] == 0 %}
+			{% else %}
+				等待使用者回覆
+			{% end %}
+		</div>
+	{% else %}
+		<div class="ui segment">
+			{% if data["status"] == 1 %}
+			{% else %}
+				等待回覆
+			{% end %}
+		</div>
+	{% end %}
 </div>
 {% end %}
