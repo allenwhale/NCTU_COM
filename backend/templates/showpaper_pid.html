@@ -107,6 +107,8 @@ $(document).ready(function(){
 			</tr>
 		</tbody>
 	<table>
+	admin: {{admin}}
+	status: {{data["status"]}}
 	{% if admin %}
 		<div class="ui segment">
 			{% if data["status"] == 0 %}
@@ -118,7 +120,7 @@ $(document).ready(function(){
 		<div class="ui segment">
 			{% if data["status"] == 1 %}
 			{% else %}
-				等待回覆
+				等待審查
 			{% end %}
 		</div>
 	{% end %}
