@@ -63,7 +63,7 @@ class AdminService:
         _f.write(non['body'])
         _f.close()
        
-        yield cur.execute('UPDATE "paperupload" SET "status" = 1, "papercheck" = %s WHERE "pid"= %s;', (check+1, pid,)) 
+        yield cur.execute('UPDATE "paperupload" SET "status" = 1, "papercheck" = %s WHERE "pid"= %s;', (check, pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
         return (None, pid)
