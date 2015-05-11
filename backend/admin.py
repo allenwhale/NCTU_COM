@@ -26,7 +26,7 @@ class AdminService:
         status = int(status)
         if status != 0:
             return ('Eturn', None)
-        path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(f['body'])
         _f.close()
@@ -49,21 +49,21 @@ class AdminService:
             return ('Euser', None)
         if status != 1:
             return ('Eturn', None)
-        path = '../html/paper/'+str(pid)+'/rreply-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+rreply['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/rreply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+rreply['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(rreply['body'])
         _f.close()
         check += 1
-        path = '../html/paper/'+str(pid)+'/'+str(pid)+('' if check == 0 else '%d'%check)+'.'+anony['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+anony['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(anony['body'])
         _f.close()
-        path = '../html/paper/'+str(pid)+'/non-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+non['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/non-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+non['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(non['body'])
         _f.close()
        
-        yield cur.execute('UPDATE "paperupload" SET "status" = 1, "papercheck" = %s WHERE "pid"= %s;', (check, pid,)) 
+        yield cur.execute('UPDATE "paperupload" SET "status" = 0, "papercheck" = %s WHERE "pid"= %s;', (check, pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
         return (None, pid)

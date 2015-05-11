@@ -110,19 +110,19 @@ class ShowpaperService:
             for f in os.listdir(path):
                 if f.find('non-'+pid+'.')!=-1:
                     res[0][1]=f
-                elif f.find('reply-'+pid+'.')!=-1:
-                    res[0][2]=f
                 elif f.find('rreply-'+pid+'.')!=-1:
                     res[0][3]=f
+                elif f.find('reply-'+pid+'.')!=-1:
+                    res[0][2]=f
                 elif f.find(pid+'.')!=-1:
                     res[0][0]=f
                 for _ in range(1,4):
                     if f.find('non-'+pid+'-'+str(_)+'.')!=-1:
                         res[_][1]=f
-                    elif f.find('reply-'+pid+'-'+str(_)+'.')!=-1:
-                        res[_][2]=f
                     elif f.find('rreply-'+pid+'-'+str(_)+'.')!=-1:
                         res[_][3]=f
+                    elif f.find('reply-'+pid+'-'+str(_)+'.')!=-1:
+                        res[_][2]=f
                     elif f.find(pid+'-'+str(_)+'.')!=-1:
                         res[_][0]=f
         except:
