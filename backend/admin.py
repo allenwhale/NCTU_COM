@@ -26,8 +26,6 @@ class AdminService:
         status = int(status)
         if status != 0:
             return ('Eturn', None)
-        if check == 2:
-            pass
         path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(f['body'])
@@ -35,6 +33,17 @@ class AdminService:
         yield cur.execute('UPDATE "paperupload" SET "status" = 1 WHERE "pid"= %s;', (pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
+        if check == 2:
+            yield cur.execute('UPDATE "paperupload" SET "pass" = %s;', (end,))
+            if cur.rowcount != 1:
+                return ('Edb', None)
+            if end == 0:
+                #10
+                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s;', (10,))
+            elif end == 1:
+                #11
+                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s;', (11,))
+            yield cur.execute('UPDATE "paperupload" SET "status" = 0 WHERE "pid"= %s;', (pid,)) 
         return (None, pid)
 
     def user_reply(self, acct, pid, rreply, anony, non):
