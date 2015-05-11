@@ -44,7 +44,7 @@ class ShowpaperService:
 
     def get_paper(self, acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status" FROM "paperupload" '+'' if Service.Admin.isadmin(acct) else 'WHERE "paperupload"."uid" = %s'+' ORDER BY "papercheck" ASC, "pid" ASC;', (acct['uid'],))
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status" FROM "paperupload" '+('' if Service.Admin.isadmin(acct) else 'WHERE "paperupload"."uid" = %s')+' ORDER BY "papercheck" ASC, "pid" ASC;', (acct['uid'],))
         meta = []
         for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, status in cur:
             meta.append({'pid': pid,
