@@ -84,7 +84,7 @@ class AdminHandler(RequestHandler):
         elif req == 'adminreply':
             pid = self.get_argument('pid', None)
             f = self.request.files['reply'][0]
-            err, pid = yield from Admin.inst.admin_reply(self.acct, pif, f)
+            err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f)
             if err:
                 self.finish(err)
             self.finish('S')
@@ -93,9 +93,8 @@ class AdminHandler(RequestHandler):
             anony = self.request.files['anony'][0]
             non = self.request.files['non-anony'][0]
             rreply = self.request.files['rreply'][0]
-            err, pid = yield from Admin.inst.user_reply(self.acct, pif, rreply, anony, non)
+            err, pid = yield from AdminService.inst.user_reply(self.acct, pif, rreply, anony, non)
             if err:
                 self.finish(err)
             self.finish('S')
-
         return
