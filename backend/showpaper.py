@@ -83,11 +83,11 @@ class ShowpaperService:
 
     def get_all_paper(self,acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain","uid" FROM "paperupload" ORDER BY "papercheck" ASC, "pid" ASC;', ())
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain","uid", "status" FROM "paperupload" ORDER BY "papercheck" ASC, "pid" ASC;', ())
         meta = [[],[],[],[]]
-        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, uid in cur:
+        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, uid, status in cur:
             if Service.Admin.isadmin(acct) or str(acct['uid'])== str(uid):
-                meta[papercheck].append({'pid': pid,
+                meta[papercheck+status].append({'pid': pid,
                     'papercheck': papercheck,
                     'chinesetitle': chinesetitle,
                     'englishtitle': englishtitle,

@@ -12,7 +12,7 @@ class AdminService:
             return 0
         return 1 if int(acct['uid']) in  config.ADMIN_RANGE else 0
 
-    def admin_reply(self, acct, pid, f):
+    def admin_reply(self, acct, pid, f, end):
         if AdminService.inst.isadmin(acct) == 0:
             return ('Eaccess', None)
         if not f:
@@ -84,7 +84,8 @@ class AdminHandler(RequestHandler):
         elif req == 'adminreply':
             pid = self.get_argument('pid', None)
             f = self.request.files['reply'][0]
-            err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f)
+            end = self.get_argument('end', None)
+            err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f, end)
             if err:
                 self.finish(err)
             self.finish('S')
