@@ -93,7 +93,7 @@ class AdminHandler(RequestHandler):
             anony = self.request.files['anony'][0]
             non = self.request.files['non-anony'][0]
             rreply = self.request.files['rreply'][0]
-            err, pid = yield from AdminService.inst.user_reply(self.acct, pif, rreply, anony, non)
+            err, pid = yield from AdminService.inst.user_reply(self.acct, pid, rreply, anony, non)
             if err:
                 self.finish(err)
             self.finish('S')

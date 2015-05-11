@@ -143,7 +143,6 @@ $(document).ready(function(){
 		</div>
 	{% else %}
 		<div class="ui segment">
-			{% set data["status"] = 1 %}
 			{% if data["status"] == 1 %}
 				<form class="ui form" id="user_reply">
 
@@ -161,11 +160,22 @@ $(document).ready(function(){
 						<input type="file" name="rreply" id="non-anony">
 					</div>
 					<input type="hidden" name="pid" value="{{data["pid"]}}">
+					<input type="hidden" name="req" value="userreply">
 					<div class="ui blue submit button" onclick="user_reply();">送出</div>
 				</form>
 				<script>
 					function user_reply(){
-						alert("GG");
+						var data = new FormData($("#user_reply")[0]);
+						$.ajax({
+							url: "/admin",
+							data: data,
+							type: "post",
+							processData: false,
+							contentType: false,
+							success: function(msg){
+								alert(msg);
+							}
+						});
 					}
 				</script>
 			{% else %}
