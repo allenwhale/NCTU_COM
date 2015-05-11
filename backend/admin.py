@@ -35,7 +35,7 @@ class AdminService:
             return ('Edb', None)
         return (None, pid)
 
-    def user_reply(self, acct, pid, f):
+    def user_reply(self, acct, pid, rreply, anony, non):
         if not f:
             return ('Efile', None)
         cur = yield self.db.cursor()
@@ -51,7 +51,16 @@ class AdminService:
             return ('Eturn', None)
         path = '../html/paper/'+str(pid)+'/rreply-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
-        _f.write(f['body'])
+        _f.write(rreply['body'])
+        _f.close()
+        check += 1
+        path = '../html/paper/'+str(pid)+'/'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        _f = open(path, 'wb')
+        _f.write(anony['body'])
+        _f.close()
+        path = '../html/paper/'+str(pid)+'/non-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        _f = open(path, 'wb')
+        _f.write(non['body'])
         _f.close()
        
         yield cur.execute('UPDATE "paperupload" SET "status" = 1, "papercheck" = %s WHERE "pid"= %s;', (check+1, pid,)) 
@@ -74,15 +83,17 @@ class AdminHandler(RequestHandler):
             self.finish(str(AdminService.inst.isadmin(self.acct)))
         elif req == 'adminreply':
             pid = self.get_argument('pid', None)
-            f = self.request.files['file'][0]
+            f = self.request.files['reply'][0]
             err, pid = yield from Admin.inst.admin_reply(self.acct, pif, f)
             if err:
                 self.finish(err)
             self.finish('S')
         elif req == 'userreply':
             pid = self.get_argument('pid', None)
-            f = self.request.files['file'][0]
-            err, pid = yield from Admin.inst.user_reply(self.acct, pif, f)
+            anony = self.request.files['anony'][0]
+            non = self.request.files['non-anony'][0]
+            rreply = self.request.files['rreply'][0]
+            err, pid = yield from Admin.inst.user_reply(self.acct, pif, rreply, anony, non)
             if err:
                 self.finish(err)
             self.finish('S')
