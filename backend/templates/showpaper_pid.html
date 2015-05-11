@@ -102,7 +102,11 @@ $(document).ready(function(){
 				<td> {{check[data["papercheck"]]}} </td>
 				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][0]}}" download> 下載 </a></td>
 				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][1]}}" download> 下載 </a></td>
-				<td> </td>
+				{% if data["status"] %}
+					<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][2]}}" download> 下載 </a></td>
+				{% else %}
+					<td> </td>
+				{% end %}
 				<td> </td>
 			</tr>
 		</tbody>
