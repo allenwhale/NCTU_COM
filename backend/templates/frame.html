@@ -26,9 +26,11 @@
         <a class="item" href="/register">
             會員申請
         </a>
-        <a class="item" href="/paperupload">
-            線上投稿
-        </a>
+		{% if not admin %}
+			<a class="item" href="/paperupload">
+				線上投稿
+			</a>
+		{% end %}
         <a class="item" href="/subscribe">
             訂閱服務
         </a>
@@ -38,7 +40,6 @@
         <a class="item" href="/contact">
             聯絡我們
         </a>
-        {{admin}}
 		{% if admin == 1 %}
 			<a class="item" href="/showpaper">
 				審查論文
