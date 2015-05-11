@@ -26,6 +26,7 @@ CREATE TABLE paperupload(
     pid SERIAL,
 	uid integer,
 	papercheck integer DEFAULT 0,
+    pass integer,
     status integer DEFAULT 0,
     chinesetitle character varying,
     englishtitle character varying,
