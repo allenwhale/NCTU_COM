@@ -123,6 +123,15 @@ $(document).ready(function(){
 						<input type="file" name="reply">
 						<input type="hidden" name="pid" value="{{data["pid"]}}">
 						<input type="hidden" name="req" value="adminreply">
+						{% if data["papercheck"] == 2 %}
+						<select class="ui upward dropdown" name="end">
+							<option value='1'>通過</option>
+							<option value='0'>不通過</option>
+						</select>
+						<script>
+							$(".ui.dropdown").dropdown();
+						</script>
+						{% end %}
 				<div class="ui blue submit button" onclick="admin_reply();">送出</div>
 				</div>
 			</form>
