@@ -36,7 +36,7 @@ class AdminService:
         return (None, pid)
 
     def user_reply(self, acct, pid, rreply, anony, non):
-        if not f:
+        if not rreply or not anony or not non:
             return ('Efile', None)
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "papercheck", "status", "uid" FROM "paperupload" WHERE "pid" = %s;', (pid,))
@@ -45,20 +45,20 @@ class AdminService:
         check, status, uid = cur.fetchone()
         check = int(check)
         status = int(status)
-        if str(uid) != str(self.acct['uid']):
+        if str(uid) != str(acct['uid']):
             return ('Euser', None)
         if status != 1:
             return ('Eturn', None)
-        path = '../html/paper/'+str(pid)+'/rreply-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/rreply-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+rreply['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(rreply['body'])
         _f.close()
         check += 1
-        path = '../html/paper/'+str(pid)+'/'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/'+str(pid)+('' if check == 0 else '%d'%check)+'.'+anony['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(anony['body'])
         _f.close()
-        path = '../html/paper/'+str(pid)+'/non-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+f['filename'].split('.')[-1]
+        path = '../html/paper/'+str(pid)+'/non-'+str(pid)+('' if check == 0 else '%d'%check)+'.'+non['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(non['body'])
         _f.close()
