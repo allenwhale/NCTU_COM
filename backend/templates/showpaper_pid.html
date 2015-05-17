@@ -78,6 +78,7 @@ $(document).ready(function(){
     });
 });
 </script>
+
 <div class="ui segment">
     <h1 class="ui header">投稿回覆</h1>
     <table class="ui table">
@@ -136,88 +137,88 @@ $(document).ready(function(){
     </table>
     admin: {{admin}}
     status: {{data["status"]}}
-    {% if admin %}
-    <div class="ui segment">
-        {% if data["status"] == 0 %}
-        <form class="ui form" id="admin_reply">
-            <h2>審查回覆</h2>
-            <div class="inline field">
-                <label>檔案上傳</label>
-                <input type="file" name="reply">
-                <input type="hidden" name="pid" value="{{data["pid"]}}">
-                <input type="hidden" name="req" value="adminreply">
-                <select class="ui upward dropdown" name="end">
-                    <option value='-1'>再審</option>
-                    <option value='1'>通過</option>
-                    <option value='0'>不通過</option>
-                </select>
-                <script>
-$(".ui.dropdown").dropdown();
-                </script>
-                <div class="ui blue submit button" onclick="admin_reply();">送出</div>
-            </div>
-        </form>
-        <script>
-function admin_reply(){
-    var data = new FormData($("#admin_reply")[0]);
-    $.ajax({
-        url: "/admin",
-        data: data,
-        type: "post",
-        processData: false,
-        contentType: false,
-        success: function(msg){
-            alert(msg);
-        }
-    });
-}
-        </script>
-        {% else %}
-        等待使用者回覆
-        {% end %}
-    </div>
-    {% else %}
-    <div class="ui segment">
-        {% if data["status"] == 1 %}
-        <form class="ui form" id="user_reply">
-
-            <h2>回覆</h2>
-            <div class="inline field">
-                <label>匿名上傳　</label>
-                <input id="anony" type="file" name="anony">
-            </div>
-            <div class="inline field">
-                <label>非匿名上傳</label>
-                <input type="file" name="non-anony" id="non-anony">
-            </div>
-            <div class="inline field">
-                <label>意見回覆　</label>
-                <input type="file" name="rreply" id="non-anony">
-            </div>
-            <input type="hidden" name="pid" value="{{data["pid"]}}">
-            <input type="hidden" name="req" value="userreply">
-            <div class="ui blue submit button" onclick="user_reply();">送出</div>
-        </form>
-        <script>
-function user_reply(){
-    var data = new FormData($("#user_reply")[0]);
-    $.ajax({
-        url: "/admin",
-        data: data,
-        type: "post",
-        processData: false,
-        contentType: false,
-        success: function(msg){
-            alert(msg);
-        }
-    });
-}
-        </script>
-        {% else %}
-        等待審查
-        {% end %}
-    </div>
-    {% end %}
-    </table>
+	{% if data["papercheck"] < 10 %}
+		{% if admin %}
+			<div class="ui segment">
+				{% if data["status"] == 0 %}
+					<form class="ui form" id="admin_reply">
+						<h2>審查回覆</h2>
+						<div class="inline field">
+							<label>檔案上傳</label>
+							<input type="file" name="reply">
+							<input type="hidden" name="pid" value="{{data["pid"]}}">
+							<input type="hidden" name="req" value="adminreply">
+							<select class="ui upward dropdown" name="end">
+								<option value='-1'>再審</option>
+								<option value='1'>通過</option>
+								<option value='0'>不通過</option>
+							</select>
+							<script>
+								$(".ui.dropdown").dropdown();
+							</script>
+							<div class="ui blue submit button" onclick="admin_reply();">送出</div>
+						</div>
+					</form>
+					<script>
+						function admin_reply(){
+							var data = new FormData($("#admin_reply")[0]);
+							$.ajax({
+								url: "/admin",
+								data: data,
+								type: "post",
+								processData: false,
+								contentType: false,
+								success: function(msg){
+									alert(msg);
+								}
+							});
+						}
+					</script>
+				{% else %}
+					等待使用者回覆
+				{% end %}
+			</div>
+		{% else %}
+			<div class="ui segment">
+				{% if data["status"] == 1 %}
+					<form class="ui form" id="user_reply">
+						<h2>回覆</h2>
+						<div class="inline field">
+							<label>匿名上傳　</label>
+							<input id="anony" type="file" name="anony">
+						</div>
+						<div class="inline field">
+							<label>非匿名上傳</label>
+							<input type="file" name="non-anony" id="non-anony">
+						</div>
+						<div class="inline field">
+							<label>意見回覆　</label>
+							<input type="file" name="rreply" id="non-anony">
+						</div>
+						<input type="hidden" name="pid" value="{{data["pid"]}}">
+						<input type="hidden" name="req" value="userreply">
+						<div class="ui blue submit button" onclick="user_reply();">送出</div>
+					</form>
+					<script>
+						function user_reply(){
+							var data = new FormData($("#user_reply")[0]);
+							$.ajax({
+								url: "/admin",
+								data: data,
+								type: "post",
+								processData: false,
+								contentType: false,
+								success: function(msg){
+									alert(msg);
+								}
+							});
+						}
+					</script>
+				{% else %}
+					等待審查
+				{% end %}
+			</div>
+		{% end %}
+	{% end %}
 </div>
 {% end %}

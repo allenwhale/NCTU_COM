@@ -41,8 +41,7 @@
 						<th>編號</th>
 						<th>中文名稱</th>
 						<th>英文名稱</th>
-						<th>審查階段</th>
-						<th></th>
+						<th>檢視</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -57,6 +56,31 @@
 				</tbody>
 			</table>
 		</div>
+		<h1>審查未通過論文</h1>
+		<div>
+			<table class="ui table">
+				<thead>
+					<tr>
+						<th>編號</th>
+						<th>中文名稱</th>
+						<th>英文名稱</th>
+						<th>檢視</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for data in meta[11] %}
+						<tr>
+							<td>{{data["pid"]}}</td>
+							<td>{{data["chinesetitle"]}}</td>
+							<td>{{data["englishtitle"]}}</td>
+							<td><a href="/showpaper?pid={{data["pid"]}}">察看</a></td>
+						</tr>
+					{% end %}
+				</tbody>
+			</table>
+		</div>
 	</div>
+</div>
+
 	{% end %}
 {% end %}
