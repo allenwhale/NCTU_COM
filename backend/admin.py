@@ -15,17 +15,32 @@ class AdminService:
     def admin_reply(self, acct, pid, f, end):
         if AdminService.inst.isadmin(acct) == 0:
             return ('Eaccess', None)
-        if not f:
-            return ('Efile', None)
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "papercheck", "status" FROM "paperupload" WHERE "pid" = %s;', (pid,))
+        yield cur.execute('SELECT "papercheck", "status", "pass" FROM "paperupload" WHERE "pid" = %s;', (pid,))
         if cur.rowcount != 1:
             return ('Epaper', None)
-        check, status = cur.fetchone()
+        check, status, _pass = cur.fetchone()
         check = int(check)
         status = int(status)
+        try:
+            _pass = int(_pass)
+        except:
+            _pass = -1
         if status != 0:
             return ('Eturn', None)
+        if _pass != -1:
+            return ('Epassorfail', None)
+        print(end, type(end))
+        if end == '1':
+            yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (10, 1,check, pid,))
+            return (None, pid)
+
+        if end == '0':
+            yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (11, 0,check, pid,))
+            return (None, pid)
+
+        if not f:
+            return ('Efile', None)
         path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(f['body'])
@@ -34,15 +49,15 @@ class AdminService:
         if cur.rowcount != 1:
             return ('Edb', None)
         if check == 2:
-            yield cur.execute('UPDATE "paperupload" SET "pass" = %s;', (end,))
+            yield cur.execute('UPDATE "paperupload" SET "pass" = %s WHERE "pid"= %s;', (end, pid))
             if cur.rowcount != 1:
                 return ('Edb', None)
             if end == 0:
                 #10
-                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s;', (10,))
+                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid"= %s;', (10, pid))
             elif end == 1:
                 #11
-                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s;', (11,))
+                yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid"= %s;', (11, pid))
             yield cur.execute('UPDATE "paperupload" SET "status" = 0 WHERE "pid"= %s;', (pid,)) 
         return (None, pid)
 
@@ -94,11 +109,15 @@ class AdminHandler(RequestHandler):
             self.finish(str(AdminService.inst.isadmin(self.acct)))
         elif req == 'adminreply':
             pid = self.get_argument('pid', None)
-            f = self.request.files['reply'][0]
+            try:
+                f = self.request.files['reply'][0]
+            except:
+                f = None
             end = self.get_argument('end', None)
             err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f, end)
             if err:
                 self.finish(err)
+                return
             self.finish('S')
         elif req == 'userreply':
             pid = self.get_argument('pid', None)
@@ -108,5 +127,6 @@ class AdminHandler(RequestHandler):
             err, pid = yield from AdminService.inst.user_reply(self.acct, pid, rreply, anony, non)
             if err:
                 self.finish(err)
+                return
             self.finish('S')
         return

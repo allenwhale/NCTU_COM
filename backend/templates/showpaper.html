@@ -46,6 +46,14 @@
 					</tr>
 				</thead>
 				<tbody>
+					{% for data in meta[10] %}
+						<tr>
+							<td>{{data["pid"]}}</td>
+							<td>{{data["chinesetitle"]}}</td>
+							<td>{{data["englishtitle"]}}</td>
+							<td><a href="/showpaper?pid={{data["pid"]}}">察看</a></td>
+						</tr>
+					{% end %}
 				</tbody>
 			</table>
 		</div>

@@ -44,11 +44,13 @@ class ShowpaperService:
 
     def get_paper(self, acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status" FROM "paperupload" '+('' if Service.Admin.isadmin(acct) else 'WHERE "paperupload"."uid" = %s')+' ORDER BY "papercheck" ASC, "pid" ASC;', (acct['uid'],))
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain", "status", "pass", "lastcheck" FROM "paperupload" '+('' if Service.Admin.isadmin(acct) else 'WHERE "paperupload"."uid" = %s')+' ORDER BY "papercheck" ASC, "pid" ASC;', (acct['uid'],))
         meta = []
-        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, status in cur:
+        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, status, _pass, lastcheck in cur:
             meta.append({'pid': pid,
+                'lastcheck': lastcheck,
                 'papercheck': papercheck,
+                'pass': _pass,
                 'chinesetitle': chinesetitle,
                 'englishtitle': englishtitle,
                 'chineseabstract': chineseabstract,
@@ -83,11 +85,12 @@ class ShowpaperService:
 
     def get_all_paper(self,acct, check=None, PID=None):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain","uid", "status" FROM "paperupload" ORDER BY "papercheck" ASC, "pid" ASC;', ())
+        yield cur.execute('SELECT "pid", "papercheck", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain","uid", "status", "pass" FROM "paperupload" ORDER BY "papercheck" ASC, "pid" ASC;', ())
         meta = [[],[],[],[],[],[],[],[],[],[],[],[],]
-        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, uid, status in cur:
+        for pid, papercheck, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, uid, status, _pass in cur:
             if Service.Admin.isadmin(acct) or str(acct['uid'])== str(uid):
                 meta[papercheck+status].append({'pid': pid,
+                    'pass': _pass,
                     'papercheck': papercheck,
                     'chinesetitle': chinesetitle,
                     'englishtitle': englishtitle,
@@ -138,6 +141,7 @@ class ShowpaperHandler(RequestHandler):
         if pid:
             err, meta = yield from ShowpaperService.inst.get_paper(self.acct, None, [pid])
             url = ShowpaperService.inst.get_file_name(pid)
+            print(meta)
             self.render('showpaper_pid.html', meta=meta, url=url)
         else:
             err, meta = yield from ShowpaperService.inst.get_all_paper(self.acct)

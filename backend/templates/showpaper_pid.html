@@ -2,199 +2,222 @@
 {% block content %}
 
 <div class="ui segment">
-	<h1 class="ui header">基本資料</h1>
-	<h3>
-		{% set data=meta[0] %}
-		論文編號: {{data["pid"]}} <br>
-		中文標題: {{data["chinesetitle"]}}<br>
-		英文標題: {{data["englishtitle"]}}
+    <h1 class="ui header">基本資料</h1>
+    <h3>
+        {% set data=meta[0] %}
+        論文編號: {{data["pid"]}} <br>
+        中文標題: {{data["chinesetitle"]}}<br>
+        英文標題: {{data["englishtitle"]}}
 
-		<div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
 
-		中文摘要:
-		<div class="ui segment spec_br">{{data["chineseabstract"]}}</div>
+        中文摘要:
+        <div class="ui segment spec_br">{{data["chineseabstract"]}}</div>
 
-		英文摘要:
-		<div class="ui segment spec_br">{{data["englishabstract"]}}</div>
+        英文摘要:
+        <div class="ui segment spec_br">{{data["englishabstract"]}}</div>
 
-		中文關鍵詞:
-		<div class="ui ul">
-			{% for x in data["keywords"]["chinese"] %}
-				{% if len(x) %}
-					<li>{{x}}</li>
-				{% end %}
-			{% end %}
-		</div>
+        中文關鍵詞:
+        <div class="ui ul">
+            {% for x in data["keywords"]["chinese"] %}
+            {% if len(x) %}
+            <li>{{x}}</li>
+            {% end %}
+            {% end %}
+        </div>
 
-		<div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
 
-		英文關鍵詞:
-		<div class="ui ul">
-			{% for x in data["keywords"]["english"] %}
-				{% if len(x) %}
-					<li>{{x}}</li>
-				{% end %}
-			{% end %}
-		</div>
+        英文關鍵詞:
+        <div class="ui ul">
+            {% for x in data["keywords"]["english"] %}
+            {% if len(x) %}
+            <li>{{x}}</li>
+            {% end %}
+            {% end %}
+        </div>
 
-		<div class="ui hidden divider"></div>
+        <div class="ui hidden divider"></div>
 
-		作者:
-		{% for x in data["author"] %}
-			<table class="ui small celled table">
-				<tbody>
-					<tr>
-						<td>姓名</td><td>{{x["name"]}}</td>
-					</tr>
-					<tr>
-						<td>First Name</td><td>{{x["first_name"]}}</td>
-						<td>Last Name</td><td>{{x["last_name"]}}</td>
-					</tr>
-					<tr>
-						<td>服務機構</td><td colspan='3'>{{x["affiliation"]}}</td>
-					</tr>
-					<tr>
-						<td>部門</td><td>{{x["department"]}}</td>
-						<td>職稱</td><td>{{x["position"]}}</td>
-					</tr>
-					<tr><td>地址</td><td colspan='3'>{{x["address"]}}</td></tr>
-					<tr>
-						<td>聯絡電話</td><td>{{x["phone"]}}</td>
-						<td>Email</td><td>{{x["email"]}}</td>
-					</tr>
-				</tbody>
-			</table>
-		{% end %}
-	</h3>
+        作者:
+        {% for x in data["author"] %}
+        <table class="ui small celled table">
+            <tbody>
+                <tr>
+                    <td>姓名</td><td>{{x["name"]}}</td>
+                </tr>
+                <tr>
+                    <td>First Name</td><td>{{x["first_name"]}}</td>
+                    <td>Last Name</td><td>{{x["last_name"]}}</td>
+                </tr>
+                <tr>
+                    <td>服務機構</td><td colspan='3'>{{x["affiliation"]}}</td>
+                </tr>
+                <tr>
+                    <td>部門</td><td>{{x["department"]}}</td>
+                    <td>職稱</td><td>{{x["position"]}}</td>
+                </tr>
+                <tr><td>地址</td><td colspan='3'>{{x["address"]}}</td></tr>
+                <tr>
+                    <td>聯絡電話</td><td>{{x["phone"]}}</td>
+                    <td>Email</td><td>{{x["email"]}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% end %}
+    </h3>
 </div>
 <script>
 $(document).ready(function(){
-	$(".spec_br").each(function(){
-		contents = $(this).html();
-		reg = new RegExp("\n", 'g');
-		contents = contents.replace(reg, "<br>");
+    $(".spec_br").each(function(){
+        contents = $(this).html();
+        reg = new RegExp("\n", 'g');
+        contents = contents.replace(reg, "<br>");
 
-		$(this).html(contents);
-	});
+        $(this).html(contents);
+    });
 });
 </script>
 <div class="ui segment">
-	<h1 class="ui header">投稿回覆</h1>
-	<table class="ui table">
-		<thead>
-			<th>#</th>
-			<th>匿名檔案</th>
-			<th>非匿名檔案</th>
-			<th>審查回覆</th>
-			<th>上傳者回覆</th>
-		</thead>
-		<tbody>
-			{% set check=["一審","二審","三審"] %}
-			{% for x in range (data["papercheck"]) %}
-			<tr>
-				<td> {{check[x]}} </td> 
-				{% for y in range (4) %}
-				<td> <a href="/paper/{{data["pid"]}}/{{url[x][y]}}" download> 下載 </a></td>
-				{% end %}
-			</tr>
-			{% end %}
-			<tr>
-				<td> {{check[data["papercheck"]]}} </td>
-				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][0]}}" download> 下載 </a></td>
-				<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][1]}}" download> 下載 </a></td>
-				{% if data["status"] %}
-					<td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][2]}}" download> 下載 </a></td>
-				{% else %}
-					<td> </td>
-				{% end %}
-				<td> </td>
-			</tr>
-		</tbody>
-	</table>
-	admin: {{admin}}
-	status: {{data["status"]}}
-	{% if admin %}
-		<div class="ui segment">
-			{% if data["status"] == 0 %}
-			<form class="ui form" id="admin_reply">
-				<h2>審查回覆</h2>
-				<div class="inline field">
-						<label>檔案上傳</label>
-						<input type="file" name="reply">
-						<input type="hidden" name="pid" value="{{data["pid"]}}">
-						<input type="hidden" name="req" value="adminreply">
-						{% if data["papercheck"] == 2 %}
-						<select class="ui upward dropdown" name="end">
-							<option value='1'>通過</option>
-							<option value='0'>不通過</option>
-						</select>
-						<script>
-							$(".ui.dropdown").dropdown();
-						</script>
-						{% end %}
-				<div class="ui blue submit button" onclick="admin_reply();">送出</div>
-				</div>
-			</form>
-				<script>
-					function admin_reply(){
-						var data = new FormData($("#admin_reply")[0]);
-						$.ajax({
-							url: "/admin",
-							data: data,
-							type: "post",
-							processData: false,
-							contentType: false,
-							success: function(msg){
-								alert(msg);
-							}
-						});
-					}
-				</script>
-			{% else %}
-				等待使用者回覆
-			{% end %}
-		</div>
-	{% else %}
-		<div class="ui segment">
-			{% if data["status"] == 1 %}
-				<form class="ui form" id="user_reply">
+    <h1 class="ui header">投稿回覆</h1>
+    <table class="ui table">
+        <thead>
+            <th>#</th>
+            <th>匿名檔案</th>
+            <th>非匿名檔案</th>
+            <th>審查回覆</th>
+            <th>上傳者回覆</th>
+        </thead>
+        <tbody>
+            {% if data['pass'] == -1 %}
+            {% set check=["一審","二審","三審"] %}
+            {% for x in range (data["papercheck"]) %}
+            <tr>
+                <td> {{check[x]}} </td> 
+                {% for y in range (4) %}
+                <td> <a href="/paper/{{data["pid"]}}/{{url[x][y]}}" download> 下載 </a></td>
+                {% end %}
+            </tr>
+            {% end %}
+            <tr>
+                <td> {{check[data["papercheck"]]}} </td>
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][0]}}" download> 下載 </a></td>
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][1]}}" download> 下載 </a></td>
+                {% if data["status"] %}
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["papercheck"]][2]}}" download> 下載 </a></td>
+                {% else %}
+                <td> </td>
+                {% end %}
+                <td> </td>
+            </tr>
+            {% else %}
+            {% set check=["一審","二審","三審"] %}
+            {% for x in range (data["lastcheck"]) %}
+            <tr>
+                <td> {{check[x]}} </td> 
+                {% for y in range (4) %}
+                <td> <a href="/paper/{{data["pid"]}}/{{url[x][y]}}" download> 下載 </a></td>
+                {% end %}
+            </tr>
+            {% end %}
+            <tr>
+                <td> {{check[data["lastcheck"]]}} </td>
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["lastcheck"]][0]}}" download> 下載 </a></td>
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["lastcheck"]][1]}}" download> 下載 </a></td>
+                {% if data["status"] %}
+                <td> <a href="/paper/{{data["pid"]}}/{{url[data["lastcheck"]][2]}}" download> 下載 </a></td>
+                {% else %}
+                <td> </td>
+                {% end %}
+                <td> </td>
+            </tr>
+            {% end %}
+        </tbody>
+    </table>
+    admin: {{admin}}
+    status: {{data["status"]}}
+    {% if admin %}
+    <div class="ui segment">
+        {% if data["status"] == 0 %}
+        <form class="ui form" id="admin_reply">
+            <h2>審查回覆</h2>
+            <div class="inline field">
+                <label>檔案上傳</label>
+                <input type="file" name="reply">
+                <input type="hidden" name="pid" value="{{data["pid"]}}">
+                <input type="hidden" name="req" value="adminreply">
+                <select class="ui upward dropdown" name="end">
+                    <option value='-1'>再審</option>
+                    <option value='1'>通過</option>
+                    <option value='0'>不通過</option>
+                </select>
+                <script>
+$(".ui.dropdown").dropdown();
+                </script>
+                <div class="ui blue submit button" onclick="admin_reply();">送出</div>
+            </div>
+        </form>
+        <script>
+function admin_reply(){
+    var data = new FormData($("#admin_reply")[0]);
+    $.ajax({
+        url: "/admin",
+        data: data,
+        type: "post",
+        processData: false,
+        contentType: false,
+        success: function(msg){
+            alert(msg);
+        }
+    });
+}
+        </script>
+        {% else %}
+        等待使用者回覆
+        {% end %}
+    </div>
+    {% else %}
+    <div class="ui segment">
+        {% if data["status"] == 1 %}
+        <form class="ui form" id="user_reply">
 
-					<h2>回覆</h2>
-					<div class="inline field">
-						<label>匿名上傳　</label>
-						<input id="anony" type="file" name="anony">
-					</div>
-					<div class="inline field">
-						<label>非匿名上傳</label>
-						<input type="file" name="non-anony" id="non-anony">
-					</div>
-					<div class="inline field">
-						<label>意見回覆　</label>
-						<input type="file" name="rreply" id="non-anony">
-					</div>
-					<input type="hidden" name="pid" value="{{data["pid"]}}">
-					<input type="hidden" name="req" value="userreply">
-					<div class="ui blue submit button" onclick="user_reply();">送出</div>
-				</form>
-				<script>
-					function user_reply(){
-						var data = new FormData($("#user_reply")[0]);
-						$.ajax({
-							url: "/admin",
-							data: data,
-							type: "post",
-							processData: false,
-							contentType: false,
-							success: function(msg){
-								alert(msg);
-							}
-						});
-					}
-				</script>
-			{% else %}
-				等待審查
-			{% end %}
-		</div>
-	{% end %}
+            <h2>回覆</h2>
+            <div class="inline field">
+                <label>匿名上傳　</label>
+                <input id="anony" type="file" name="anony">
+            </div>
+            <div class="inline field">
+                <label>非匿名上傳</label>
+                <input type="file" name="non-anony" id="non-anony">
+            </div>
+            <div class="inline field">
+                <label>意見回覆　</label>
+                <input type="file" name="rreply" id="non-anony">
+            </div>
+            <input type="hidden" name="pid" value="{{data["pid"]}}">
+            <input type="hidden" name="req" value="userreply">
+            <div class="ui blue submit button" onclick="user_reply();">送出</div>
+        </form>
+        <script>
+function user_reply(){
+    var data = new FormData($("#user_reply")[0]);
+    $.ajax({
+        url: "/admin",
+        data: data,
+        type: "post",
+        processData: false,
+        contentType: false,
+        success: function(msg){
+            alert(msg);
+        }
+    });
+}
+        </script>
+        {% else %}
+        等待審查
+        {% end %}
+    </div>
+    {% end %}
+    </table>
 </div>
 {% end %}
