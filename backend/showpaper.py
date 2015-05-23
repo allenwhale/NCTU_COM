@@ -12,7 +12,7 @@ class ShowpaperService:
 
     def get_author_bypid(self, pid):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper" WHERE "author_paper"."pid" = %s;', (pid, ))
+        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper" WHERE "author_paper"."pid" = %s ORDER BY "apid";', (pid, ))
         meta = []
         for apid, name, first_name, last_name, affiliation, department, position, country, address, phone, email in cur:
             meta.append({'apid': apid,
@@ -108,7 +108,7 @@ class ShowpaperService:
 
     def get_author_save_byuid(self, uid):
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper_save" WHERE "uid" = %s;', (uid, ))
+        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper_save" WHERE "uid" = %s ORDER BY "apid";', (uid, ))
         meta = []
         for apid, name, first_name, last_name, affiliation, department, position, country, address, phone, email in cur:
             meta.append({'apid': apid,
