@@ -62,6 +62,7 @@ class PaperuploadService:
         #data.pop('uid')
         cur = yield self.db.cursor()
         yield cur.execute('DELETE FROM "paperupload_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "author_paper_save" WHERE "uid" = %s;', (uid,))
         yield cur.execute('DELETE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
         yield cur.execute('DELETE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
         sql, prama = gen_sql(data)
