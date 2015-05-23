@@ -106,6 +106,61 @@ class ShowpaperService:
                     })
         return (None, meta)
 
+    def get_author_save_byuid(self, uid):
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "country", "address", "phone", "email" FROM "author_paper_save" WHERE "uid" = %s;', (uid, ))
+        meta = []
+        for apid, name, first_name, last_name, affiliation, department, position, country, address, phone, email in cur:
+            meta.append({'apid': apid,
+                'name': name,
+                'first_name': first_name,
+                'last_name': last_name,
+                'affiliation': affiliation,
+                'department': department,
+                'position': position,
+                'country': country,
+                'address': address,
+                'phone': phone,
+                'email': email})
+        return (None, meta)
+
+    def get_keywords_save_byuid(self, uid):
+        cur = yield self.db.cursor()
+        meta = {'chinese': [],
+                'english': []}
+        yield cur.execute('SELECT "keyword" FROM "chinesekeywords_save" WHERE"pid" = %s;', (pid, ))
+        for (k, ) in cur:
+            meta['chinese'].append(k)
+        yield cur.execute('SELECT "keyword" FROM "englishkeywords_save" WHERE"pid" = %s;', (pid, ))
+        for (k, ) in cur:
+            meta['english'].append(k)
+
+        return (None, meta)
+
+    def get_paper_save(self, uid):
+        def gen_sql(data):
+            sql, prama = '', ()
+            for d in data:
+                if sql == '':
+                    sql = '"%s"'%d
+                else:
+                    sql = sql + ',"%s" '%d
+                prama = prama + (d,)
+            return (sql, prama)
+        args = ['chinesetitle', 'englishtitle', 'chineseabstract', 'englishabstract', 'letter', 'picnum', 'wordnum', 'submitted', 'confirm', 'conflict', 'conflict_explain', ]
+        sql, prama = gen_sql(args)
+        cur = yield self.db.cursor()
+        yield cur.execute('SELECT '+sql+' FROM "paperupload_save" WHERE "uid" = %s;', (uid,))
+        if cur.rowcount != 1:
+            return (None, None)
+        meta = {'uid': uid}
+        q = cur.fetchone()
+        for i,a in enumerate(args):
+            meta[a] = q[i]
+        err, meta['author'] = yield from self.get_author_bypid(meta['uid'])
+        err, meta['keywords'] = yield from self.get_keywords_bypid(meta['uid'])
+        return (None, meta)
+
     def get_file_name(self, pid):
         path = '../html/paper/'+ str(pid)
         res = {0:[None, None,None,None], 1: [None,None,None,None],2:[None,None,None,None],3:[None,None,None,None]}
