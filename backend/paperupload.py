@@ -10,30 +10,30 @@ class PaperuploadService:
 
     def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author, chinesekeywords, englishkeywords):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
-       cur = yield self.db.cursor()
-       yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
-       if cur.rowcount != 1:
-           return ('EDB', None)
-       pid = str(cur.fetchone()[0])
-       os.mkdir('../html/paper/'+pid)
-       anony_filename = '../html/paper/' + pid + '/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
-       non_anony_filename = '../html/paper/'+pid+'/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
-       f = open(anony_filename, 'wb+')
-       f.write(anony_file['body'])
-       f.close()
-       f = open(non_anony_filename, 'wb+')
-       f.write(non_anony_file['body'])
-       f.close()
-       apid = 0
-       for a in author:
-           print(a)
-           apid += 1
-           yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "address", "phone", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
-       for k in chinesekeywords:
-           yield cur.execute('INSERT INTO "chinesekeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
-       for k in englishkeywords:
-           yield cur.execute('INSERT INTO "englishkeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
-       return (None, pid)
+        cur = yield self.db.cursor()
+        yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
+        if cur.rowcount != 1:
+            return ('EDB', None)
+        pid = str(cur.fetchone()[0])
+        os.mkdir('../html/paper/'+pid)
+        anony_filename = '../html/paper/' + pid + '/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
+        non_anony_filename = '../html/paper/'+pid+'/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
+        f = open(anony_filename, 'wb+')
+        f.write(anony_file['body'])
+        f.close()
+        f = open(non_anony_filename, 'wb+')
+        f.write(non_anony_file['body'])
+        f.close()
+        apid = 0
+        for a in author:
+            print(a)
+            apid += 1
+            yield cur.execute('INSERT INTO "author_paper" ("pid", "apid", "name", "first_name", "last_name", "affiliation", "department", "position", "address", "phone", "email") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (pid, apid,) + tuple(a))
+        for k in chinesekeywords:
+            yield cur.execute('INSERT INTO "chinesekeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
+        for k in englishkeywords:
+            yield cur.execute('INSERT INTO "englishkeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
+        return (None, pid)
     def set_papercheck(self, pid, papercheck):
         cur = yield from self.db.cursor()
         if int(papercheck) not in range(4):
@@ -69,6 +69,7 @@ class PaperuploadService:
         yield cur.execute('INSERT INTO "paperupload_save" '+sql+';', prama)
         if cur.rowcount != 1:
             return ('Edb', None)
+        print(chinesekeywords)
         for k in chinesekeywords:
             yield cur.execute('INSERT INTO "chinesekeywords_save" ("uid", "keyword") VALUES (%s, %s);', (uid, k))
         for k in englishkeywords:

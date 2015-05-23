@@ -128,10 +128,10 @@ class ShowpaperService:
         cur = yield self.db.cursor()
         meta = {'chinese': [],
                 'english': []}
-        yield cur.execute('SELECT "keyword" FROM "chinesekeywords_save" WHERE"pid" = %s;', (pid, ))
+        yield cur.execute('SELECT "keyword" FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid, ))
         for (k, ) in cur:
             meta['chinese'].append(k)
-        yield cur.execute('SELECT "keyword" FROM "englishkeywords_save" WHERE"pid" = %s;', (pid, ))
+        yield cur.execute('SELECT "keyword" FROM "englishkeywords_save" WHERE "uid" = %s;', (uid, ))
         for (k, ) in cur:
             meta['english'].append(k)
 
@@ -157,8 +157,8 @@ class ShowpaperService:
         q = cur.fetchone()
         for i,a in enumerate(args):
             meta[a] = q[i]
-        err, meta['author'] = yield from self.get_author_bypid(meta['uid'])
-        err, meta['keywords'] = yield from self.get_keywords_bypid(meta['uid'])
+        err, meta['author'] = yield from self.get_author_save_byuid(meta['uid'])
+        err, meta['keywords'] = yield from self.get_keywords_save_byuid(meta['uid'])
         return (None, meta)
 
     def get_file_name(self, pid):
