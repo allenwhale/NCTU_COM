@@ -63,3 +63,43 @@ CREATE TABLE author_paper(
     phone character varying,
     email character varying
 );
+CREATE TABLE paperupload_save(
+	uid integer,
+	papercheck integer DEFAULT 0,
+    lastcheck integer DEFAULT -1,
+    pass integer DEFAULT -1,
+    status integer DEFAULT 0,
+    chinesetitle character varying DEFAULT '',
+    englishtitle character varying DEFAULT '',
+    chineseabstract character varying DEFAULT '',
+    englishabstract character varying DEFAULT '',
+    letter character varying DEFAULT '',
+    picnum character varying DEFAULT '',
+    wordnum character varying DEFAULT '',
+    submitted character varying DEFAULT '',
+    confirm character varying DEFAULT '',
+    conflict character varying DEFAULT '',
+    conflict_explain character varying DEFAULT ''
+);
+CREATE TABLE englishkeywords_save(
+	uid integer,
+	keyword character varying
+);
+CREATE TABLE chinesekeywords_save(
+	uid integer,
+	keyword character varying
+);
+CREATE TABLE author_paper_save(
+    uid integer,
+    apid integer,
+    name character varying,
+    first_name character varying,
+    last_name character varying,
+    affiliation character varying,
+    department character varying,
+    position character varying,
+    country character varying,
+    address character varying,
+    phone character varying,
+    email character varying
+);
