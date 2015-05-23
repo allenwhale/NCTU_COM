@@ -55,16 +55,17 @@ class PaperuploadService:
                     sql2 = '%s'
                 else:
                     sql2 = sql2 + ',%s '
-                prama = prama + (d,)
-            return ('('+sql1+') VALUES ('+sql2,+')', prama)
+                prama = prama + (data[d],)
+            return ('('+sql1+') VALUES ('+sql2+')', prama)
         
         uid = data['uid']
         #data.pop('uid')
         cur = yield self.db.cursor()
-        yield cur.execute('DEELTE FROM "paperupload_save" WHERE "uid" = %s;', (uid,))
-        yield cur.execute('DEELTE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
-        yield cur.execute('DEELTE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "paperupload_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
         sql, prama = gen_sql(data)
+        print(sql,prama)
         yield cur.execute('INSERT INTO "paperupload_save" '+sql+';', prama)
         if cur.rowcount != 1:
             return ('Edb', None)

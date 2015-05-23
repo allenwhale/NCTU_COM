@@ -28,9 +28,9 @@ class RequestHandler(tornado.web.RequestHandler):
         return
 
     def get_args(self, args):
-        meta = []
+        meta = {}
         for a in args:
-            meta[a] = self.get_args(a, None)
+            meta[a] = self.get_argument(a, None)
         return meta
         
     def render(self,templ,**kwargs):
