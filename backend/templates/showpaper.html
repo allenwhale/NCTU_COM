@@ -5,34 +5,6 @@
 	<script>window.location="/"</script>
 	{% else %}
 	<div class="ui segment">
-		<h1>審查中論文</h1>
-		{% set papercheck = ["未審","一審","二審","三審"] %}
-		{% for x in range(4) %}
-		<h3>{{papercheck[x]}}</h3>
-		<div class="ui clearing divider"></div>
-			<div id="paper">
-				<table class="ui table">
-					<thead>
-						<tr>
-							<th>編號</th>
-							<th>中文名稱</th>
-							<th>英文名稱</th>
-							<th>檢視</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for data in meta[x] %}
-						<tr>
-							<td>{{data["pid"]}}</td>
-							<td>{{data["chinesetitle"]}}</td>
-							<td>{{data["englishtitle"]}}</td>
-							<td><a href="/showpaper?pid={{data["pid"]}}">察看</a></td>
-						</tr>
-					{% end %}
-					</tbody>
-				</table>
-			</div>
-		{% end %}
 		<h1>審查通過論文</h1>
 		<div id="pass_paper">
 			<table class="ui table">
@@ -79,6 +51,34 @@
 				</tbody>
 			</table>
 		</div>
+		<h1>審查中論文</h1>
+		{% set papercheck = ["未審","一審","二審","三審"] %}
+		{% for x in range(4) %}
+		<h3>{{papercheck[x]}}</h3>
+		<div class="ui clearing divider"></div>
+			<div id="paper">
+				<table class="ui table">
+					<thead>
+						<tr>
+							<th>編號</th>
+							<th>中文名稱</th>
+							<th>英文名稱</th>
+							<th>檢視</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for data in meta[x] %}
+						<tr>
+							<td>{{data["pid"]}}</td>
+							<td>{{data["chinesetitle"]}}</td>
+							<td>{{data["englishtitle"]}}</td>
+							<td><a href="/showpaper?pid={{data["pid"]}}">察看</a></td>
+						</tr>
+					{% end %}
+					</tbody>
+				</table>
+			</div>
+		{% end %}
 	</div>
 </div>
 

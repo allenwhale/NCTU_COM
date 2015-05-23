@@ -11,24 +11,26 @@ humane.log("請先登入", {timeout: 1000}, function(){
 <form id="paperupload" class="ui form">
 	<h2 class="ui dividing header">投稿上傳</h2>
 	<div class="field">
-		<label><h3>中文標題</h3></label>
+		<label><h3>中文標題 Chinese Title</h3></label>
 		<input name="chinesetitle" rows=2></input>
 	</div>
 	<div class="field">
-		<label><h3>英文標題</h3></label>
+		<label><h3>英文標題 English Title</h3></label>
 		<input name="englishtitle" rows=2></input>
 	</div>
 	<div class="field">
-		<label><h3>中文摘要</h3></label>
+                <label><h3>中文摘要 Chinese Abstract (250~300 字)</h3></label>
 		<textarea name="chineseabstract"></textarea>
 	</div>
 	<div class="field">
-		<label><h3>英文摘要</h3></label>
+                <label><h3>英文摘要 English Abstract (400~500 words)</h3></label>
 		<textarea name="englishabstract"></textarea>
 	</div>
 	<div class="two fields">
 		<div class="three wide field">
 			<label><h3>中文關鍵詞</h3></label>
+                        <label><h3>Chinese Keywords</h3></label>
+                        <label><h4>請填寫4~5項</h4></label>
 		</div>
 		<div class="thirteen wide field">
 			<input name="chinesekeywords[]"></input>
@@ -42,6 +44,8 @@ humane.log("請先登入", {timeout: 1000}, function(){
     <div class="two fields">
         <div class="three wide field">
             <label><h3>英文關鍵詞</h3></label>
+            <label><h3>English Keywords</h3></label>
+            <label><h4>請填寫4~5項</h4></label>
         </div>
         <div class="thirteen wide field">
             <input name="englishkeywords[]"></input>
@@ -56,7 +60,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
         <textarea name="letter"></textarea>
     </div>
     <div class="field">
-        <label><h3>圖表數量</h3></label>
+        <label><h3>圖表數量 Number of chart</h3></label>
         <div class="fields">
             <div class="fifteen wide field">
                 <input name="picnum" ></input>
@@ -67,7 +71,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
         </div>
     </div>
     <div class="field">
-        <label><h3>論文字數</h3></label>
+        <label><h3>論文字數 Number of words in paper</h3></label>
         <div class="fields">
             <div class="fifteen wide field">
                 <input name="wordnum"></input>
@@ -86,11 +90,11 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			</div>
 			<div class="ui secondary segment" style="display: none;">
 				<div class="field">
-					<label><h3>姓名</h3></label>
+					<label><h3>姓名 (Chinese Name)</h3></label>
 					<input name="name[]" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
 				</div>
 				<div class="field">
-					<label><h3>Name</h3></label>
+					<label><h3>Name (English name)</h3></label>
 					<div class="two fields">
 						<div class="field">
 							<input name="first_name[]" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
@@ -120,9 +124,9 @@ humane.log("請先登入", {timeout: 1000}, function(){
 						</select>
 					</div>
 				</div>
-				<div class="fields">
+				<div class="field">
 					<label><h3>地址</h3></label>
-					<input name="address[]" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
+					<input name="address[]" type="text" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
 				</div>
 				<div class="field">
 					<label><h3>聯絡電話</h3></label>
@@ -136,33 +140,39 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		</div>
 	</div>
     <div class="field">
-        <label><h3>曾投稿本學報</h3></label>    
+        <label><h3>曾投稿本學報 Ever submit paper before</h3></label>    
         <div class="ui radio checkbox">
             <input type="radio" name="submitted" value="1"></input>
-            <label>是</label>
+            <label>是 Yes</label>
         </div>
         <div class="ui radio checkbox">
             <input type="radio" name="submitted" value="0"></input>
-            <label>否</label>
+            <label>否 No</label>
         </div>
     </div>
     <div class="field">
-        <label><h3>請確認以下條件</h3></label>    
+        <label><h3>請確認以下條件 Please check</h3></label>    
         <div class="ui checkbox">
             <input type="checkbox" name="confirm1" ></input>
-            <label>確認此篇論文僅投稿至本學報，而且以前未曾被刊登過，或投稿過其他刊物。</label>
+            <label>匿名全文：匿名電子檔（PDF檔）中，不得有國科會計劃編號。</label>
         </div>
 	</div>
     <div class="field">
         <div class="ui checkbox">
             <input type="checkbox" name="confirm2" ></input>
-            <label>確認所有研究均符合學術界之道德規範。</label>
+            <label>非匿名全文：非匿名電子檔（Word檔）中，請註明作者完只之中英文姓名，中英文服務單位以及聯絡方式。</label>
         </div>
 	</div>
     <div class="field">
         <div class="ui checkbox">
             <input type="checkbox" name="confirm3" ></input>
-            <label>確認所交付之論文除了封面頁之外，其他文件均符合匿名審查原則，未出現作者任何個人資料。</label>
+            <label>本刊已全面改為英文，在稿件接受刊登後，作者須將稿件改為英文，才能刊登</label>
+        </div>
+    </div>
+    <div class="field">
+        <div class="ui checkbox">
+            <input type="checkbox" name="confirm4"></input>
+            <label>確認投稿稿件未曾刊登並符合學術倫理</label>
         </div>
     </div>
     <div class="field">
@@ -178,7 +188,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
         <textarea name="conflict_explain" style="margin-top: 7px"></textarea>
     </div>
     <div class="field">
-        <label><h3>選擇檔案上傳</h3></label>
+        <label><h3>選擇檔案上傳 Paper Upload</h3></label>
 			<div class="two fields">
                 <div class="inline field">
 					<label>匿名上傳</label>
@@ -190,7 +200,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
                 </div>
             </div>
     </div>
-    <div class="ui blue submit button" onclick="send();">送出</div>
+    <div class="ui blue submit button" onclick="send();">送出 Submit</div>
 </form>
 <script>
 $( document ).ready(function(){
