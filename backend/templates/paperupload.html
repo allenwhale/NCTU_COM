@@ -34,11 +34,9 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			<label><h4>請填寫4~5項</h4></label>
 		</div>
 		<div class="thirteen wide field">
-			<input name="chinesekeywords[]"></input>
-			<input name="chinesekeywords[]"></input>
-			<input name="chinesekeywords[]"></input>
-			<input name="chinesekeywords[]"></input>
-			<input name="chinesekeywords[]"></input>
+			{% for x in range(5) %}
+				<input name="chinesekeywords[]" value="{{meta['keywords']['chinese'][x]}}">
+			{% end %}
 		</div>
 	</div>
 	<br>
@@ -49,22 +47,20 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			<label><h4>請填寫4~5項</h4></label>
 		</div>
 		<div class="thirteen wide field">
-			<input name="englishkeywords[]"></input>
-			<input name="englishkeywords[]"></input>
-			<input name="englishkeywords[]"></input>
-			<input name="englishkeywords[]"></input>
-			<input name="englishkeywords[]"></input>
+			{% for x in range(5) %}
+				<input name="englishkeywords[]" value="{{meta['keywords']['english'][x]}}">
+			{% end %}
 		</div>
 	</div>
 	<div class="field">
 		<label><h3>給總編輯的信</h3></label>
-		<textarea name="letter"></textarea>
+		<textarea name="letter">{{meta["letter"]}}</textarea>
 	</div>
 	<div class="field">
 		<label><h3>圖表數量 Number of chart</h3></label>
 		<div class="fields">
 			<div class="fifteen wide field">
-				<input name="picnum" ></input>
+				<input name="picnum" value='{{meta["picnum"]}}'>
 			</div>
 			<div class="one wide field" style="padding-top:4px;">
 				<h3>張</h3>
@@ -75,7 +71,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		<label><h3>論文字數 Number of words in paper</h3></label>
 		<div class="fields">
 			<div class="fifteen wide field">
-				<input name="wordnum"></input>
+				<input name="wordnum" value='{{meta["wordnum"]}}'>
 			</div>
 			<div class="one wide field" style="padding-top:4px;">
 				<h3>字</h3>
