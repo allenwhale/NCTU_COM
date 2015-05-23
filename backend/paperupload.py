@@ -82,7 +82,11 @@ class PaperuploadService:
 class PaperuploadHandler(RequestHandler):
     @reqenv
     def get(self):
-        err, meta = yield from Service.Showpaper.get_paper_save(self.acct['uid'])
+        try:
+            uid =self.acct['uid']
+        except:
+            uid = 0
+        err, meta = yield from Service.Showpaper.get_paper_save( uid)
         self.render('paperupload.html', meta=meta)
         return
 
@@ -92,7 +96,10 @@ class PaperuploadHandler(RequestHandler):
         if req == 'save':
             args = ['chinesetitle', 'englishtitle', 'chineseabstract', 'englishabstract', 'letter', 'picnum', 'wordnum', 'submitted', 'confirm', 'conflict', 'conflict_explain', ]
             meta = self.get_args(args)
-            meta['uid'] = self.acct['uid']
+            try:
+                meta['uid'] = self.acct['uid']
+            except:
+                meta['uid'] = 0
             author_name = self.get_arguments('name[]')
             author_first_name = self.get_arguments('first_name[]')
             author_last_name = self.get_arguments('last_name[]')
