@@ -4,33 +4,39 @@
 {% if acct == None %}
 <script>
 humane.log("請先登入", {timeout: 1000}, function(){
-		window.location="/login";
-		});
+	window.location="/login";
+});
 </script>
 {% else %}
+	{% if meta == None %}
+		<script>
+			save();
+		</script>
+	{% end %}
 <form id="paperupload" class="ui form">
+	{{meta}}
 	<h2 class="ui dividing header">投稿上傳</h2>
 	<div class="field">
 		<label><h3>中文標題 Chinese Title</h3></label>
-		<input name="chinesetitle" rows=2></input>
+		<input name="chinesetitle" rows=2 value="">
 	</div>
 	<div class="field">
 		<label><h3>英文標題 English Title</h3></label>
 		<input name="englishtitle" rows=2></input>
 	</div>
 	<div class="field">
-                <label><h3>中文摘要 Chinese Abstract (250~300 字)</h3></label>
+		<label><h3>中文摘要 Chinese Abstract (250~300 字)</h3></label>
 		<textarea name="chineseabstract"></textarea>
 	</div>
 	<div class="field">
-                <label><h3>英文摘要 English Abstract (400~500 words)</h3></label>
+		<label><h3>英文摘要 English Abstract (400~500 words)</h3></label>
 		<textarea name="englishabstract"></textarea>
 	</div>
 	<div class="two fields">
 		<div class="three wide field">
 			<label><h3>中文關鍵詞</h3></label>
-                        <label><h3>Chinese Keywords</h3></label>
-                        <label><h4>請填寫4~5項</h4></label>
+			<label><h3>Chinese Keywords</h3></label>
+			<label><h4>請填寫4~5項</h4></label>
 		</div>
 		<div class="thirteen wide field">
 			<input name="chinesekeywords[]"></input>
@@ -41,46 +47,46 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		</div>
 	</div>
 	<br>
-    <div class="two fields">
-        <div class="three wide field">
-            <label><h3>英文關鍵詞</h3></label>
-            <label><h3>English Keywords</h3></label>
-            <label><h4>請填寫4~5項</h4></label>
-        </div>
-        <div class="thirteen wide field">
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-            <input name="englishkeywords[]"></input>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>給總編輯的信</h3></label>
-        <textarea name="letter"></textarea>
-    </div>
-    <div class="field">
-        <label><h3>圖表數量 Number of chart</h3></label>
-        <div class="fields">
-            <div class="fifteen wide field">
-                <input name="picnum" ></input>
-            </div>
-            <div class="one wide field" style="padding-top:4px;">
-                <h3>張</h3>
-            </div>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>論文字數 Number of words in paper</h3></label>
-        <div class="fields">
-            <div class="fifteen wide field">
-                <input name="wordnum"></input>
-            </div>
-            <div class="one wide field" style="padding-top:4px;">
-                <h3>字</h3>
-            </div>
-        </div>
-    </div>
+	<div class="two fields">
+		<div class="three wide field">
+			<label><h3>英文關鍵詞</h3></label>
+			<label><h3>English Keywords</h3></label>
+			<label><h4>請填寫4~5項</h4></label>
+		</div>
+		<div class="thirteen wide field">
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+			<input name="englishkeywords[]"></input>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>給總編輯的信</h3></label>
+		<textarea name="letter"></textarea>
+	</div>
+	<div class="field">
+		<label><h3>圖表數量 Number of chart</h3></label>
+		<div class="fields">
+			<div class="fifteen wide field">
+				<input name="picnum" ></input>
+			</div>
+			<div class="one wide field" style="padding-top:4px;">
+				<h3>張</h3>
+			</div>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>論文字數 Number of words in paper</h3></label>
+		<div class="fields">
+			<div class="fifteen wide field">
+				<input name="wordnum"></input>
+			</div>
+			<div class="one wide field" style="padding-top:4px;">
+				<h3>字</h3>
+			</div>
+		</div>
+	</div>
 
 	<div class="field" id="author_field">
 		<label><h2 class="ui dividing header">作者<a class="hover" onclick="create_author();"><i class="plus icon" style="float: right;"></a></i></h2></label>
@@ -139,68 +145,68 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			</div>
 		</div>
 	</div>
-    <div class="field">
-        <label><h3>曾投稿本學報 Ever submit paper before</h3></label>    
-        <div class="ui radio checkbox">
-            <input type="radio" name="submitted" value="1"></input>
-            <label>是 Yes</label>
-        </div>
-        <div class="ui radio checkbox">
-            <input type="radio" name="submitted" value="0"></input>
-            <label>否 No</label>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>請確認以下條件 Please check</h3></label>    
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm1" ></input>
-            <label>匿名全文：匿名電子檔（PDF檔）中，不得有國科會計劃編號。</label>
-        </div>
+	<div class="field">
+		<label><h3>曾投稿本學報 Ever submit paper before</h3></label>    
+		<div class="ui radio checkbox">
+			<input type="radio" name="submitted" value="1"></input>
+			<label>是 Yes</label>
+		</div>
+		<div class="ui radio checkbox">
+			<input type="radio" name="submitted" value="0"></input>
+			<label>否 No</label>
+		</div>
 	</div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm2" ></input>
-            <label>非匿名全文：非匿名電子檔（Word檔）中，請註明作者完只之中英文姓名，中英文服務單位以及聯絡方式。</label>
-        </div>
+	<div class="field">
+		<label><h3>請確認以下條件 Please check</h3></label>    
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm1" ></input>
+			<label>匿名全文：匿名電子檔（PDF檔）中，不得有國科會計劃編號。</label>
+		</div>
 	</div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm3" ></input>
-            <label>本刊已全面改為英文，在稿件接受刊登後，作者須將稿件改為英文，才能刊登</label>
-        </div>
-    </div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input type="checkbox" name="confirm4"></input>
-            <label>確認投稿稿件未曾刊登並符合學術倫理</label>
-        </div>
-    </div>
-    <div class="field">
-        <label><h3>此篇論文有涉及任何利益衝突</h3></label>    
-        <div class="ui radio checkbox">
-            <input type="radio" name="conflict" value="1"></input>
-            <label>是，請做說明</label>
-        </div>
-        <div class="ui radio checkbox">
-            <input type="radio" name="conflict" value="0"></input>
-            <label>否</label>
-        </div>
-        <textarea name="conflict_explain" style="margin-top: 7px"></textarea>
-    </div>
-    <div class="field">
-        <label><h3>選擇檔案上傳 Paper Upload</h3></label>
-			<div class="two fields">
-                <div class="inline field">
-					<label>匿名上傳</label>
-					<input id="anony" type="file" name="anony"></input>
-                </div>
-                <div class="inline field">
-					<label>非匿名上傳</label>
-					<input type="file" name="non-anony" id="non-anony"></input>
-                </div>
-            </div>
-    </div>
-    <div class="ui blue submit button" onclick="send();">送出 Submit</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm2" ></input>
+			<label>非匿名全文：非匿名電子檔（Word檔）中，請註明作者完只之中英文姓名，中英文服務單位以及聯絡方式。</label>
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm3" ></input>
+			<label>本刊已全面改為英文，在稿件接受刊登後，作者須將稿件改為英文，才能刊登</label>
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input type="checkbox" name="confirm4"></input>
+			<label>確認投稿稿件未曾刊登並符合學術倫理</label>
+		</div>
+	</div>
+	<div class="field">
+		<label><h3>此篇論文有涉及任何利益衝突</h3></label>    
+		<div class="ui radio checkbox">
+			<input type="radio" name="conflict" value="1"></input>
+			<label>是，請做說明</label>
+		</div>
+		<div class="ui radio checkbox">
+			<input type="radio" name="conflict" value="0"></input>
+			<label>否</label>
+		</div>
+		<textarea name="conflict_explain" style="margin-top: 7px"></textarea>
+	</div>
+	<div class="field">
+		<label><h3>選擇檔案上傳 Paper Upload</h3></label>
+		<div class="two fields">
+			<div class="inline field">
+				<label>匿名上傳</label>
+				<input id="anony" type="file" name="anony"></input>
+			</div>
+			<div class="inline field">
+				<label>非匿名上傳</label>
+				<input type="file" name="non-anony" id="non-anony"></input>
+			</div>
+		</div>
+	</div>
+	<div class="ui blue submit button" onclick="send();">送出 Submit</div>
 </form>
 <script>
 $( document ).ready(function(){
@@ -208,7 +214,7 @@ $( document ).ready(function(){
 	$('.ui.radio.checkbox').checkbox();
 	$('.ui.checkbox').checkbox();
 	$('textarea[name=conflict_explain]').hide();
-	
+
 	if($('[name=conflict]:checked').val() == '1'){
 		$('textarea[name=conflict_explain]').show();
 	}
@@ -220,6 +226,30 @@ $( document ).ready(function(){
 		}
 	});
 });
+function save(){
+	console.log("XD");
+	var conf = "";
+	for( i = 1 ; i <= 3 ; i++){
+		var selector = "[name=confirm"+i+"]:checked";
+		if( $(selector).val() == "on" ) conf += "1";
+		else conf += "0";
+	}
+	var data = new FormData($("#paperupload")[0]);
+	data.append("confirm", conf);
+	data.append("req", "save");
+	console.log("QQ");
+	$.ajax({
+		url: "/paperupload",
+		data: data,
+		type: "post",
+		processData: false,
+		contentType: false,
+		success: function(msg){
+			alert(msg);
+		}
+	});
+	console.log("orz");
+}
 function send(){
 	//	alert( $("input[name=conflict]:checked").val());
 	var anony = document.getElementById('anony').files[0];
@@ -249,7 +279,7 @@ function send(){
 		processData: false,
 		contentType: false,
 		success: function(msg){
-			alert(msg);
+		alert(msg);
 		}
 	});
 }
