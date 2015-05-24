@@ -16,6 +16,8 @@ class RegisterService:
                 ret = (ret * C + ord(i)) % MOD
             return ret
 
+        if email.find('@') == -1:
+            return ('Email 格式錯誤', None)
         cur = yield self.db.cursor()
         yield cur.execute('SELECT * FROM "account" '
                 'WHERE "account"."email" = %s;', (email, ))
