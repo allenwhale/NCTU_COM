@@ -286,7 +286,10 @@ function send(){
 		processData: false,
 		contentType: false,
 		success: function(msg){
-		alert(msg);
+            if (msg == 'S')
+                humane.log('成功上傳', {timeout: 1500});
+            else if (msg == 'Eempty')
+                humane.log('尚有資料未填寫', {timeout: 1500});
 		}
 	});
 }
