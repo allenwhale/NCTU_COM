@@ -71,7 +71,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
     </div>
     <div class="fields">
         <div class="four wide field">
-            <label><h3>郵遞區號 Postal Code  <a class="ui green button right" style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank">查詢(Search)</a></h3></label>
+			<label><h3>郵遞區號 Postal Code  <a style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank"><i class="search icon"></i></a></h3></label>
             <input name="affiliation_postcode" value="{{ '' if acct["affiliation_postcode"] == None else acct["affiliation_postcode"] }}">
         </div>
         <div class="twelve wide field">
@@ -81,13 +81,13 @@ humane.log("請先登入", {timeout: 1000}, function(){
     </div>
     <div class="field">
         <div class="ui checkbox">
-            <input id="set_contact_as_affiliation" type="checkbox">
+            <input id="set_contact_as_affiliation" type="checkbox" onchange="same(this);"">
             <label>同服務機構地址 Same with Service Company Name</label>
         </div>
     </div>
     <div class="fields">
         <div class="four wide field">
-            <label><h3>郵遞區號 Postal Code <a class="ui green button right" style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank">查詢(Search)</a></h3></label>
+			<label><h3>郵遞區號 Postal Code <a style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank"><i class="search icon"></i></a></h3></label>
             <input name="contact_postcode" value="{{ '' if acct["contact_postcode"] == None else acct["contact_postcode"] }}">
         </div>
         <div class="twelve wide field">
@@ -113,6 +113,18 @@ humane.log("請先登入", {timeout: 1000}, function(){
     <div class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
+function same(ele){
+	if($(ele).prop("checked")){
+        $("input[name='contact_address']").val($("input[name='affiliation_address']").val());
+        $("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
+        $("input[name='contact_address']").attr("disabled", "disabled");
+        $("input[name='contact_postcode']").attr("disabled", "disabled");
+		
+	} else {
+        $("input[name='contact_address']").removeAttr("disabled");
+        $("input[name='contact_postcode']").removeAttr("disabled");
+	}
+}
 $( document ).ready(function(){
     $('select.dropdown').dropdown();
     $('.ui.checkbox').checkbox();

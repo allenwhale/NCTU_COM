@@ -78,63 +78,78 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			</div>
 		</div>
 	</div>
-
 	<div class="field" id="author_field">
 		<label><h2 class="ui dividing header">作者<a class="hover" onclick="create_author();"><i class="plus icon" style="float: right;"></a></i></h2></label>
-		<div class="ui segments">
-			<div class="ui teal inverted segment author-edit hover" onclick=" $(this).next().animate({height: 'toggle'});">
-				<h4>作者</h4>
-			</div>
-			<div class="ui secondary segment" style="display: none;">
-				<div class="field">
-					<label><h3>姓名 (Chinese Name)</h3></label>
-					<input name="name[]" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
+		{% set author=meta["author"] %}
+		{% for x in range(max(len(author),1)) %}
+			{% if x == 0 %}
+				{% set auth=acct %}
+			{% else %}
+				{% set auth=author[x] %}
+			{% end %}
+			<div class="ui segments">
+				<div class="ui teal inverted segment author-edit hover" onclick=" $(this).next().animate({height: 'toggle'});">
+					<h4>作者</h4>
 				</div>
-				<div class="field">
-					<label><h3>Name (English name)</h3></label>
+				<div class="ui secondary segment" style="display: none;">
+					<div class="field">
+						<label><h3>姓名 (Chinese Name)</h3></label>
+						<input name="name[]" type="text" value="{{ '' if auth["name"] == None else auth["name"]  }}">
+					</div>
+					<div class="field">
+						<label><h3>Name (English name)</h3></label>
+						<div class="two fields">
+							<div class="field">
+								<input name="first_name[]" type="text" placeholder="First Name" value="{{ '' if auth["first_name"] == None else auth["first_name"]  }}">
+							</div>
+							<div class="field">
+								<input name="last_name[]" type="text" placeholder="Last Name" value="{{ '' if auth["last_name"] == None else auth["last_name"]  }}">
+							</div>
+						</div>
+					</div>
+					<div class="field">
+						<label><h3>服務機構名稱</h3></label>
+						<input name="affiliation[]" type="text" value="{{ '' if auth["affiliation"] == None else auth["affiliation"]  }}">
+					</div>
 					<div class="two fields">
 						<div class="field">
-							<input name="first_name[]" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
+							<label><h3>部門</h3></label>
+							<input name="department[]" type="text" placeholder="Department" value="{{ '' if auth["department"] == None else auth["department"]  }}">
 						</div>
 						<div class="field">
-							<input name="last_name[]" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
+							<label><h3>職稱</h3></label>
+							<select name="position[]" class="ui dropdown">
+								<option value="">　</option>
+								{% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}
+								{% for i in position %}
+								<option value="{{i}}" {{'selected' if auth["position"] == i else ''}} >{{i}}</option>
+								{% end %}
+							</select>
 						</div>
 					</div>
-				</div>
-				<div class="field">
-					<label><h3>服務機構名稱</h3></label>
-					<input name="affiliation[]" type="text" value="{{ '' if acct["affiliation"] == None else acct["affiliation"]  }}">
-				</div>
-				<div class="two fields">
 					<div class="field">
-						<label><h3>部門</h3></label>
-						<input name="department[]" type="text" placeholder="Department" value="{{ '' if acct["department"] == None else acct["department"]  }}">
+						<label><h3>地址</h3></label>
+						{% if x == 0 %}
+							<input name="address[]" type="text" value="{{ '' if auth["affiliation_address"] == None else auth["affiliation_address"] }}">
+						{% else %}
+							<input name="address[]" type="text" value="{{ '' if auth["address"] == None else auth["address"] }}">
+						{% end %}
 					</div>
 					<div class="field">
-						<label><h3>職稱</h3></label>
-						<select name="position[]" class="ui dropdown">
-							<option value="">　</option>
-							{% set position=["講師", "助理教授", "副教授", "教授", "研究人員", "其他"] %}
-							{% for i in position %}
-							<option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
-							{% end %}
-						</select>
+						<label><h3>聯絡電話</h3></label>
+						{% if x == 0 %}
+							<input name="phone[]" type="text" value="{{ '' if auth["cellphone"] == None else auth["cellphone"]}}">
+						{% else %}
+							<input name="phone[]" type="text" value="{{ '' if auth["phone"] == None else auth["phone"]}}">
+						{% end %}
 					</div>
-				</div>
-				<div class="field">
-					<label><h3>地址</h3></label>
-					<input name="address[]" type="text" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
-				</div>
-				<div class="field">
-					<label><h3>聯絡電話</h3></label>
-					<input name="phone[]" type="text" value="{{ '' if acct["cellphone"] == None else acct["cellphone"]}}">
-				</div>
-				<div class="field">
-					<label><h3>E-mail</h3></label>
-					<input name="email[]" type="text" value="{{ '' if acct["email"] == None else acct["email"] }}">
+					<div class="field">
+						<label><h3>E-mail</h3></label>
+						<input name="email[]" type="text" value="{{ '' if auth["email"] == None else auth["email"] }}">
+					</div>
 				</div>
 			</div>
-		</div>
+		{% end %}
 	</div>
 	<div class="field">
 		<label><h3>曾投稿本學報 Ever submit paper before</h3></label>    
