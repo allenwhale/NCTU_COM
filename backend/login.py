@@ -89,6 +89,8 @@ class LoginService:
         meta = cur.fetchone()
         if str(self._hash(password)) != meta[0]:
             return ('Epassword', None)
+        if name == '' or first_name == ''or last_name == '' or degree == '' or country == '' or affiliation == '' or department == '' or affiliation_address == '' or affiliation_postcode == '' or contact_address == '' or contact_postcode == '' or cellphone == '' or telephone == '':
+            return ('Eempty', None)
         uid = meta[1]
         yield cur.execute('UPDATE "account" SET '
                 '("name") = (%s), ("first_name") = (%s), ("last_name") = (%s), ("gender") = (%s), ("degree") = (%s), ("country")=(%s), ("affiliation")=(%s), ("department")=(%s), ("position")=(%s), ("affiliation_postcode")=(%s), ("affiliation_address")=(%s), ("contact_postcode")=(%s), ("contact_address")=(%s), ("cellphone")=(%s), ("telephone")=(%s) WHERE "account"."email" = %s;', (name, first_name, last_name, gender, degree, country, affiliation, department, position, affiliation_postcode, affiliation_address, contact_postcode, contact_address, cellphone, telephone, email))
