@@ -80,12 +80,12 @@ humane.log("請先登入", {timeout: 1000}, function(){
 	</div>
 	<div class="field" id="author_field">
 		<label><h2 class="ui dividing header">作者<a class="hover" onclick="create_author();"><i class="plus icon" style="float: right;"></a></i></h2></label>
-		{% set author=meta["author"] %}
-		{% for x in range(max(len(author),1)) %}
+		{% set sz = len(meta["author"]) if meta else 1 %}
+		{% for x in range(sz) %}
 			{% if x == 0 %}
 				{% set auth=acct %}
 			{% else %}
-				{% set auth=author[x] %}
+				{% set auth=meta["author"][x] %}
 			{% end %}
 			<div class="ui segments">
 				<div class="ui teal inverted segment author-edit hover" onclick=" $(this).next().animate({height: 'toggle'});">
