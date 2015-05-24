@@ -12,7 +12,7 @@ class AdminService:
             return 0
         return 1 if int(acct['uid']) in  config.ADMIN_RANGE else 0
 
-    def admin_reply(self, acct, pid, f, end):
+    def admin_reply(self, acct, pid, f, end, letter):
         if AdminService.inst.isadmin(acct) == 0:
             return ('Eaccess', None)
         cur = yield self.db.cursor()
@@ -114,7 +114,8 @@ class AdminHandler(RequestHandler):
             except:
                 f = None
             end = self.get_argument('end', None)
-            err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f, end)
+            letter = self.get_argument('letter', None)
+            err, pid = yield from AdminService.inst.admin_reply(self.acct, pid, f, end, letter)
             if err:
                 self.finish(err)
                 return

@@ -13,19 +13,19 @@ humane.log("請先登入", {timeout: 1000}, function(){
 	<h2 class="ui dividing header">投稿上傳</h2>
 	<div class="field">
 		<label><h3>中文標題 Chinese Title</h3></label>
-		<input name="chinesetitle" rows=2 value="{{meta['chinesetitle']}}">
+		<input name="chinesetitle" rows=2 value="{{meta['chinesetitle'] if meta else ''}}">
 	</div>
 	<div class="field">
 		<label><h3>英文標題 English Title</h3></label>
-		<input name="englishtitle" rows=2 value="{{meta['englishtitle']}}">
+		<input name="englishtitle" rows=2 value="{{meta['englishtitle'] if meta else ''}}">
 	</div>
 	<div class="field">
 		<label><h3>中文摘要 Chinese Abstract (250~300 字)</h3></label>
-		<textarea name="chineseabstract">{{meta['chineseabstract']}}</textarea>
+		<textarea name="chineseabstract">{{meta['chineseabstract'] if meta else ''}}</textarea>
 	</div>
 	<div class="field">
 		<label><h3>英文摘要 English Abstract (400~500 words)</h3></label>
-		<textarea name="englishabstract">{{meta['englishabstract']}}</textarea>
+		<textarea name="englishabstract">{{meta['englishabstract'] if meta else ''}}</textarea>
 	</div>
 	<div class="two fields">
 		<div class="three wide field">
@@ -35,7 +35,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		</div>
 		<div class="thirteen wide field">
 			{% for x in range(5) %}
-				<input name="chinesekeywords[]" value="{{meta['keywords']['chinese'][x]}}">
+				<input name="chinesekeywords[]" value="{{meta['keywords']['chinese'][x] if meta else ''}}">
 			{% end %}
 		</div>
 	</div>
@@ -48,19 +48,19 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		</div>
 		<div class="thirteen wide field">
 			{% for x in range(5) %}
-				<input name="englishkeywords[]" value="{{meta['keywords']['english'][x]}}">
+				<input name="englishkeywords[]" value="{{meta['keywords']['english'][x] if meta else ''}}">
 			{% end %}
 		</div>
 	</div>
 	<div class="field">
 		<label><h3>給總編輯的信</h3></label>
-		<textarea name="letter">{{meta["letter"]}}</textarea>
+		<textarea name="letter">{{meta["letter"] if meta else ''}}</textarea>
 	</div>
 	<div class="field">
 		<label><h3>圖表數量 Number of chart</h3></label>
 		<div class="fields">
 			<div class="fifteen wide field">
-				<input name="picnum" value='{{meta["picnum"]}}'>
+				<input name="picnum" value='{{meta["picnum"] if meta else ''}}'>
 			</div>
 			<div class="one wide field" style="padding-top:4px;">
 				<h3>張</h3>
@@ -71,7 +71,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
 		<label><h3>論文字數 Number of words in paper</h3></label>
 		<div class="fields">
 			<div class="fifteen wide field">
-				<input name="wordnum" value='{{meta["wordnum"]}}'>
+				<input name="wordnum" value='{{meta["wordnum"] if meta else ''}}'>
 			</div>
 			<div class="one wide field" style="padding-top:4px;">
 				<h3>字</h3>
