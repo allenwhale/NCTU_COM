@@ -37,6 +37,10 @@ class PaperuploadService:
             yield cur.execute('INSERT INTO "chinesekeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
         for k in englishkeywords:
             yield cur.execute('INSERT INTO "englishkeywords" ("pid", "keyword") VALUES(%s, %s)', (pid, k))
+        yield cur.execute('DELETE FROM "paperupload_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "author_paper_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
+        yield cur.execute('DELETE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
         return (None, pid)
     def set_papercheck(self, pid, papercheck):
         cur = yield from self.db.cursor()

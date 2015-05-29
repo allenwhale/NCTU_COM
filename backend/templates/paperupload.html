@@ -272,11 +272,12 @@ function send(){
 		return;
 	}
 	var conf = "";
-	for( i = 1 ; i <= 3 ; i++){
+	for( i = 1 ; i <= 4 ; i++){
 		var selector = "[name=confirm"+i+"]:checked";
 		if( $(selector).val() == "on" ) conf += "1";
 		else conf += "0";
 	}
+    console.log(conf);
 	var data = new FormData($("#paperupload")[0]);
 	data.append("confirm", conf);
 	$.ajax({
