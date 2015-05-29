@@ -39,7 +39,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
         <label><h3>學位 Degree</h3></label>
         <select name="degree" class="ui dropdown">
             <option value="">　</option>
-            {% set degree=["博士 Professor ", "碩士 Master ", "學士 Bachelor ", "其他 Others "] %}
+            {% set degree=["博士 Professor", "碩士 Master", "學士 Bachelor", "其他 Others"] %}
             {% for i in degree %}
                 <option value="{{i}}" {{'selected' if acct["degree"] == i else ''}} >{{i}}</option>
             {% end %}
@@ -62,7 +62,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
             <label><h3>職稱 Identity </h3></label>
             <select name="position" class="ui dropdown">
                 <option value="">　</option>
-                {% set position=["講師 Lecturer ", "助理教授 Assistant Professor ", "副教授 Associate Professor ", "教授 Professor ", "研究人員 Researcher ", "其他 Other "] %}
+                {% set position=["講師 Lecturer", "助理教授 Assistant Professor", "副教授 Associate Professor", "教授 Professor", "研究人員 Researcher", "其他 Other"] %}
                 {% for i in position %}
                     <option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
                 {% end %}

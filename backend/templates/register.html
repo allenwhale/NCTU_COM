@@ -30,8 +30,8 @@ function send(){
             info,
             function(msg){
                 if(msg == "S")
-                    humane.log("註冊成功頁面即將跳轉至登入畫面！<br>並於登入後立即修改個人資料", {timeout: 2000}, function(){
-                        window.location="/login";
+                    humane.log("註冊成功頁面即將跳轉至個人資料畫面！<br>請立即修改個人資料", {timeout: 2000}, function(){
+                        window.location="/modifyuser";
                     });
                 else{
                     humane.log(msg, {timeout: 1000}, function(){
