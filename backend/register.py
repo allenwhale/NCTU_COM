@@ -1,5 +1,6 @@
 from req import RequestHandler
 from req import reqenv
+import os
 class RegisterService:
     def __init__(self, db):
         self.db = db

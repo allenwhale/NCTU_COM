@@ -10,16 +10,18 @@ class PaperuploadService:
 
     def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author, chinesekeywords, englishkeywords):
 #            , chineseabstract, englishabstract, chinesekeywords, englishkeywords, authors, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, attach_file):
-        if chinesetitle == '' or englishtitle == '' or chineseabstract == '' or englishabstract == '' or letter == '' or picnum == '' or wordnum == '' :
+        if chinesetitle == '' or englishtitle == '' or chineseabstract == '' or englishabstract == '' or letter == '' or picnum == '' or wordnum == '' or conflict == '':
             return ('Eempty', None)
         if chinesekeywords.count('') == 5 or englishkeywords.count('') == 5:
+            return ('Eempty', None)
+        if confirm.count('0') == 4:
             return ('Eempty', None)
         cur = yield self.db.cursor()
         yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));
         if cur.rowcount != 1:
             return ('EDB', None)
         pid = str(cur.fetchone()[0])
-        os.mkdir('../html/paper/'+pid)
+        os.makedirs('../html/paper/'+pid)
         anony_filename = '../html/paper/' + pid + '/' + str(pid) + '.' + anony_file['filename'].split('.')[-1]
         non_anony_filename = '../html/paper/'+pid+'/non-' + str(pid) + '.' + non_anony_file['filename'].split('.')[-1]
         f = open(anony_filename, 'wb+')
