@@ -52,6 +52,7 @@ class RegisterHandler(RequestHandler):
         if err:
             self.finish(err)
             return
+        self.set_secure_cookie('uid', str(uid))
         self.finish('S')
         return
 
