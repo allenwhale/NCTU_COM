@@ -119,7 +119,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
 							<label><h3>職稱</h3></label>
 							<select name="position[]" class="ui dropdown">
 								<option value="">　</option>
-                                {% set position=["講師 Lecturer ", "助理教授 Assistant Professor ", "副教授 Associate Professor ", "教授 Professor ", "研究人員 Researcher ", "其他 Other "] %}
+								{% set position=["講師 Lecturer", "助理教授 Assistant Professor", "副教授 Associate Professor", "教授 Professor", "研究人員 Researcher", "其他 Other"] %}
 								{% for i in position %}
 								<option value="{{i}}" {{'selected' if auth["position"] == i else ''}} >{{i}}</option>
 								{% end %}
