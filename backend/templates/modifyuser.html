@@ -9,142 +9,143 @@ humane.log("請先登入", {timeout: 1000}, function(){
 </script>
 {% else %}
 <form id="edit" class="ui form">
-    <h2 class="ui dividing header">Personal Information</h2>
-    <div class="field">
-        <label><h3>姓名 Chinese Name</h3></label>
-        <input name="name" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
-    </div>
-    <div class="field">
-        <label><h3>English Name</h3></label>
-            <div class="two fields">
-                <div class="field">
-                    <input name="first_name" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
-                </div>
-                <div class="field">
-                    <input name="last_name" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
-                </div>
-            </div>
-    </div>
-    <div class="field">
-        <label><h3>Gender</h3></label>
-        <select name="gender" class="ui dropdown" value="先生">
-            <option value="">　</option>
-            {% set gender=["先生", "女士"] %}
-            {% for i in gender %}
-                <option value="{{i}}" {{'selected' if acct["gender"] == i else ''}} >{{i}}</option>
-            {% end %}
-        </select>
-    </div>
-    <div class="field">
-        <label><h3>學位 Degree</h3></label>
-        <select name="degree" class="ui dropdown">
-            <option value="">　</option>
-            {% set degree=["博士 Professor", "碩士 Master", "學士 Bachelor", "其他 Others"] %}
-            {% for i in degree %}
-                <option value="{{i}}" {{'selected' if acct["degree"] == i else ''}} >{{i}}</option>
-            {% end %}
-        </select>
-    </div>
-    <div class="field">
-        <label><h3>國籍 Citizenship </h3></label>
-        <input name="country" type="text" value="{{ '' if acct["country"] == None else acct["country"]  }}">
-    </div>
-    <div class="field">
-        <label><h3>服務機構名稱 Service Company Name</h3></label>
-        <input name="affiliation" type="text" value="{{ '' if acct["affiliation"] == None else acct["affiliation"]  }}">
-    </div>
-    <div class="two fields">
-        <div class="field">
-        <label><h3>部門 Department</h3></label>
-            <input name="department" type="text" placeholder="Department" value="{{ '' if acct["department"] == None else acct["department"]  }}">
-        </div>
-        <div class="field">
-            <label><h3>職稱 Identity </h3></label>
-            <select name="position" class="ui dropdown">
-                <option value="">　</option>
-                {% set position=["講師 Lecturer", "助理教授 Assistant Professor", "副教授 Associate Professor", "教授 Professor", "研究人員 Researcher", "其他 Other"] %}
-                {% for i in position %}
-                    <option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
-                {% end %}
-            </select>
-        </div>
-    </div>
-    <div class="fields">
-        <div class="four wide field">
+	<h2 class="ui dividing header">Personal Information</h2>
+	<div class="field">
+		<label><h3>姓名 Chinese Name</h3></label>
+		<input name="name" type="text" value="{{ '' if acct["name"] == None else acct["name"]  }}">
+	</div>
+	<div class="field">
+		<label><h3>English Name</h3></label>
+			<div class="two fields">
+				<div class="field">
+					<input name="first_name" type="text" placeholder="First Name" value="{{ '' if acct["first_name"] == None else acct["first_name"]  }}">
+				</div>
+				<div class="field">
+					<input name="last_name" type="text" placeholder="Last Name" value="{{ '' if acct["last_name"] == None else acct["last_name"]  }}">
+				</div>
+			</div>
+	</div>
+	<div class="field">
+		<label><h3>Gender</h3></label>
+		<select name="gender" class="ui dropdown" value="先生">
+			<option value="">　</option>
+			{% set gender=["先生", "女士"] %}
+			{% for i in gender %}
+				<option value="{{i}}" {{'selected' if acct["gender"] == i else ''}} >{{i}}</option>
+			{% end %}
+		</select>
+	</div>
+	<div class="field">
+		<label><h3>學位 Degree</h3></label>
+		<select name="degree" class="ui dropdown">
+			<option value="">　</option>
+			{% set degree=["博士 Professor", "碩士 Master", "學士 Bachelor", "其他 Others"] %}
+			{% for i in degree %}
+				<option value="{{i}}" {{'selected' if acct["degree"] == i else ''}} >{{i}}</option>
+			{% end %}
+		</select>
+	</div>
+	<div class="field">
+		<label><h3>國籍 Citizenship </h3></label>
+		<input name="country" type="text" value="{{ '' if acct["country"] == None else acct["country"]  }}">
+	</div>
+	<div class="field">
+		<label><h3>服務機構名稱 Service Company Name</h3></label>
+		<input name="affiliation" type="text" value="{{ '' if acct["affiliation"] == None else acct["affiliation"]  }}">
+	</div>
+	<div class="two fields">
+		<div class="field">
+		<label><h3>部門 Department</h3></label>
+			<input name="department" type="text" placeholder="Department" value="{{ '' if acct["department"] == None else acct["department"]  }}">
+		</div>
+		<div class="field">
+			<label><h3>職稱 Identity </h3></label>
+			<select name="position" class="ui dropdown">
+				<option value="">　</option>
+				{% set position=["講師 Lecturer", "助理教授 Assistant Professor", "副教授 Associate Professor", "教授 Professor", "研究人員 Researcher", "其他 Other"] %}
+				{% for i in position %}
+					<option value="{{i}}" {{'selected' if acct["position"] == i else ''}} >{{i}}</option>
+				{% end %}
+			</select>
+		</div>
+	</div>
+	<div class="fields">
+		<div class="four wide field">
 			<label><h3>郵遞區號 Postal Code  <a style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank"><i class="search icon"></i></a></h3></label>
-            <input name="affiliation_postcode" value="{{ '' if acct["affiliation_postcode"] == None else acct["affiliation_postcode"] }}">
-        </div>
-        <div class="twelve wide field">
-            <label><h3>服務機構地址 Service Company Name</h3></label>
-            <input name="affiliation_address" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
-        </div>
-    </div>
-    <div class="field">
-        <div class="ui checkbox">
-            <input id="set_contact_as_affiliation" type="checkbox" onchange="same(this);"">
-            <label>同服務機構地址 Same with Service Company Name</label>
-        </div>
-    </div>
-    <div class="fields">
-        <div class="four wide field">
+			<input name="affiliation_postcode" value="{{ '' if acct["affiliation_postcode"] == None else acct["affiliation_postcode"] }}">
+		</div>
+		<div class="twelve wide field">
+			<label><h3>服務機構地址 Service Company Name</h3></label>
+			<input name="affiliation_address" value="{{ '' if acct["affiliation_address"] == None else acct["affiliation_address"] }}">
+		</div>
+	</div>
+	<div class="field">
+		<div class="ui checkbox">
+			<input id="set_contact_as_affiliation" type="checkbox" onchange="same(this);"">
+			<label>同服務機構地址 Same with Service Company Name</label>
+		</div>
+	</div>
+	<div class="fields">
+		<div class="four wide field">
 			<label><h3>郵遞區號 Postal Code <a style="padding: 5px;" href="http://www.post.gov.tw/post/internet/Postal/index.jsp?ID=208" target="_blank"><i class="search icon"></i></a></h3></label>
-            <input name="contact_postcode" value="{{ '' if acct["contact_postcode"] == None else acct["contact_postcode"] }}">
-        </div>
-        <div class="twelve wide field">
-            <label><h3>聯絡地址 Contact Address </h3></label>
-            <input name="contact_address" value="{{ '' if acct["contact_address"] == None else acct["contact_address"] }}">
-        </div>
-    </div>
-    <div class="two fields">
-        <div class="field">
-            <label><h3>手機號碼 CellPhone number </h3></label>
+			<input name="contact_postcode" value="{{ '' if acct["contact_postcode"] == None else acct["contact_postcode"] }}">
+		</div>
+		<div class="twelve wide field">
+			<label><h3>聯絡地址 Contact Address </h3></label>
+			<input name="contact_address" value="{{ '' if acct["contact_address"] == None else acct["contact_address"] }}">
+		</div>
+	</div>
+	<div class="two fields">
+		<div class="field">
+			<label><h3>手機號碼 CellPhone number </h3></label>
 			<input name="cellphone" type="text" value="{{ '' if acct["cellphone"] == None else acct["cellphone"]}}">
-        </div>
-        <div class="field">
-            <label><h3>室內電話 TelPhone number </h3></label>
+		</div>
+		<div class="field">
+			<label><h3>室內電話 TelPhone number </h3></label>
 			<input name="telephone" type="text" value="{{ '' if acct["telephone"] == None else acct["telephone"]}}">
-        </div>
-    </div>
-    <div class="field">
-        <label><h2>Password</h2></label>
-        <input name="password" type="password">
-    </div>
-    <input name="req" type="hidden" value="edit">
-    <div class="ui blue submit button" onclick="send();">送出</div>
+		</div>
+	</div>
+	<div class="field">
+		<label><h2>*Password<span style="font-size: 16px;"> 必填</span></h2></label>
+		<input name="password" type="password">
+	</div>
+	<input name="req" type="hidden" value="edit">
+	<div class="ui blue submit button" onclick="send();">送出</div>
 </form>
 <script>
 function same(ele){
 	if($(ele).prop("checked")){
-        $("input[name='contact_address']").val($("input[name='affiliation_address']").val());
-        $("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
-        $("input[name='contact_address']").attr("disabled", "disabled");
-        $("input[name='contact_postcode']").attr("disabled", "disabled");
+		$("input[name='contact_address']").val($("input[name='affiliation_address']").val());
+		$("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
 		
 	} else {
-        $("input[name='contact_address']").removeAttr("disabled");
-        $("input[name='contact_postcode']").removeAttr("disabled");
 	}
 }
 $( document ).ready(function(){
-    $('select.dropdown').dropdown();
-    $('.ui.checkbox').checkbox();
+	$('select.dropdown').dropdown();
+	$('.ui.checkbox').checkbox();
 });
 function send(){
-    if( $("#set_contact_as_affiliation").prop("checked")){
-        $("input[name='contact_address']").val($("input[name='affiliation_address']").val());
-        $("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
-    }
-    info = $("#edit").serialize();
-    $.post(
-        "/login",
-        info,
-        function(msg){
-            if( msg == "S" )
-                humane.log("修改成功！", {timeout: 1500});
-            else if (msg == "Eempty")
-                humane.log("尚有資料未填寫", {timeout: 1500});
-        }
-    );
+	if( $("#set_contact_as_affiliation").prop("checked")){
+		$("input[name='contact_address']").val($("input[name='affiliation_address']").val());
+		$("input[name='contact_postcode']").val( $("input[name='affiliation_postcode']").val());
+	}
+	info = $("#edit").serialize();
+	$.post(
+		"/login",
+		info,
+		function(msg){
+			if( msg == "S" ){
+				humane.log("修改成功！", {timeout: 1500}, function(){
+					window.location = window.location;
+				});
+			}
+			else if (msg == "Eempty")
+				humane.log("尚有資料未填寫", {timeout: 1500});
+			else if (msg == "Epassword")
+				humane.log("密碼錯誤或未填寫密碼", {timeout: 1500});
+		}
+	);
 }
 </script>
 
