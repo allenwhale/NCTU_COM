@@ -1,10 +1,13 @@
 from req import RequestHandler
 from req import reqenv
+from req import Service
 import config
+from mail import MailHandler
 
 class AdminService:
     def __init__(self, db):
         self.db = db
+        self.reply = MailHandler('templates/reply.html')
         AdminService.inst = self
 
     def isadmin(self, acct):
@@ -15,6 +18,8 @@ class AdminService:
     def admin_reply(self, acct, pid, f, end, letter):
         if AdminService.inst.isadmin(acct) == 0:
             return ('Eaccess', None)
+        if not f:
+            return ('Efile', None)
         cur = yield self.db.cursor()
         yield cur.execute('SELECT "papercheck", "status", "pass" FROM "paperupload" WHERE "pid" = %s;', (pid,))
         if cur.rowcount != 1:
@@ -33,14 +38,12 @@ class AdminService:
         print(end, type(end))
         if end == '1':
             yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (10, 1,check, pid,))
-            return (None, pid)
+            #return (None, pid)
 
         if end == '0':
             yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (11, 0,check, pid,))
-            return (None, pid)
+            #return (None, pid)
 
-        if not f:
-            return ('Efile', None)
         path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
         _f = open(path, 'wb')
         _f.write(f['body'])
@@ -48,6 +51,8 @@ class AdminService:
         yield cur.execute('UPDATE "paperupload" SET "status" = 1 WHERE "pid"= %s;', (pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
+        if end ==0 or end == 1:
+            return (None, pid)
         if check == 2:
             yield cur.execute('UPDATE "paperupload" SET "pass" = %s WHERE "pid"= %s;', (end, pid))
             if cur.rowcount != 1:
@@ -59,6 +64,10 @@ class AdminService:
                 #11
                 yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid"= %s;', (11, pid))
             yield cur.execute('UPDATE "paperupload" SET "status" = 0 WHERE "pid"= %s;', (pid,)) 
+        yield cur.execute('SELECT "uid" FROM "paperupload" WHERE "pid" = %s;', (pid,))
+        uid = cur.fetchone()[0]
+        err, meta = yield from Service.Login.get_account_info(uid)
+        self.reply.send(meta['email'], 'MS-[%s]稿件通知，稿件審查完畢'%pid, pid=pid, letter=letter)
         return (None, pid)
 
     def user_reply(self, acct, pid, rreply, anony, non):
