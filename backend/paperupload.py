@@ -14,7 +14,7 @@ class PaperuploadService:
             return ('Eempty', None)
         if chinesekeywords.count('') == 5 or englishkeywords.count('') == 5:
             return ('Eempty', None)
-        if confirm.count('0') == 4:
+        if confirm.count('0') != 0:
             return ('Eempty', None)
         cur = yield self.db.cursor()
         yield cur.execute('INSERT INTO "paperupload" ("uid", "chinesetitle", "englishtitle", "chineseabstract", "englishabstract", "letter", "picnum", "wordnum", "submitted", "confirm", "conflict", "conflict_explain") VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING "paperupload"."pid";', (uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain));

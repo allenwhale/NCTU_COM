@@ -1,7 +1,7 @@
 DBNAME = 'nctu_com'
-DBUSER = 'root'
-DBPASSWORD = 'root'
-DBHOST = '140.113.240.138'
+DBUSER = 'cdmr'
+DBPASSWORD = 'cdmr'
+DBHOST = 'localhost'
 COOKIE_SECRET = 'wef wqfqw wqefwqf2 f'
-PORT = '2517'
+PORT = '80'
 ADMIN_RANGE = [0,1,]

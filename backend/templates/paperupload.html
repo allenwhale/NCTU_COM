@@ -196,7 +196,7 @@ humane.log("請先登入", {timeout: 1000}, function(){
 			<input type="radio" name="conflict" value="0"></input>
 			<label>否</label>
 		</div>
-		<textarea name="conflict_explain" style="margin-top: 7px"></textarea>
+		<textarea name="conflict_explain" style="margin-top: 7px">{{meta['conflict_explain'] if meta else ''}}</textarea>
 	</div>
 	<div class="field">
 		<label><h3>選擇檔案上傳 Paper Upload</h3></label>
@@ -287,9 +287,10 @@ function send(){
 		processData: false,
 		contentType: false,
 		success: function(msg){
-            if (msg == 'S')
+            if (msg == 'S'){
                 humane.log('成功上傳', {timeout: 1500});
-            else if (msg == 'Eempty')
+		window.location = "/showpaper";
+            }else if (msg == 'Eempty')
                 humane.log('尚有資料未填寫', {timeout: 1500});
 		}
 	});
