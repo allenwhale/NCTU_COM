@@ -7,14 +7,9 @@ class MailHandler:
 
     def send(self, to, subject, cc=[], bcc=[], **kwargs):
         content = re.sub('<%(?P<name>.*)?%>', lambda m: kwargs[m.group('name')], self.templ)
-        cmd = ['mail','-a', 'Content-Type: text/html', '-s', subject]
-        for c in cc:
-            cmd += ['-c', c]
-        for b in bcc:
-            cmd += ['-b', b]
-        cmd += [to]
+        cmd = 'mail -s "$(echo "'+subject+'\nContent-Type: text/html\n")" '+to
         try:
-            p = sp.Popen(cmd, stdin=sp.PIPE)
+            p = sp.Popen(cmd, stdin=sp.PIPE, shell=True)
             p.stdin.write(content.encode())
             p.communicate()
             p.stdin.close()

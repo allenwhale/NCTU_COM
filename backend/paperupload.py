@@ -2,10 +2,12 @@ from req import RequestHandler
 from req import reqenv
 from req import Service
 import os
+from mail import MailHandler
 
 class PaperuploadService:
     def __init__(self, db):
         self.db = db
+        self.update_mail = MailHandler('templates/upload_mail.html')
         PaperuploadService.inst = self
 
     def upload(self, uid, chinesetitle, englishtitle, chineseabstract, englishabstract, letter, picnum, wordnum, submitted, confirm, conflict, conflict_explain, anony_file, non_anony_file, author, chinesekeywords, englishkeywords):
@@ -43,6 +45,8 @@ class PaperuploadService:
         yield cur.execute('DELETE FROM "author_paper_save" WHERE "uid" = %s;', (uid,))
         yield cur.execute('DELETE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
         yield cur.execute('DELETE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
+        err, meta = yield from Service.Login.get_account_info(uid)
+        err = self.update_mail.send(meta['email'],'MS-[%s]稿件通知，已收到您的稿件'%pid, pid=pid)
         return (None, pid)
     def set_papercheck(self, pid, papercheck):
         cur = yield from self.db.cursor()
