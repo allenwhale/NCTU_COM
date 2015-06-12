@@ -46,7 +46,7 @@ class PaperuploadService:
         yield cur.execute('DELETE FROM "chinesekeywords_save" WHERE "uid" = %s;', (uid,))
         yield cur.execute('DELETE FROM "englishkeywords_save" WHERE "uid" = %s;', (uid,))
         err, meta = yield from Service.Login.get_account_info(uid)
-        err = self.update_mail.send(meta['email'],'MS-[%s]稿件通知，已收到您的稿件'%pid, pid=pid)
+        err = self.update_mail.send(meta['email'],'MS-%s稿件通知，已收到您的稿件'%pid, pid=pid)
         return (None, pid)
     def set_papercheck(self, pid, papercheck):
         cur = yield from self.db.cursor()

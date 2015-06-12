@@ -48,11 +48,11 @@ class AdminService:
         _f = open(path, 'wb')
         _f.write(f['body'])
         _f.close()
+        if end == '0' or end == '1':
+            return (None, pid)
         yield cur.execute('UPDATE "paperupload" SET "status" = 1 WHERE "pid"= %s;', (pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
-        if end ==0 or end == 1:
-            return (None, pid)
         if check == 2:
             yield cur.execute('UPDATE "paperupload" SET "pass" = %s WHERE "pid"= %s;', (end, pid))
             if cur.rowcount != 1:
@@ -67,7 +67,7 @@ class AdminService:
         yield cur.execute('SELECT "uid" FROM "paperupload" WHERE "pid" = %s;', (pid,))
         uid = cur.fetchone()[0]
         err, meta = yield from Service.Login.get_account_info(uid)
-        self.reply.send(meta['email'], 'MS-[%s]稿件通知，稿件審查完畢'%pid, pid=pid, letter=letter)
+        self.reply.send(meta['email'], 'MS-%s稿件通知，稿件審查完畢'%pid, pid=pid, letter=letter)
         return (None, pid)
 
     def user_reply(self, acct, pid, rreply, anony, non):
@@ -131,9 +131,14 @@ class AdminHandler(RequestHandler):
             self.finish('S')
         elif req == 'userreply':
             pid = self.get_argument('pid', None)
-            anony = self.request.files['anony'][0]
-            non = self.request.files['non-anony'][0]
-            rreply = self.request.files['rreply'][0]
+            try:
+                anony = self.request.files['anony'][0]
+                non = self.request.files['non-anony'][0]
+                rreply = self.request.files['rreply'][0]
+            except:
+                anony = None
+                non = None
+                rreply = None
             err, pid = yield from AdminService.inst.user_reply(self.acct, pid, rreply, anony, non)
             if err:
                 self.finish(err)

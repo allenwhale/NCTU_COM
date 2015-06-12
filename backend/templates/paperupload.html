@@ -253,7 +253,13 @@ function save(first){
 		processData: false,
 		contentType: false,
 		success: function(msg){
-			window.location.reload();
+            if(first == false){
+                humane.log('已儲存', {timeout: 1000}, function(){
+                    window.location = '/showpaper';
+                });
+            }else{
+                window.location.reload();
+            }
 		}
 	});
 }
