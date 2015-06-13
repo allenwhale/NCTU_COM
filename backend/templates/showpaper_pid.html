@@ -91,7 +91,7 @@ $(document).ready(function(){
         </thead>
         <tbody>
             {% if data['pass'] == -1 %}
-            {% set check=["一審","二審","三審"] %}
+            {% set check=["一審","二審","三審","四審","五審"] %}
             {% for x in range (data["papercheck"]) %}
             <tr>
                 <td> {{check[x]}} </td> 
@@ -112,7 +112,7 @@ $(document).ready(function(){
                 <td> </td>
             </tr>
             {% else %}
-            {% set check=["一審","二審","三審"] %}
+            {% set check=["一審","二審","三審","四審","五審"] %}
             {% for x in range (data["lastcheck"]) %}
             <tr>
                 <td> {{check[x]}} </td> 
@@ -135,8 +135,10 @@ $(document).ready(function(){
             {% end %}
         </tbody>
     </table>
+	<!--
     admin: {{admin}}
     status: {{data["status"]}}
+	-->
 	{% if data["papercheck"] < 10 %}
 		{% if admin %}
 			<div class="ui segment">
