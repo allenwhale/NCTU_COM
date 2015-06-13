@@ -163,6 +163,10 @@ $(document).ready(function(){
 					</form>
 					<script>
 						function admin_reply(){
+							if($("#admin_reply").find("textarea[name=letter]").val() == ""){
+								humane.log("回覆不得為空");
+								return;
+							}
 							var data = new FormData($("#admin_reply")[0]);
 							$.ajax({
 								url: "/admin",
@@ -171,7 +175,11 @@ $(document).ready(function(){
 								processData: false,
 								contentType: false,
 								success: function(msg){
-									alert(msg);
+									if(msg == "S"){
+										window.location = "/showpaper";
+									} else {
+										humane.log(msg);
+									}
 								}
 							});
 						}
@@ -211,7 +219,16 @@ $(document).ready(function(){
 								processData: false,
 								contentType: false,
 								success: function(msg){
-									alert(msg);
+									if(msg == "S"){
+										window.location = "/showpaper";
+									/*
+									humane.log("成功提交", {timeout: 1500}, function(){
+											window.location = "/showpaper";
+										});
+									*/
+									} else {
+										humane.log(msg);
+									}
 								}
 							});
 						}

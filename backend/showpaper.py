@@ -164,7 +164,7 @@ class ShowpaperService:
 
     def get_file_name(self, pid):
         path = '../html/paper/'+ str(pid)
-        res = {0:[None, None,None,None], 1: [None,None,None,None],2:[None,None,None,None],3:[None,None,None,None]}
+        res = {0:[None, None,None,None], 1: [None,None,None,None],2:[None,None,None,None],3:[None,None,None,None],4:[None,None,None,None],5:[None,None,None,None]}
         try:
             for f in os.listdir(path):
                 if f.find('non-'+pid+'.')!=-1:
@@ -175,7 +175,7 @@ class ShowpaperService:
                     res[0][2]=f
                 elif f.find(pid+'.')!=-1:
                     res[0][0]=f
-                for _ in range(1,4):
+                for _ in range(1,6):
                     if f.find('non-'+pid+'-'+str(_)+'.')!=-1:
                         res[_][1]=f
                     elif f.find('rreply-'+pid+'-'+str(_)+'.')!=-1:

@@ -8,6 +8,8 @@ class AdminService:
     def __init__(self, db):
         self.db = db
         self.reply = MailHandler('templates/reply.html')
+        self.pass_mail = MailHandler('templates/pass_mail.html')
+        self.fail_mail = MailHandler('templates/fail_mail.html')
         AdminService.inst = self
 
     def isadmin(self, acct):
@@ -19,14 +21,15 @@ class AdminService:
         if AdminService.inst.isadmin(acct) == 0:
             return ('Eaccess', None)
         if not f:
-            return ('Efile', None)
+            return ('回覆檔案不能為空', None)
         cur = yield self.db.cursor()
-        yield cur.execute('SELECT "papercheck", "status", "pass" FROM "paperupload" WHERE "pid" = %s;', (pid,))
+        yield cur.execute('SELECT "papercheck", "status", "pass", "uid" FROM "paperupload" WHERE "pid" = %s;', (pid,))
         if cur.rowcount != 1:
             return ('Epaper', None)
-        check, status, _pass = cur.fetchone()
+        check, status, _pass, uid = cur.fetchone()
         check = int(check)
         status = int(status)
+        err, meta = yield from Service.Login.get_account_info(uid)
         try:
             _pass = int(_pass)
         except:
@@ -38,10 +41,14 @@ class AdminService:
         print(end, type(end))
         if end == '1':
             yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (10, 1,check, pid,))
+            print('pass')
+            err = self.pass_mail.send(meta['email'], 'MS-%s稿件通知'%str(pid), pid=pid)
+            print('err', err)
             #return (None, pid)
 
         if end == '0':
             yield cur.execute('UPDATE "paperupload" SET ("papercheck", "pass", "lastcheck") = (%s, %s, %s) WHERE "pid" = %s;', (11, 0,check, pid,))
+            self.fail_mail.send(meta['email'], 'MS-%s稿件通知'%str(pid), pid=pid)
             #return (None, pid)
 
         path = '../html/paper/'+str(pid)+'/reply-'+str(pid)+('' if check == 0 else '-%d'%check)+'.'+f['filename'].split('.')[-1]
@@ -53,16 +60,18 @@ class AdminService:
         yield cur.execute('UPDATE "paperupload" SET "status" = 1 WHERE "pid"= %s;', (pid,)) 
         if cur.rowcount != 1:
             return ('Edb', None)
-        if check == 2:
+        if check == 4:
             yield cur.execute('UPDATE "paperupload" SET "pass" = %s WHERE "pid"= %s;', (end, pid))
             if cur.rowcount != 1:
                 return ('Edb', None)
             if end == 0:
                 #10
                 yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid"= %s;', (10, pid))
+                self.pass_mail.send(meta['email'], 'MS-%s稿件通知'%str(pid), pid=pid)
             elif end == 1:
                 #11
                 yield cur.execute('UPDATE "paperupload" SET "papercheck" = %s WHERE "pid"= %s;', (11, pid))
+                self.fail_mail.send(meta['email'], 'MS-%s稿件通知'%str(pid), pid=pid)
             yield cur.execute('UPDATE "paperupload" SET "status" = 0 WHERE "pid"= %s;', (pid,)) 
         yield cur.execute('SELECT "uid" FROM "paperupload" WHERE "pid" = %s;', (pid,))
         uid = cur.fetchone()[0]
